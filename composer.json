@@ -1,0 +1,26 @@
+{
+	"name": "lynkcms/components",
+	"type": "package",
+	"description": "LynkCMS Components",
+	"keywords": [],
+	"homepage": "https://lynkcms.com",
+	"license": "MIT",
+	"authors": [
+		{
+			"name": "Brandon Garcia",
+			"email": "me@bgarcia.dev"
+		}
+	],
+	"autoload": {
+		"psr-4": {
+			"LynkCMS\\Component\\": "src/",
+			"lynk\\": "src/Functions/"
+		}
+	},
+	"require": {
+		"php": ">=7.0"
+	},
+	"require-dev": {
+		"phpunit/phpunit": "^5.7"
+	}
+}
