@@ -1,0 +1,16 @@
+#
+# ** %pkg_name% : Document(webpage) Configuration File : Created %created_time% **
+#
+language: 'en'
+attributes: []
+head:
+    icon: null
+    charset: 'utf-8'
+    robots: null
+    viewport: null
+    links: []
+    meta: []
+    css: []
+    scripts: []
+body:
+    scripts: []

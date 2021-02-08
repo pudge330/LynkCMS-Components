@@ -1,0 +1,8 @@
+#
+# ** %pkg_name% : Routing Configuration File : Created %created_time% **
+#
+parameters:
+    %pkg_lshortname%.serviceClass: '%namespace%%pkg_name%\Service\%pkg_shortname%'
+services:
+    %pkg_lshortname%:
+        class: %%pkg_lshortname%.serviceClass%
