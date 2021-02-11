@@ -13,7 +13,7 @@
 	],
 	"autoload": {
 		"psr-4": {
-			"LynkCMS\\Component\\": "src/",
+			"BGStudios\\Component\\": "src/",
 			"lynk\\": "src/Functions/"
 		}
 	},
