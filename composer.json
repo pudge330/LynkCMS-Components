@@ -14,8 +14,11 @@
 	"autoload": {
 		"psr-4": {
 			"BGStudios\\Component\\": "src/",
-			"lynk\\": "src/Functions/"
+			"bgs\\": "src/Functions/"
 		}
+		,"files": [
+			"src/Functions/Autoload.php"
+		]
 	},
 	"require": {
 		"php": ">=7.0"
