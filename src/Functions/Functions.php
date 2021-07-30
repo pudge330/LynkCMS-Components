@@ -348,7 +348,7 @@ function isSerialized($string) {
  * @return bool True if string starts with value, false otherwise.
  */
 function startsWith($haystack, $needle) {
-	return preg_match('/^' . preg_quote($needle) . '/', $haystack);
+	return preg_match('/^' . preg_quote($needle, '/') . '/', $haystack);
 	// return $needle === "" || strpos($haystack, $needle) !== FALSE && strpos($haystack, $needle) === 0;
 }
 
@@ -361,7 +361,7 @@ function startsWith($haystack, $needle) {
  * @return bool True if string ends with value, false otherwise.
  */
 function endsWith($haystack, $needle) {
-	return preg_match('/' . preg_quote($needle) . '$/', $haystack);
+	return preg_match('/' . preg_quote($needle, '/') . '$/', $haystack);
 	// if ($haystack == '') return false;
 	// return $needle === "" || strpos($haystack, $needle, strlen($haystack) - strlen($needle)) !== FALSE;
 }
@@ -513,7 +513,7 @@ function getDirContents($dir, &$results = array(), $filesOnly = false, $foldersO
 		else if (!in_array($value, ['.', '..'])){
 			$passed = true;
 			foreach ($excludedFolders as $folder) {
-				if (preg_match('#' . preg_quote($folder) . '$#', $path)) {
+				if (preg_match('#' . preg_quote($folder, '#') . '$#', $path)) {
 					$passed = false;
 				}
 			}
