@@ -1226,7 +1226,7 @@ function getPagination($current, $last, $delta = 2, $start = 1, $end = 1) {
  * @return string Unique id.
  */
 function getUniqueId($opt=false) {
-	return \LynkCMS\Component\UUID\UUID::uniqid($opt);
+	return \LynkCMS\Component\Util\UUID::uniqid($opt);
 }
 
 /**
@@ -1237,7 +1237,7 @@ function getUniqueId($opt=false) {
  * @return string Series of random bytes as string.
  */
 function getRandomBytes($length = 64) {
-	return \LynkCMS\Component\UUID\UUID::randomBytes($length);
+	return \LynkCMS\Component\Util\UUID::randomBytes($length);
 }
 
 /**
@@ -1249,5 +1249,5 @@ function getRandomBytes($length = 64) {
  * @return string Randomly generated reference id.
  */
 function getReferenceId($format = null, $randomizedFormat = true) {
-	return \LynkCMS\Component\UUID\UUID::referenceId($format, $randomizedFormat);
+	return \LynkCMS\Component\Util\UUID::referenceId($format, $randomizedFormat);
 }
