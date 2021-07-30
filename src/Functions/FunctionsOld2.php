@@ -1,7 +1,7 @@
 <?php
 namespace LynkCMS;
 
-class FunctionsOld {}
+class FunctionsOld2 {}
 
 function getIp() {
 	$stacktrace = \debug_backtrace(DEBUG_BACKTRACE_PROVIDE_OBJECT, 1);
