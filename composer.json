@@ -19,6 +19,7 @@
 			"BGStudios\\Component\\": "src/"
 		},
 		"files": [
+			"src.new/Functions/Autoload.php",
 			"src/Functions/Autoload.php"
 		]
 	},
