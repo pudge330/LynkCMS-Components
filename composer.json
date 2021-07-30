@@ -1,14 +1,14 @@
 {
-	"name": "bag/components",
+	"name": "lynkcms/components",
 	"type": "package",
-	"description": "BAG Components",
+	"description": "LynkCMS Components",
 	"keywords": [],
-	"homepage": "https://brandonagarcia.me",
+	"homepage": "https://lynkcms.com",
 	"license": "MIT",
 	"authors": [
 		{
 			"name": "Brandon Garcia",
-			"email": "hello@brandonagarcia.me"
+			"email": "me@bgarcia.dev"
 		}
 	],
 	"autoload": {
