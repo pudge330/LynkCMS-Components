@@ -233,7 +233,7 @@ class Config {
 			break;
 			case self::FORMAT_RAW:
 			default:
-				if (\bgs\startsWith($data, '[serialized]')) {
+				if (\lynk\startsWith($data, '[serialized]')) {
 					$data = unserialize(substr($data, 12));
 					$data = $this->interpolate($data, $context);
 				}

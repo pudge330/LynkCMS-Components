@@ -94,6 +94,6 @@ class ConfigEvent extends Event {
 	 * @param Array $config Configuration.
 	 */
 	public function mergeConfig($config) {
-		$this->config = \bgs\deepMerge($this->config, $config);
+		$this->config = \lynk\deepMerge($this->config, $config);
 	}
 }

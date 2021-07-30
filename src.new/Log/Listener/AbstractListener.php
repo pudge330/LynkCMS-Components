@@ -42,7 +42,7 @@ class AbstractListener extends ContainerAwareClass {
 			'datetime' => date($this->datetimeFormat)
 			,'level' => $level
 			,'message' => $message
-			,'ip' => \bgs\getIp()
+			,'ip' => \lynk\getIp()
 			,'uid' => $userId
 		);
 		if (sizeof($context) > 0) {
@@ -51,6 +51,6 @@ class AbstractListener extends ContainerAwareClass {
 		}
 		else
 			$record .= "\n";
-		return \bgs\interpolate($record, $recordContext, array('%'));
+		return \lynk\interpolate($record, $recordContext, array('%'));
 	}
 }

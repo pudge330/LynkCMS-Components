@@ -1,9 +1,44 @@
 <?php
-namespace bgs;
+/**
+ * This file is part of the LynkCMS Components Package.
+ *
+ * (c) Brandon Garcia <me@bgarcia.dev>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ *
+ * @package LynkCMS Components
+ * @subpackage Functions
+ * @author Brandon Garcia <me@bgarcia.dev>
+ */
 
+namespace lynk;
+
+/**
+ * Empty functions class, used to autoload this file.
+ */
 class Functions {}
 
-function curlRequest($url, $options = [], $data = []) {
+/**
+ * ==================================================
+ * Http and Request
+ * ==================================================
+ */
+
+/**
+ * Execute curl request.
+ * fix: `headers` and `curlOptions` needs to be implemented and tested.
+ * 
+ * @param string $url Request URL.
+ * @param Array $options Optional. Request options.
+ *                       - type:        Request type.
+ *                       - post_json:   Post data instead of GET parameters appended to URL.
+ *                       - headers:     Http headers.
+ *                       - curlOptions: Curl options.
+ * 
+ * @return Array Response body and header.
+ */
+function curlRequest($url, Array $options = [], Array $data = []) {
 	$options = array_merge([
 		'type' => 'GET',
 		'post_json' => false,
@@ -54,6 +89,11 @@ function curlRequest($url, $options = [], $data = []) {
     return ['header' => $header, 'body' => $body];
 }
 
+/**
+ * Get request protocol.
+ * 
+ * @return string Protocol.
+ */
 function getProtocol() {
 	if(isset($_SERVER['HTTP_X_FORWARDED_PROTO'])){
 		return $_SERVER['HTTP_X_FORWARDED_PROTO'];
@@ -65,6 +105,12 @@ function getProtocol() {
 		return $protocol;
 	}
 }
+
+/**
+ * Get request port.
+ * 
+ * @return int Request port number.
+ */
 function getPort() {
 	$port = (int)(
 		isset($_SERVER["HTTP_X_FORWARDED_PORT"])
@@ -77,6 +123,11 @@ function getPort() {
 	return $port;
 }
 
+/**
+ * Get request client IP address.
+ * 
+ * @return string Client IP address.
+ */
 function getIp() {
 	if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
 		return $_SERVER['HTTP_CLIENT_IP'];
@@ -89,10 +140,22 @@ function getIp() {
 	}
 }
 
+/**
+ * Get user agent.
+ * 
+ * @return string Http client user agent.
+ */
 function getUserAgent() {
 	return isset($_SERVER['HTTP_USER_AGENT']) ? $_SERVER['HTTP_USER_AGENT'] : null;
 }
 
+/**
+ * Get IP addess type.
+ * 
+ * @param string $ip IP address.
+ * 
+ * @return Array IP address type, false if undetected.
+ */
 function ipType($ip) {
 	if (strpos($ip, ":") !== false && strpos($ip, ".") === false)
 		return [0, "v6-pure"];
@@ -104,6 +167,11 @@ function ipType($ip) {
 		return false;
 }
 
+/**
+ * Get server name, domain.
+ * 
+ * @return string Domain name, false if undetectable or using CLI.
+ */
 function getDomain() {
 	if (isset($_SERVER['HTTP_HOST']) && $_SERVER['HTTP_HOST'] != '') {
 		return $_SERVER['HTTP_HOST'];
@@ -114,11 +182,92 @@ function getDomain() {
 	return null;
 }
 
+/**
+ * Get base url.
+ * change: use getProtocol() method, for DRY purposes.
+ * 
+ * @return string Base URL.
+ */
 function getBaseUrl() {
 	$serverName = rtrim(getDomain() . BASE_URL, '/');
 	return sprintf("%s://%s", isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] != 'off' ? 'https' : 'http', $serverName);
 }
 
+/**
+ * Get http basic authentication username and password.
+ * 
+ * @return Array Username and password.
+ */
+function getHttpBasicAuth() {
+	if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
+		return [$_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']];
+	}
+	else if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
+		list($username, $password) = explode(':' , base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
+		return [$username, $password];
+	}
+	else {
+		return [null, null];
+	}
+}
+
+/**
+ * Validate http basic authentication request.
+ * 
+ * @param $credentials Array Valid credentials.
+ * @param string $realm Optional. Page realm.
+ * @param string $output Optional. Failure message.
+ * 
+ * @return mixed Authenticated user credential.
+ */
+function validateHttpBasicAuth($credentials, $realm = null, $output = null) {
+	$realm = $realm ? $realm : 'Please enter your username and password to proceed further';
+	$output = $output ? $output : 'Oops! It require login to proceed further. Please enter your login detail';
+	$restricted = function() use ($realm, $output) {
+		header("WWW-Authenticate: Basic realm=\"{$realm}\"");
+		header("HTTP/1.0 401 Unauthorized");
+		if ($output instanceof \Closure) {
+			$output();
+		}
+		else {
+			echo $output;
+		}
+		exit;
+	};
+	list($authUser, $authPw) = getHttpBasicAuth();
+	if (!$authUser && !$authPw) {
+		$restricted();
+	}
+	if (!is_array($credentials[0])) {
+		$credentials = ['', $credentials];
+	}
+	$authenticated = null;
+	foreach ($credentials as $credential) {
+		if ($credential[0] == $authUser && $credential[1] == $authPw) {
+			$authenticated = $credential;
+		}
+	}
+	if (!$authenticated) {
+		$restricted();
+	}
+	return $authenticated;
+}
+
+/**
+ * ==================================================
+ * Strings
+ * ==================================================
+ */
+
+/**
+ * Interpolate variables into a string.
+ * 
+ * @param string $string The string template.
+ * @param Array $context Data to interpolate.
+ * @param Array $keyWrap Data key wrap.
+ * 
+ * @return string The interpolated string.
+ */
 function interpolate($string, array $context = array(), array $keyWrap = array('{', '}')) {
 	$keyWrapSize = sizeof($keyWrap);
 	if ($keyWrapSize < 2) {
@@ -139,10 +288,16 @@ function interpolate($string, array $context = array(), array $keyWrap = array('
 }
 
 /**
- *	Splits a series of queries from a string by semi-colons
- * 	Returns array of queries, with or without the semi-colon at the end
- *
- *	@source http://stackoverflow.com/questions/24423260/split-sql-statements-in-php-on-semicolons-but-not-inside-quotes
+ * Splits a series of queries from a string by semi-colons
+ * Returns array of queries, with or without the semi-colon at the end
+ * change: if $keepSemiColon is false just trim queries string.
+ * 
+ * @source http://stackoverflow.com/questions/24423260/split-sql-statements-in-php-on-semicolons-but-not-inside-quotes
+ * 
+ * @param string $queries Queries string.
+ * @param bool $keepSemiColon Optional. Keep last semi-colon. Resulting array would have an empty last index.
+ * 
+ * @return Array Split queries.
  */
 function splitQueries($queries, $keepSemiColon = false) {
 	if ($keepSemiColon) {
@@ -158,10 +313,99 @@ function splitQueries($queries, $keepSemiColon = false) {
 	}
 }
 
+/**
+ * Strip string of non alpha-numeric characters and underscore. Also keep dashes by default.
+ * 
+ * @param string $s String to strip.
+ * @param bool $dash Optional. Keep dashes.
+ * 
+ * @return string Stripped string.
+ */
+function stripString($s, $dash = true) {
+	if ($dash)
+		return preg_replace('/[^\w-]/', '', $s);
+	else
+		return preg_replace("/[^\w]+/", '', $s);
+}
+
+/**
+ * Check if string is serialized data.
+ * 
+ * @param string $string The string to check.
+ * 
+ * @return bool True if string is serialized data, false otherwise.
+ */
+function isSerialized($string) {
+	return ($string == serialize(false) || @unserialize($string) !== false);
+}
+
+/**
+ * Check if string starts with specific value.
+ * 
+ * @param string $haystack String to check.
+ * @param string $needle String to check for.
+ * 
+ * @return bool True if string starts with value, false otherwise.
+ */
+function startsWith($haystack, $needle) {
+	return preg_match('/^' . preg_quote($needle) . '/', $haystack);
+	// return $needle === "" || strpos($haystack, $needle) !== FALSE && strpos($haystack, $needle) === 0;
+}
+
+/**
+ * Check if string ends with specific value.
+ * 
+ * @param string $haystack String to check.
+ * @param string $needle String to check for.
+ * 
+ * @return bool True if string ends with value, false otherwise.
+ */
+function endsWith($haystack, $needle) {
+	return preg_match('/' . preg_quote($needle) . '$/', $haystack);
+	// if ($haystack == '') return false;
+	// return $needle === "" || strpos($haystack, $needle, strlen($haystack) - strlen($needle)) !== FALSE;
+}
+
+/**
+ * Write data into a single line in CSV file format.
+ * 
+ * @param Array Data to write.
+ * 
+ * @return string Line of data in CSV format.
+ */
+function csvLine($data) {
+	$h = fopen('php://temp', 'r+');
+	fputcsv($h, $data, ',', '"');
+	rewind($h);
+	$data = fread($h, 1048576);
+	fclose($h);
+	return trim($data);
+}
+
+/**
+ * ==================================================
+ * Filesystem
+ * ==================================================
+ */
+
+/**
+ * Normalize file path with system directory separator.
+ * 
+ * @param string $path File path.
+ * 
+ * @return string File path with normalized directory separators.
+ */
 function path($path) {
 	return str_replace(['/', '\\'], DIRECTORY_SEPARATOR, $path);
 }
 
+/**
+ * Real relative path, removes `.` and `..` from paths.
+ * 
+ * @param string $path File path.
+ * 
+ * @return string Real path.
+ */
 function realRelPath($path) {
 	$final = array();
 	foreach (explode('/', $path) as $part) {
@@ -177,110 +421,14 @@ function realRelPath($path) {
 	return $startingSlash . implode('/', $final) . $endingSlash;
 }
 
-function stripString($s, $dash = true) {
-	if ($dash)
-		return preg_replace('/[^\w-]/', '', $s);
-	else
-		return preg_replace("/[^\w]+/", '', $s);
-}
-
-function addDTS($toAdd) {
-	$toAdd = array_merge(['y' => 0, 'm' => 0, 'd' => 0, 'h' => 0, 'i' => 0, 's' => 0], $toAdd);
-	$units = array('y','m','d','h','i','s');
-	$addString = 'P{@y}Y{@m}M{@d}DT{@h}H{@i}M{@s}S';
-	foreach ($toAdd as $key => $val) {
-		if ($val === null || trim($val) == '')
-			$val = 0;
-		$addString = str_replace("{@" . $key . "}", $val, $addString);
-	}
-	return $addString;
-}
-
-function getHttpBasicAuth() {
-	if (isset($_SERVER['PHP_AUTH_USER']) && isset($_SERVER['PHP_AUTH_PW'])) {
-		return [$_SERVER['PHP_AUTH_USER'], $_SERVER['PHP_AUTH_PW']];
-	}
-	else if (isset($_SERVER['HTTP_AUTHORIZATION'])) {
-		list($username, $password) = explode(':' , base64_decode(substr($_SERVER['HTTP_AUTHORIZATION'], 6)));
-		return [$username, $password];
-	}
-	else {
-		return [null, null];
-	}
-}
-
-function validateHttpBasicAuth($credentials, $realm = null, $output = null) {
-	$realm = $realm ? $realm : 'Please enter your username and password to proceed further';
-	$output = $output ? $output : 'Oops! It require login to proceed further. Please enter your login detail';
-	$restricted = function() use ($realm, $output) {
-		header("WWW-Authenticate: Basic realm=\"{$realm}\"");
-		header("HTTP/1.0 401 Unauthorized");
-		if ($output instanceof \Closure) {
-			$output();
-		}
-		else {
-			echo $output;
-		}
-		exit;
-	};
-	list($authUser, $authPw) = getHttpBasicAuth();
-	if (!$authUser && !$authPw) {
-		$restricted();
-	}
-	if (!is_array($credentials[0])) {
-		$credentials = [$credentials];
-	}
-	$authenticated = null;
-	foreach ($credentials as $credential) {
-		if ($credential[0] == $authUser && $credential[1] == $authPw) {
-			$authenticated = $credential;
-		}
-	}
-	if (!$authenticated) {
-		$restricted();
-	}
-	return $authenticated;
-}
-
-function deepMerge() {
-	$args = func_get_args();
-	if (sizeof($args) == 0) {
-		return [];
-	}
-	$merged = array_shift($args);
-	foreach ($args as $arg) {
-		if (!is_array($arg)) {
-			$merged[] = $arg;
-			// ? add to array or ignore
-			// throw new \Exception('not array');
-			// die('not array');
-		}
-		else {
-			foreach ($arg as $key => &$value) {
-				if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
-					$merged[$key] = deepMerge($merged[$key], $value);
-				}
-				else {
-					$merged[$key] = $value;
-				}
-			}
-		}
-	}
-	return $merged;
-}
-
-function deepMergeRef(array &$array1, array &$array2) {
-	foreach ($array2 as $key => &$value) {
-		if (is_array($value) && isset($array1[$key]) && is_array($array1[$key])) {
-			$array1[$key] = deepMerge($array1[$key], $value);
-		}
-		else {
-			$array1[$key] = $value;
-		}
-	}
-	return $array1;
-}
-
+/**
+ * Format file sizes in more readable format with labels.
+ * 
+ * @param int $filesize File size in bytes.
+ * @param Array $labels Optional. Array of size labels. Using abbreviations as keys.
+ * 
+ * @return string Formatted file size.
+ */
 function formatFileSize($filesize, $labels = []) {
 	$labels = array_merge([
 		'b' => 'b'
@@ -302,113 +450,13 @@ function formatFileSize($filesize, $labels = []) {
 	return $filesize;
 }
 
-function getUniqueId($opt=true) { //--bc
-	return \BGStudios\Component\UUID\UUID::uniqid($opt);
-}
-
-function getRandomBytes($length) { //--bc
-	return \BGStudios\Component\UUID\UUID::randomBytes($length);
-}
-
-function getReferenceId($format = null) { //--bc
-	return \BGStudios\Component\UUID\UUID::referenceId($format);
-}
-
-function isSerialized($string) {
-	return ($string == serialize(false) || @unserialize($string) !== false);
-}
-
-function isAssoc(array $a) {
-	foreach (array_keys($a) as $k)
-		if (!is_int($k)) return true;
-	return false;
-}
-
-function startsWith($haystack, $needle) {
-	return $needle === "" || strpos($haystack, $needle) !== FALSE && strpos($haystack, $needle) === 0;
-}
-
-function endsWith($haystack, $needle) {
-	if ($haystack == '') return false;
-	return $needle === "" || strpos($haystack, $needle, strlen($haystack) - strlen($needle)) !== FALSE;
-}
-
-function getTimezones() {
-    $timezoneIdentifiers = DateTimeZone::listIdentifiers();
-    $utcTime = new DateTime('now', new DateTimeZone('UTC'));
-    $tempTimezones = array();
-    foreach ($timezoneIdentifiers as $timezoneIdentifier) {
-        $currentTimezone = new DateTimeZone($timezoneIdentifier);
-        $tempTimezones[] = array(
-            'offset' => (int)$currentTimezone->getOffset($utcTime),
-            'identifier' => $timezoneIdentifier
-        );
-    }
-    // Sort the array by offset,identifier ascending
-    usort($tempTimezones, function($a, $b) {
-        return ($a['offset'] == $b['offset'])
-            ? strcmp($a['identifier'], $b['identifier'])
-            : $a['offset'] - $b['offset'];
-    });
-    $timezoneList = array();
-    foreach ($tempTimezones as $tz) {
-        $sign = ($tz['offset'] > 0) ? '+' : '-';
-        $offset = gmdate('H:i', abs($tz['offset']));
-        $timezoneList[$tz['identifier']] = $sign . $offset;
-    }
-    return $timezoneList;
-}
-
-function hashValue($value, $salt='', $type='sha1') {
-	if (sizeof(explode('.', $salt)) == 2)
-		return hash($type, $salt.$value.explode('.', $salt)[1].$value.explode('.', $salt)[0]);
-	else
-		return hash($type, $salt.$value.$salt.$value.$salt);
-}
-
-function createPassword($password, $algo = 'sha1') {
-	$salt = getUniqueId();
-	$passHash = hashValue($password, $salt, $algo);
-	return "{$algo}\${$salt}\${$passHash}";
-}
-
-function verifyPassword($password, $passString) {
-	$currentPasswordHash = $currentPasswordSalt = $currentPasswordAlgorithm = 'sha1$0.0$0';
-	$currentPasswordHash = explode('$', $passString);
-	$currentPasswordSalt = $currentPasswordHash[1];
-	$currentPasswordAlgorithm = $currentPasswordHash[0];
-	$currentPasswordHash = $currentPasswordHash[2];
-	return trim(hashValue($password, $currentPasswordSalt, $currentPasswordAlgorithm)) == trim($currentPasswordHash);
-}
-
-function rgbToHex($rgb) {
-	//--rgba regex
-	//--matches ###(1),###(2),###(3),#.#(4)?
-	//--/rgb(?:a)?\( ?([\d]{1,3}) ?, ?([\d]{1,3}) ?, ?([\d]{1,3}) ?,? ?([\d](?:\.[\d])?)? ?\)/
-	$rgb = array_values($rgb);
-	return '#' . sprintf('%02x', $rgb[0]) . sprintf('%02x', $rgb[1]) . sprintf('%02x', $rgb[2]);
-}
-
-function hexToRgb($hex, $assoc = false) {
-	$hex = str_replace("#", "", $hex);
-	$r = $g = $b = null;
-	if ($hex) {
-		if(strlen($hex) == 3) {
-			$r = hexdec($hex[0].$hex[0]);
-			$g = hexdec($hex[1].$hex[1]);
-			$b = hexdec($hex[2].$hex[2]);
-		} else if (strlen($hex) == 6) {
-			$r = hexdec($hex[0].$hex[1]);
-			$g = hexdec($hex[2].$hex[3]);
-			$b = hexdec($hex[4].$hex[5]);
-		}
-	}
-	if ($assoc)
-		return ['r' => $r, 'g' => $g, 'b' => $b];
-	else
-		return [$r, $g, $b];
-}
-
+/**
+ * Clear/delete files in directory.
+ * 
+ * @param string $dir Directory path.
+ * 
+ * @return int Deleted file count.
+ */
 function clrDir($dir) {
 	 // chmod($dir, 0755);
 	 $di = new \RecursiveDirectoryIterator($dir, \FilesystemIterator::SKIP_DOTS);
@@ -429,6 +477,18 @@ function clrDir($dir) {
 	 return $count;
 }
 
+/**
+ * Get contents of directory.
+ * 
+ * @param string $dir Directory path.
+ * @param Array $results Optional. File list.
+ * @param bool $filesOnly Optional. Find files only.
+ * @param bool $foldersOnly Optional. Find folders only.
+ * @param Array $excludedFiles Optional. Array of files to exclude. Relative to directory.
+ * @param Array $excludedFolders Optional. Array of folders to exclude. Relative to directory.
+ * 
+ * @return Array List of files/folders found.
+ */
 function getDirContents($dir, &$results = array(), $filesOnly = false, $foldersOnly = false, $excludedFiles = ['.DS_Store'], $excludedFolders = []){
 	$files = $dir ? scandir($dir) : Array();
 	if (!$excludedFiles || !is_array($excludedFiles)) {
@@ -471,29 +531,59 @@ function getDirContents($dir, &$results = array(), $filesOnly = false, $foldersO
 	return $results;
 }
 
+/**
+ * Get file mime type.
+ * 
+ * @param string $filename File path.
+ * 
+ * @return string Mime type.
+ */
 function mimeType($filename) {
-	$mimeType = mime_content_type($filename);
-	if ($mimeType === false) {
-		$filename = escapeshellcmd($filename);
-		$command = "file -b --mime-type -m /usr/share/misc/magic {$filename}";
+	$fileExists = file_exists($file);
+	if(function_exists('mime_content_type') && $mimeType = mime_content_type($file))
+		return $mimeType;
+	else if ($fileExists && function_exists('finfo_open')) {
+		$finfo = finfo_open(FILEINFO_MIME);
+		$mimetype = finfo_file($finfo, $file);
+		finfo_close($finfo);
+		return $mimetype;
+	}
+	else {
+		$file = escapeshellcmd($file);
+		$command = "file -b --mime-type -m /usr/share/misc/magic {$file}";
 		$mimeType = shell_exec($command);
+		return trim($mimeType);
 	}
-	if (!$mimeType) {
-		$mimeType = null;
-	}
-	return trim($mimeType);
 }
 
+/**
+ * Get file extension.
+ * 
+ * @param string $filename File path.
+ * 
+ * @return string File extension.
+ */
 function fileExt($filename) {
 	$fileinfo = pathinfo($filename);
 	return isset($fileinfo['extension']) ? $fileinfo['extension'] : null;
 }
 
-function verifyDir($path) {
+/**
+ * Verify directory exists, if not create it.
+ * 
+ * @param string $path Directory path.
+ * @param int $permissions Directory permissions.
+ */
+function verifyDir($path, $permissions = 0755) {
 	if (!file_exists($path))
-		mkdir($path, 0755, true);
+		mkdir($path, $permissions, true);
 }
 
+/**
+ * Delete symlink.
+ * 
+ * @param string $linkfile Symlink path.
+ */
 function deleteSymlink($linkfile) {
 	if(file_exists($linkfile)) {
 		if(is_link($linkfile))
@@ -501,6 +591,11 @@ function deleteSymlink($linkfile) {
 	}
 }
 
+/**
+ * Delete symlink target file or directory.
+ * 
+ * @param string $linkfile Symlink path.
+ */
 function deleteSymlinkTarget($linkfile) {
 	if(is_link($linkfile)) {
 		$target = readlink($linkfile);
@@ -513,93 +608,202 @@ function deleteSymlinkTarget($linkfile) {
 	}
 }
 
-function buildHierarchyTreeSelectOptions(&$selectData, $data, $pad = null, $depth = -1) {
-	$pad = $pad ?: '&#x2500;';
-	$depth++;
-	$depthStr = str_repeat($pad, $depth);
-	if ($depthStr != '')
-		$depthStr = "{$depthStr} ";
-	foreach ($data as $key => $data) {
-		if (sizeof($data['children']) == 0) {
-			$selectData["id_{$data['uid']}"] = "{$depthStr}{$data['uid']}: {$data['name']}";
+/**
+ * ==================================================
+ * Array
+ * ==================================================
+ */
+
+/**
+ * Recursively deep merge arrays.
+ * 
+ * @param Array Arrays to deep merge. Unlimited arrays can be passed in as individual arguments.
+ * 
+ * @return Array Single merged array.
+ */
+function deepMerge() {
+	$args = func_get_args();
+	if (sizeof($args) == 0) {
+		return [];
+	}
+	$merged = array_shift($args);
+	foreach ($args as $arg) {
+		if (!is_array($arg)) {
+			$merged[] = $arg;
+			// ? add to array or ignore
+			// throw new \Exception('not array');
+			// die('not array');
 		}
 		else {
-			$selectData["id_{$data['uid']}"] = "{$depthStr}{$data['uid']}: {$data['name']}";
-			buildHierarchyTreeSelectOptions($selectData, $data['children'], $pad, $depth);
+			foreach ($arg as $key => &$value) {
+				if (is_array($value) && isset($merged[$key]) && is_array($merged[$key])) {
+					$merged[$key] = deepMerge($merged[$key], $value);
+				}
+				else {
+					$merged[$key] = $value;
+				}
+			}
 		}
 	}
+	return $merged;
 }
 
-function buildHierarchyTree($tmpGroups, $parentId = null, $excluded = null, $keys = []) {
-	$keys = array_merge(['id' => 'id', 'parent' => 'parent_id'], $keys);
-	$idKey = $keys['id'];
-	$parentKey = $keys['parent'];
-	$groups = [];
-	$tmpGroups = array_values($tmpGroups);
-	foreach ($tmpGroups as $group) {
-		$group['children'] = [];
-		$groups["id_{$group[$idKey]}"] = $group;
-	}
-	$getUserGroupTree = function($groups, $parentId, $excluded, $keys) use (&$getUserGroupTree, $idKey, $parentKey) {
-		$data = [];
-		foreach ($groups as $groupKey => $groupValue) {
-			if ($groupValue[$parentKey] == $parentId && $groupValue[$idKey] != $excluded) {
-				$data["id_{$groupValue[$idKey]}"] = $groupValue;
-				$data["id_{$groupValue[$idKey]}"]['children'] = $getUserGroupTree($groups, $groupValue[$idKey], $excluded, $keys);
-			}
+/**
+ * Recursively deep merge 2 arrays. Faster for large arrays and less memory usage.
+ * 
+ * @param Array $array1 First array to deep merge.
+ * @param Array $array2 Second array to deep merge.
+ * 
+ * @return Array Single merged array.
+ */
+function deepMergeRef(array &$array1, array &$array2) {
+	foreach ($array2 as $key => &$value) {
+		if (is_array($value) && isset($array1[$key]) && is_array($array1[$key])) {
+			$array1[$key] = deepMerge($array1[$key], $value);
 		}
-		return $data;
-	};
-	if ($parentId && $parentId != $excluded) {
-		if (isset($groups["id_{$parentId}"])) {
-			$groups["id_{$parentId}"]['children'] = $getUserGroupTree($groups, $groups["id_{$parentId}"][$idKey], $excluded, $keys);
-			return ["id_{$parentId}" => $groups["id_{$parentId}"]];
+		else {
+			$array1[$key] = $value;
 		}
 	}
-	else {
-		foreach ($groups as $key => &$group) {
-			if ((!$group[$parentKey] || $group[$parentKey] == '') && $group[$idKey] != $excluded) {
-				$group['children'] = $getUserGroupTree($groups, $group[$idKey], $excluded, $keys);
-			}
-		}
-		foreach ($groups as $key => &$group) {
-			if ($group[$parentKey] || $group[$idKey] == $excluded) {
-				unset($groups[$key]);
-			}
-		}
-	}
-	return $groups;
+	return $array1;
 }
 
-function getPagination($current, $last, $delta = 2, $start = 1, $end = 1) {
-	$left = $current - $delta;
-	$right = $current + $delta + 1;
-	$range = $rangeWithDots = [];
-	$l = -1;
-	for ($i = 1; $i <= $last; $i++) {
-		$startTest = ($i <= $start);
-		$endTest = ($i >= ($last - ($end - 1)));
-		$rangeTest = ($i >= $left && $i < $right);
-		if ($startTest || $endTest || $rangeTest) {
-			$range[] = $i;
-		}
-	}
-	for ($i = 0; $i < sizeof($range); $i++) {
-		if ($l != -1) {
-			if ($range[$i] - $l === 2) {
-				$rangeWithDots[] = $i + 1;
-			}
-			else if ($range[$i] - $l !== 1) {
-				$rangeWithDots[] = '...';
-			}
-		}
-		$rangeWithDots[] = $range[$i];
-		$l = $range[$i];
-	}
-	return $rangeWithDots;
+/**
+ * Check if array is associative or not.
+ * 
+ * @param Array $a Array to check.
+ * 
+ * @return bool True if array is associative, false otherwise.
+ */
+function isAssoc(array $a) {
+	foreach (array_keys($a) as $k)
+		if (!is_int($k)) return true;
+	return false;
 }
 
-//--@https://stackoverflow.com/a/46872528
+/**
+ * ==================================================
+ * Datetime
+ * ==================================================
+ */
+
+/**
+ * Generate add datetime string, for use with DateInterval.
+ * 
+ * @param Array $toAdd Date and time values.
+ * 
+ * @return string Datetime add string.
+ */
+function addDTS($toAdd) {
+	$toAdd = array_merge(['y' => 0, 'm' => 0, 'd' => 0, 'h' => 0, 'i' => 0, 's' => 0], $toAdd);
+	$units = array('y','m','d','h','i','s');
+	$addString = 'P{@y}Y{@m}M{@d}DT{@h}H{@i}M{@s}S';
+	foreach ($toAdd as $key => $val) {
+		if ($val === null || trim($val) == '')
+			$val = 0;
+		$addString = str_replace("{@" . $key . "}", $val, $addString);
+	}
+	return $addString;
+}
+
+/**
+ * Get available timezones.
+ * 
+ * @return Array List of timezones.
+ */
+function getTimezones() {
+    $timezoneIdentifiers = DateTimeZone::listIdentifiers();
+    $utcTime = new DateTime('now', new DateTimeZone('UTC'));
+    $tempTimezones = array();
+    foreach ($timezoneIdentifiers as $timezoneIdentifier) {
+        $currentTimezone = new DateTimeZone($timezoneIdentifier);
+        $tempTimezones[] = array(
+            'offset' => (int)$currentTimezone->getOffset($utcTime),
+            'identifier' => $timezoneIdentifier
+        );
+    }
+    // Sort the array by offset,identifier ascending
+    usort($tempTimezones, function($a, $b) {
+        return ($a['offset'] == $b['offset'])
+            ? strcmp($a['identifier'], $b['identifier'])
+            : $a['offset'] - $b['offset'];
+    });
+    $timezoneList = array();
+    foreach ($tempTimezones as $tz) {
+        $sign = ($tz['offset'] > 0) ? '+' : '-';
+        $offset = gmdate('H:i', abs($tz['offset']));
+        $timezoneList[$tz['identifier']] = $sign . $offset;
+    }
+    return $timezoneList;
+}
+
+/**
+ * ==================================================
+ * Cryptography and Authentication
+ * ==================================================
+ */
+
+/**
+ * Hash value with optional salt.
+ * 
+ * @param string $value Value to hash.
+ * @param string $salt Optional. Hash salt value.
+ * @param string $type Optional. Hash algorithm.
+ * 
+ * @return string Hashed value.
+ */
+function hashValue($value, $salt='', $type='sha1') {
+	if (sizeof(explode('.', $salt)) == 2)
+		return hash($type, $salt.$value.explode('.', $salt)[1].$value.explode('.', $salt)[0]);
+	else
+		return hash($type, $salt.$value.$salt.$value.$salt);
+}
+
+/**
+ * Create hashed password string.
+ * 
+ * @param string $password Password to hash.
+ * @param string $algo Hash algorithm.
+ * 
+ * @return string Hashed password string.
+ */
+function createPassword($password, $algo = 'sha1') {
+	$salt = getUniqueId();
+	$passHash = hashValue($password, $salt, $algo);
+	return "{$algo}\${$salt}\${$passHash}";
+}
+
+/**
+ * Verify password against hashed version.
+ * 
+ * @param string $password Unhashed password.
+ * @param string $passString Hashed password string.
+ * 
+ * @return bool True if password is valid, false otherwise.
+ */
+function verifyPassword($password, $passString) {
+	$currentPasswordHash = $currentPasswordSalt = $currentPasswordAlgorithm = 'sha1$0.0$0';
+	$currentPasswordHash = explode('$', $passString);
+	$currentPasswordSalt = $currentPasswordHash[1];
+	$currentPasswordAlgorithm = $currentPasswordHash[0];
+	$currentPasswordHash = $currentPasswordHash[2];
+	return trim(hashValue($password, $currentPasswordSalt, $currentPasswordAlgorithm)) == trim($currentPasswordHash);
+}
+
+/**
+ * Encrypt data, using AES-256-CBC mode.
+ * Generates 'key' from the provided password using SHA256.
+ * Generates hmac has of the encrypted data for integrity check.
+ * Generates random IV for each message.
+ * Prepends IV (16b) and the hash (32b) to the ciphertext.
+ * 
+ * @source https://stackoverflow.com/a/46872528
+ * 
+ * @param string $plaintext Text/data to encrypt.
+ * @param string $password Password to encrypt data with.
+ * 
+ * @return string Ciphertext with IV and hash appended to it.
+ */
 function encrypt($plaintext, $password) {
     $method = "AES-256-CBC";
     $key = hash('sha256', $password, true);
@@ -608,6 +812,17 @@ function encrypt($plaintext, $password) {
     $hash = hash_hmac('sha256', $ciphertext . $iv, $key, true);
     return $iv . $hash . $ciphertext;
 }
+
+/**
+ * Decrypt data, using AES-256-CBC mode. Ciphertext from \lynk\encrypt method.
+ * 
+ * @source https://stackoverflow.com/a/46872528
+ * 
+ * @param string $ivHashCiphertext IV+Hash+Ciphertext to decrypt.
+ * @param string $password Password to decrypt data with.
+ * 
+ * @param string Decrypted data.
+ */
 function decrypt($ivHashCiphertext, $password) {
     $method = "AES-256-CBC";
     $iv = substr($ivHashCiphertext, 0, 16);
@@ -618,8 +833,13 @@ function decrypt($ivHashCiphertext, $password) {
     return openssl_decrypt($ciphertext, $method, $key, OPENSSL_RAW_DATA, $iv);
 }
 
-// Returns used memory (either in percent (without percent sign) or free and overall in bytes)
-// @--https://www.php.net/manual/en/function.memory-get-peak-usage.php
+/**
+ * Returns used memory (either in percent (without percent sign) or free and overall in bytes).
+ * 
+ * @source https://www.php.net/manual/en/function.memory-get-peak-usage.php
+ * 
+ * @param mixed Array of total and free memory or precentage. Null if not available or failure.
+ */
 function getServerMemoryUsage($getPercentage=true) {
     $memoryTotal = null;
     $memoryFree = null;
@@ -705,8 +925,13 @@ function getServerMemoryUsage($getPercentage=true) {
     }
 }
 
-// Returns server load in percent (just number, without percent sign)
-// @--https://www.php.net/manual/en/function.sys-getloadavg.php#118673
+/**
+ * Returns server load in percent (just number, without percent sign).
+ * 
+ * @source https://www.php.net/manual/en/function.sys-getloadavg.php#118673
+ * 
+ * @return float Server load in percent.
+ */
 function getServerLoad() {
     $load = null;
 
@@ -733,9 +958,9 @@ function getServerLoad() {
         {
             // Collect 2 samples - each with 1 second period
             // See: https://de.wikipedia.org/wiki/Load#Der_Load_Average_auf_Unix-Systemen
-            $statData1 = \bgs\_getServerLoadLinuxData();
+            $statData1 = \lynk\_getServerLoadLinuxData();
             sleep(1);
-            $statData2 = \bgs\_getServerLoadLinuxData();
+            $statData2 = \lynk\_getServerLoadLinuxData();
 
             if
             (
@@ -761,6 +986,12 @@ function getServerLoad() {
 
     return $load;
 }
+
+/**
+ * Returns server load values.
+ * 
+ * @return Array Server loads.
+ */
 function _getServerLoadLinuxData() {
     if (is_readable("/proc/stat"))
     {
@@ -801,19 +1032,222 @@ function _getServerLoadLinuxData() {
     return null;
 }
 
+/**
+ * Check if envrionment is command line interface or not.
+ * 
+ * @return bool True if CLI, false otherwise.
+ */
 function isCli() {
 	return (php_sapi_name() == "cli");
 }
 
-function csvLine($data) {
-	$h = fopen('php://temp', 'r+');
-	fputcsv($h, $data, ',', '"');
-	rewind($h);
-	$data = fread($h, 1048576);
-	fclose($h);
-	return trim($data);
+/**
+ * ==================================================
+ * Other
+ * ==================================================
+ */
+
+/**
+ * Convert rgb color values to hex.
+ * 
+ * @param Array $rgb Rgb colors.
+ * 
+ * @return string Hex color value.
+ */
+function rgbToHex($rgb) {
+	//--rgba regex
+	//--matches ###(1),###(2),###(3),#.#(4)?
+	//--/rgb(?:a)?\( ?([\d]{1,3}) ?, ?([\d]{1,3}) ?, ?([\d]{1,3}) ?,? ?([\d](?:\.[\d])?)? ?\)/
+	$rgb = array_values($rgb);
+	return '#' . sprintf('%02x', $rgb[0]) . sprintf('%02x', $rgb[1]) . sprintf('%02x', $rgb[2]);
 }
 
-function microtime($returnBool = false) {
-	
+/**
+ * Convert hex color to rgb values.
+ * 
+ * @param string $hex Hex color value.
+ * @param bool $assoc Return associative array.
+ * 
+ * @return Array Rgb values.
+ */
+function hexToRgb($hex, $assoc = false) {
+	$hex = str_replace("#", "", $hex);
+	$r = $g = $b = null;
+	if ($hex && preg_match('/^[0-9a-f]+$/i', $hex)) {
+		if(strlen($hex) == 3) {
+			$r = hexdec($hex[0].$hex[0]);
+			$g = hexdec($hex[1].$hex[1]);
+			$b = hexdec($hex[2].$hex[2]);
+		} else if (strlen($hex) == 6) {
+			$r = hexdec($hex[0].$hex[1]);
+			$g = hexdec($hex[2].$hex[3]);
+			$b = hexdec($hex[4].$hex[5]);
+		}
+	}
+	if ($assoc)
+		return ['r' => $r, 'g' => $g, 'b' => $b];
+	else
+		return [$r, $g, $b];
+}
+
+/**
+ * Build a hierarchy tree select element options. Uses '-' for nested options.
+ * 
+ * @param Array $selectData Empty array where resulting select element options are stored.
+ * @param Array $data Source data to build options from. Multi-dimensional array with child arrays having 3 elements.
+ *                    - uid: id of the item
+ *                    - name: item name, for output
+ *                    - children: child items, optional.
+ * @param string $pad Optional. Child element padding. Gets mutiplied by depth level, default is '-'.
+ * @param int $depth Optional. Depth level.
+ */
+function buildHierarchyTreeSelectOptions(&$selectData, $data, $pad = null, $depth = -1) {
+	$pad = $pad ?: '&#x2500;';
+	$depth++;
+	$depthStr = str_repeat($pad, $depth);
+	if ($depthStr != '')
+		$depthStr = "{$depthStr} ";
+	foreach ($data as $key => $data) {
+		if (!isset($data['children'])) {
+			$data['children'] = [];
+		}
+		if (sizeof($data['children']) == 0) {
+			$selectData["id_{$data['uid']}"] = "{$depthStr}{$data['uid']}: {$data['name']}";
+		}
+		else {
+			$selectData["id_{$data['uid']}"] = "{$depthStr}{$data['uid']}: {$data['name']}";
+			buildHierarchyTreeSelectOptions($selectData, $data['children'], $pad, $depth);
+		}
+	}
+}
+
+/**
+ * Build hierarchy tree using set of data.
+ * change: make excluded option and array so more than one item can be excluded.
+ * 
+ * @param Array $tmpGroups Initial source data.
+ * @param mixed $parentId Optional. Parent item id.
+ * @param mixed $excluded Optional. Excluded item by id, also excludes resulting children.
+ * @param Array $keys Optional. Define id and name keys for dataset.
+ * 
+ * @return Array Built Hierarchy tree data.
+ */
+function buildHierarchyTree($tmpGroups, $parentId = null, $excluded = null, $keys = []) {
+	$keys = array_merge(['id' => 'id', 'parent' => 'parent_id'], $keys);
+	$idKey = $keys['id'];
+	$parentKey = $keys['parent'];
+	$groups = [];
+	$tmpGroups = array_values($tmpGroups);
+	foreach ($tmpGroups as $group) {
+		$group['children'] = [];
+		$groups["id_{$group[$idKey]}"] = $group;
+	}
+	$getUserGroupTree = function($groups, $parentId, $excluded, $keys) use (&$getUserGroupTree, $idKey, $parentKey) {
+		$data = [];
+		foreach ($groups as $groupKey => $groupValue) {
+			if ($groupValue[$parentKey] == $parentId && $groupValue[$idKey] != $excluded) {
+				$data["id_{$groupValue[$idKey]}"] = $groupValue;
+				$data["id_{$groupValue[$idKey]}"]['children'] = $getUserGroupTree($groups, $groupValue[$idKey], $excluded, $keys);
+			}
+		}
+		return $data;
+	};
+	if ($parentId && $parentId != $excluded) {
+		if (isset($groups["id_{$parentId}"])) {
+			$groups["id_{$parentId}"]['children'] = $getUserGroupTree($groups, $groups["id_{$parentId}"][$idKey], $excluded, $keys);
+			return ["id_{$parentId}" => $groups["id_{$parentId}"]];
+		}
+	}
+	else {
+		foreach ($groups as $key => &$group) {
+			if ((!$group[$parentKey] || $group[$parentKey] == '') && $group[$idKey] != $excluded) {
+				$group['children'] = $getUserGroupTree($groups, $group[$idKey], $excluded, $keys);
+			}
+		}
+		foreach ($groups as $key => &$group) {
+			if ($group[$parentKey] || $group[$idKey] == $excluded) {
+				unset($groups[$key]);
+			}
+		}
+	}
+	return $groups;
+}
+
+/**
+ * Get pagination for use in building HTML pagination widgets.
+ * 
+ * @param int $current Current page.
+ * @param int $last Last available page.
+ * @param int $delta Optional. Pages to show on left and right of current page.
+ * @param int $start Optional. Pages to show at the start of the pagination list.
+ * @param int $end Optional. Pages to show at the end of the pagination list.
+ * 
+ * @return Array Pagination data list.
+ */
+function getPagination($current, $last, $delta = 2, $start = 1, $end = 1) {
+	$left = $current - $delta;
+	$right = $current + $delta + 1;
+	$range = $rangeWithDots = [];
+	$l = -1;
+	for ($i = 1; $i <= $last; $i++) {
+		$startTest = ($i <= $start);
+		$endTest = ($i >= ($last - ($end - 1)));
+		$rangeTest = ($i >= $left && $i < $right);
+		if ($startTest || $endTest || $rangeTest) {
+			$range[] = $i;
+		}
+	}
+	for ($i = 0; $i < sizeof($range); $i++) {
+		if ($l != -1) {
+			if ($range[$i] - $l === 2) {
+				$rangeWithDots[] = $i + 1;
+			}
+			else if ($range[$i] - $l !== 1) {
+				$rangeWithDots[] = '...';
+			}
+		}
+		$rangeWithDots[] = $range[$i];
+		$l = $range[$i];
+	}
+	return $rangeWithDots;
+}
+
+/**
+ * ==================================================
+ * Backwards Compatibility - To be removed
+ * ==================================================
+ */
+
+/**
+ * Get uniqid with option for more entropy.
+ *
+ * @param bool $moreEntropy More entropy.
+ * 
+ * @return string Unique id.
+ */
+function getUniqueId($opt=false) {
+	return \LynkCMS\Component\UUID\UUID::uniqid($opt);
+}
+
+/**
+ * Get a series of random bytes, 2 cryptographically secure options with a thrid fallback to a non-cryptographically secure option.
+ *
+ * @param int $length requested byte count.
+ * 
+ * @return string Series of random bytes as string.
+ */
+function getRandomBytes($length = 64) {
+	return \LynkCMS\Component\UUID\UUID::randomBytes($length);
+}
+
+/**
+ * Generate a randomly unique reference id.
+ *
+ * @param string $format Optional. Format for reference id. Use '%s' for character placement.
+ * @param bool $ramdomizedFormat Optional. Use a random format out the built in choices.
+ * 
+ * @return string Randomly generated reference id.
+ */
+function getReferenceId($format = null, $randomizedFormat = true) {
+	return \LynkCMS\Component\UUID\UUID::referenceId($format, $randomizedFormat);
 }

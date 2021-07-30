@@ -63,17 +63,17 @@ class ConsoleCommandLoader {
 			}
 			$toSearch = preg_match('/^\//', $path) ? $path : "{$this->root}/{$path}";
 			if (file_exists($toSearch) && is_dir($toSearch)) {
-				$files = array_merge($files, \bgs\getDirContents($toSearch));
+				$files = array_merge($files, \lynk\getDirContents($toSearch));
 				$sources = array_merge(
 					$sources
 					,($namespace
 						? Array(
-							Array(\bgs\realRelPath($toSearch), $namespace)
+							Array(\lynk\realRelPath($toSearch), $namespace)
 							,Array(realpath($toSearch), $namespace)
 							,Array($toSearch, $namespace)
 						)
 						: Array(
-							\bgs\realRelPath($toSearch)
+							\lynk\realRelPath($toSearch)
 							,realpath($toSearch)
 							,$toSearch
 						)

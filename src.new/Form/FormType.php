@@ -228,7 +228,7 @@ class FormType {
 		$this->bindData();
 		$initFieldSettings = $this->init();
 		if ($initFieldSettings && is_array($initFieldSettings))
-			$fieldSettings = \bgs\deepMerge($fieldSettings, $this->fieldSettings, $initFieldSettings);
+			$fieldSettings = \lynk\deepMerge($fieldSettings, $this->fieldSettings, $initFieldSettings);
 		$this->setInputs($this->fieldSettings);
 		if ($this->isBound() && $this->autoValidate)
 			$this->validate();

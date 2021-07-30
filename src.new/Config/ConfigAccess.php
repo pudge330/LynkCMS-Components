@@ -120,7 +120,7 @@ class ConfigAccess {
 	 * @param Array $config An array of config.
 	 */
 	public function mergeCompiledConfig($config) {
-		$this->config = \bgs\deepMerge($this->config, $config);
+		$this->config = \lynk\deepMerge($this->config, $config);
 	}
 
 	/**

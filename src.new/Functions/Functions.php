@@ -958,9 +958,9 @@ function getServerLoad() {
         {
             // Collect 2 samples - each with 1 second period
             // See: https://de.wikipedia.org/wiki/Load#Der_Load_Average_auf_Unix-Systemen
-            $statData1 = \bgs\_getServerLoadLinuxData();
+            $statData1 = \lynk\_getServerLoadLinuxData();
             sleep(1);
-            $statData2 = \bgs\_getServerLoadLinuxData();
+            $statData2 = \lynk\_getServerLoadLinuxData();
 
             if
             (

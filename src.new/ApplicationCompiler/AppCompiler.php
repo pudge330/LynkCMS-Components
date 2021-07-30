@@ -119,7 +119,7 @@ class AppCompiler {
 	public function compile($config, $templateMap = null, $configIsArray = true, $defaultConfig = Array()) {
 		$templateMap = !$templateMap ? $this->templateMap() : $templateMap;
 		$config = $configIsArray ? $config : $this->loadConfig($config);
-		$config = \bgs\deepMerge($defaultConfig, $config);
+		$config = \lynk\deepMerge($defaultConfig, $config);
 
 		foreach ($this->compilers as $compiler) {
 			$compiler->config($config);
@@ -282,7 +282,7 @@ class AppCompiler {
 	public function getUniqueTemporaryPath($prefix = '') {
 		$path = '';
 		do {
-			$path = $this->tmpDirectory . $prefix . md5(\bgs\getRandomBytes(128));
+			$path = $this->tmpDirectory . $prefix . md5(\lynk\getRandomBytes(128));
 		} while (file_exists($path));
 		return $path;
 	}

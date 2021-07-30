@@ -204,7 +204,7 @@ class Storage implements StorageInterface {
 			$flags .= 'b';
 		}
 		else if ($this->options['encryptData']) {
-			$data = \bgs\encrypt($data, $this->options['encryptKey']);
+			$data = \lynk\encrypt($data, $this->options['encryptKey']);
 			$flags .= 'e';
 		}
 		return ($flags != '' ? "{$flags}\\" : '') . $data;
@@ -227,7 +227,7 @@ class Storage implements StorageInterface {
 			$data = base64_decode($data);
 		}
 		else if (strpos($flags, 'e') !== false) {
-			$data = \bgs\decrypt($data, $this->options['encryptKey']);
+			$data = \lynk\decrypt($data, $this->options['encryptKey']);
 		}
 		if (strpos($flags, 'j') !== false) {
 			$data = json_decode($data, $this->options['returnJsonArray']);
