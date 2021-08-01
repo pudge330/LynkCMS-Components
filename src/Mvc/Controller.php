@@ -1,8 +1,7 @@
 <?php
 namespace BGStudios\Component\Mvc;
 
-// use BGStudios\Component\Container\ContainerAwareClass;
-use BGStudios\Component\Http\JsonResult;
+use LynkCMS\Component\Http\JsonResult;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;

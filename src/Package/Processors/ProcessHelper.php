@@ -1,7 +1,7 @@
 <?php
 namespace BGStudios\Component\Package\Processors;
 
-use BGStudios\Component\Command\ConsoleHelper;
+use LynkCMS\Component\Command\ConsoleHelper;
 use Exception;
 use ZipArchive;
 use Symfony\Component\Console\Output\OutputInterface;

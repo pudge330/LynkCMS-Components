@@ -1,8 +1,8 @@
 <?php
 namespace BGStudios\Component\Package\Loaders;
 
-use BGStudios\Component\Config\Config;
 use BGStudios\Component\Package\PackagePaths;
+use LynkCMS\Component\Config\Config;
 use Symfony\Component\Routing\Route;
 use Symfony\Component\Routing\RouteCollection;
 

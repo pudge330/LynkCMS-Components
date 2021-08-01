@@ -1,7 +1,7 @@
 <?php
 namespace BGStudios\Component\Package\Generator;
 
-use BGStudios\Component\Config\Config;
+use LynkCMS\Component\Config\Config;
 
 class PackageGenerator {
 	protected $root;

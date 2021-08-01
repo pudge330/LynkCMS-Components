@@ -3,8 +3,8 @@ namespace BGStudios\Component\Package\Processors;
 
 use Closure;
 use Exception;
-use BGStudios\Component\Command\ConsoleHelper;
-use BGStudios\Component\Container\ContainerAwareClass;
+use LynkCMS\Component\Command\ConsoleHelper;
+use LynkCMS\Component\Container\ContainerAwareClass;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class CompilerProcess extends ContainerAwareClass {

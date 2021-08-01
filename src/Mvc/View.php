@@ -3,11 +3,11 @@ namespace BGStudios\Component\Mvc;
 
 use Exception;
 
-use BGStudios\Component\Container\AbstractCompiledContainer;
-use BGStudios\Component\Container\ContainerAwareTrait;
-use BGStudios\Component\Storage\StandardContainer;
-use BGStudios\Component\Util\NamedBuffers;
-use BGStudios\Component\Container\Container;
+use LynkCMS\Component\Container\AbstractCompiledContainer;
+use LynkCMS\Component\Container\ContainerAwareTrait;
+use LynkCMS\Component\Container\StandardContainer;
+use LynkCMS\Component\Container\Container;
+use LynkCMS\Component\Util\NamedBuffers;
 
 class View extends Container {
 	use ContainerAwareTrait;

@@ -1,7 +1,7 @@
 <?php
 namespace BGStudios\Component\Package\Loaders;
 
-use BGStudios\Component\Config\Config;
+use LynkCMS\Component\Config\Config;
 
 class PackageLoader {
 	private $config;
