@@ -88,13 +88,13 @@ class AbstractPackage {
 			$vendor[0] = rtrim($vendor[0], DIRECTORY_SEPARATOR);
 			$vendor[1] = rtrim($vendor[1], DIRECTORY_SEPARATOR);
 			$link = is_link($vendor[0]) ? readlink($vendor[0]) : null;
-			if ($link && \bgs\startsWith($packageRoot, $link)) {
+			if ($link && \lynk\startsWith($packageRoot, $link)) {
 				$relRoot = preg_replace('#^' . preg_quote($link) . '#', '', $packageRoot);
 				$relRoot = trim($relRoot, DIRECTORY_SEPARATOR);
 				$relRoot = ($vendor[1] ? $vendor[1] . DIRECTORY_SEPARATOR : '') . $relRoot . ($relRoot ? DIRECTORY_SEPARATOR : '');
 				return $relRoot;
 			}
-			else if (\bgs\startsWith($packageRoot, $vendor[0])) {
+			else if (\lynk\startsWith($packageRoot, $vendor[0])) {
 				$relRoot = preg_replace('#^' . $vendor[0] . '#', '', $packageRoot);
 				$relRoot = trim($relRoot, DIRECTORY_SEPARATOR);
 				$relRoot = ($vendor[1] ? $vendor[1] . DIRECTORY_SEPARATOR : '') . $relRoot . ($relRoot ? DIRECTORY_SEPARATOR : '');

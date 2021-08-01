@@ -14,7 +14,7 @@ class PathResolver {
 		return isset($this->packages[$p]['namespace']) ? $this->packages[$p]['namespace'] : null;
 	}
 	public function packageRoot($p) {
-		return \bgs\realRelPath(LYNK_ROOT . '/' . $this->packages[$p]['root']);
+		return \lynk\realRelPath(LYNK_ROOT . '/' . $this->packages[$p]['root']);
 	}
 	public function object($p) {
 		return $this->packageRoot($p) . $p . LYNK_DS . $p . '.php';

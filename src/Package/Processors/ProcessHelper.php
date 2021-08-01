@@ -72,7 +72,7 @@ class ProcessHelper {
 			$source = preg_replace('/^(\[folder\])(?:\/)?(.+)$/', "$2", $source);
 			$folderPath = "{$root}/{$source}";
 			if (is_dir($folderPath)) {
-				$files = \bgs\getDirContents($folderPath);
+				$files = \lynk\getDirContents($folderPath);
 				foreach ($files as $file) {
 					if (!is_dir($file)) {
 						$matchResult = $matchCallback($file);
@@ -93,7 +93,7 @@ class ProcessHelper {
 				}
 				$zip->extractTo($tmpZipDirectory);
 				$zip->close();
-				$tmpExtractedFiles = \bgs\getDirContents($tmpZipDirectory);
+				$tmpExtractedFiles = \lynk\getDirContents($tmpZipDirectory);
 				foreach ($tmpExtractedFiles as $file) {
 					if (!is_dir($file)) {
 						$matchResult = $matchCallback($file);
@@ -106,7 +106,7 @@ class ProcessHelper {
 						unlink($file);
 					}
 				}
-				\bgs\clrDir($tmpZipDirectory);
+				\lynk\clrDir($tmpZipDirectory);
 				rmdir($tmpZipDirectory);
 			}
 		}
@@ -133,7 +133,7 @@ class ProcessHelper {
 				$zip->extractTo($tmpZipDirectory);
 				$zip->close();
 				unlink($tmpUrlResource);
-				$tmpExtractedFiles = \bgs\getDirContents($tmpZipDirectory);
+				$tmpExtractedFiles = \lynk\getDirContents($tmpZipDirectory);
 				foreach ($tmpExtractedFiles as $file) {
 					if (!is_dir($file)) {
 						$matchResult = $matchCallback($file);
@@ -146,7 +146,7 @@ class ProcessHelper {
 						unlink($file);
 					}
 				}
-				\bgs\clrDir($tmpZipDirectory);
+				\lynk\clrDir($tmpZipDirectory);
 				rmdir($tmpZipDirectory);
 			}
 			//--need to implement
@@ -160,7 +160,7 @@ class ProcessHelper {
 	public function getUniqueTemporaryPath($sourcePath, $prefix = '') {
 		$path = '';
 		do {
-			$path = LYNK_ROOT . LYNK_DS . LYNK_VAR . '/tmp/' . $prefix . md5(\bgs\getRandomBytes(64) . $sourcePath);
+			$path = LYNK_ROOT . LYNK_DS . LYNK_VAR . '/tmp/' . $prefix . md5(\lynk\getRandomBytes(64) . $sourcePath);
 		} while (file_exists($path));
 		return $path;
 	}
@@ -236,7 +236,7 @@ class ProcessHelper {
 						"\t@<fg=white>{$tmpSourceName}</> ->\n\t@<fg=white>{$tmpDestName}</>"
 					);
 				}
-				if (\bgs\startsWith($files[0], LYNK_ROOT . LYNK_DS . LYNK_VAR . '/tmp'))
+				if (\lynk\startsWith($files[0], LYNK_ROOT . LYNK_DS . LYNK_VAR . '/tmp'))
 					unlink($files[0]);
 			}
 		}

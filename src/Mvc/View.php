@@ -100,14 +100,14 @@ class View extends Container {
 
 	public function includeFile($path, $data = []) {
 		$path = $this->path($path);
-		if (!\bgs\startsWith($path, ROOT))
+		if (!\lynk\startsWith($path, ROOT))
 			$path = ROOT . ltrim($path, '/');
 		return include $path;
 	}
 
 	public function includeFileRef($path, &$data = []) {
 		$path = $this->path($path);
-		if (!\bgs\startsWith($path, ROOT))
+		if (!\lynk\startsWith($path, ROOT))
 			$path = ROOT . ltrim($path, '/');
 		return include $path;
 	}
