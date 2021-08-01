@@ -15,12 +15,10 @@
 		"psr-4": {
 			"LynkCMS\\Component\\": "src.new/",
 			"lynk\\": "src.new/Functions/",
-			"bgs\\": "src/Functions/",
 			"BGStudios\\Component\\": "src/"
 		},
 		"files": [
-			"src.new/Functions/Autoload.php",
-			"src/Functions/Autoload.php"
+			"src.new/Functions/Autoload.php"
 		]
 	},
 	"require": {
