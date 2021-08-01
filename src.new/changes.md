@@ -28,6 +28,8 @@
 
 + Storage\StandardContainer -> Container\StandardContainer
 
++ Form\Input\DefaultInput\*.php -> Form\Input\Type\*.php
+
 ----------------------------------------------------------------------------------------------------
 
 # Core
