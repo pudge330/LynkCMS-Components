@@ -394,7 +394,7 @@ function csvLine($data) {
  * 
  * @return string Minified HTML code.
  */
-function sanitize_output($buffer) {
+function sanitizeOutput($buffer) {
 	$search = array(
 		'/\>[^\S ]+/s',     // strip whitespaces after tags, except space
 		'/[^\S ]+\</s',     // strip whitespaces before tags, except space
