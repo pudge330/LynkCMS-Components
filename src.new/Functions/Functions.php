@@ -383,6 +383,35 @@ function csvLine($data) {
 }
 
 /**
+ * Sanitize and remove extra whitespace from HTML. Simple method.
+ * Caution, does not handle <code> and <pre> tags.
+ * Caution when using inline <script>. Semi-colon (;) is required after every statement
+ * and // comments break
+ * 
+ * @source https://stackoverflow.com/a/6225706
+ * 
+ * @param string $buffer HTML code to minify.
+ * 
+ * @return string Minified HTML code.
+ */
+function sanitize_output($buffer) {
+	$search = array(
+		'/\>[^\S ]+/s',     // strip whitespaces after tags, except space
+		'/[^\S ]+\</s',     // strip whitespaces before tags, except space
+		'/(\s)+/s',         // shorten multiple whitespace sequences
+		'/<!--(.|\s)*?-->/' // Remove HTML comments
+	);
+	$replace = array(
+		'>',
+		'<',
+		'\\1',
+		''
+	);
+	$buffer = preg_replace($search, $replace, $buffer);
+	return $buffer;
+}
+
+/**
  * ==================================================
  * Filesystem
  * ==================================================
@@ -821,7 +850,7 @@ function encrypt($plaintext, $password) {
  * @param string $ivHashCiphertext IV+Hash+Ciphertext to decrypt.
  * @param string $password Password to decrypt data with.
  * 
- * @param string Decrypted data.
+ * @return string Decrypted data.
  */
 function decrypt($ivHashCiphertext, $password) {
     $method = "AES-256-CBC";
