@@ -412,6 +412,54 @@ function sanitizeOutput($buffer) {
 }
 
 /**
+ * Shorthand for PHP htmlentities with ENT_QUOTES flag and default UTF-8 encoding.
+ * 
+ * @param string $content String to escape.
+ * @param string $encoding Optional. Encoding type.
+ * 
+ * @return string Escaped content.
+ */
+function escape($content, $encoding = "UTF-8") {
+	return htmlentities($content, ENT_QUOTES, $encoding);
+}
+
+/**
+ * Clean URL slug and remove unwanted characters.
+ * Also remove double hyphens and underscrores.
+ * 
+ * @param string $slug Slug value to clean.
+ * @param bool $lowercase Optional. Whether or not to convert to lowercase.
+ * @param string $regex Optional. Regex for removing unwanted characters.
+ * 
+ * @return string Cleaned slug
+ */
+function cleanSlug($slug, $lowercase = true, $regex = "/[^a-z0-9-_]/i") {
+	$slug = str_replace(' ', '-', $slug);
+	$slug = preg_replace($regex, "", iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $slug));
+	$slug = str_replace('--', '-', $slug);
+	$slug = str_replace('__', '_', $slug);
+	return $lowercase ? strtolower($slug) : $slug;
+}
+
+/**
+ * Build HTML attributes string from array of values.
+ * 
+ * @param Array $data Key value pairs.
+ * @param string $prefix Optional. Attribute prefix.
+ * @param bool $padding Optional. Whether or not to keep leading space.
+ * 
+ * @return string HTML attribute string.
+ */
+public function attributes($data, $prefix = null, $padding = true) {
+	$attrString = '';
+	foreach ($data as $k => $v)
+		$attrString .= $v !== null ? " {$prefix}{$k}=\"{$v}\"" : " {$prefix}{$k}";
+	if (!$padding && $attrString != '')
+		$attrString = trim($attrString);
+	return $attrString;
+}
+
+/**
  * ==================================================
  * Filesystem
  * ==================================================
