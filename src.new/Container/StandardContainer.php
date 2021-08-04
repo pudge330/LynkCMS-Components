@@ -234,6 +234,16 @@ class StandardContainer {
 	}
 
 	/**
+	 * Export/return the array of data.
+	 * Here for backwards compatibility.
+	 * 
+	 * @return Array The array of data.
+	 */
+	public function getData() {
+		return $this->data;
+	}
+
+	/**
 	 * Export the data, without closures to JSON format.
 	 * 
 	 * @return string The array in JSON form.
