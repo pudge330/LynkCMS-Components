@@ -452,7 +452,7 @@ function cleanSlug($slug, $lowercase = true, $regex = "/[^a-z0-9-_]/i") {
  * 
  * @return string HTML attribute string.
  */
-public function attributes($data, $prefix = null, $padding = true) {
+function attributes($data, $prefix = null, $padding = true) {
 	$attrString = '';
 	foreach ($data as $k => $v)
 		$attrString .= $v !== null ? " {$prefix}{$k}=\"{$v}\"" : " {$prefix}{$k}";
