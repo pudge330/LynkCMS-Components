@@ -438,6 +438,8 @@ function cleanSlug($slug, $lowercase = true, $regex = "/[^a-z0-9-_]/i") {
 	$slug = preg_replace($regex, "", iconv('UTF-8', 'ASCII//TRANSLIT//IGNORE', $slug));
 	$slug = str_replace('--', '-', $slug);
 	$slug = str_replace('__', '_', $slug);
+	$slug = trim($slug, '-');
+	$slug = trim($slug, '_');
 	return $lowercase ? strtolower($slug) : $slug;
 }
 
