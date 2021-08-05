@@ -16,29 +16,4 @@
 
 * Rename Connection\ConnectionFactory::get to Connection\ConnectionFactory::create
 
-- Moved Service component to LynkCMS\Core repo
-
-- Moved Package component to LynkCMS\Core repo
-
-- Moved Mvc component to LynkCMS\Core repo
-
-+ UUID\UUID -> Util\UUID
-
-+ Storage\GlobalAccessContainer -> Container\GlobalArrayContainer
-
-+ Storage\StandardContainer -> Container\StandardContainer
-
-+ Form\Input\DefaultInput\*.php -> Form\Input\Type\*.php
-
 ----------------------------------------------------------------------------------------------------
-
-# Core
-- √ Rename Library\Form\Input\DefaultInput to Library\Form\Input\Type
-- Move custom inputs from Library\Form\Input to Library\Form\Input\Types\Custom
-- Move custom input processors from Library\Form\Input\Processor\Input to Library\Form\Input\Processor\Types\Custom
-
-# Components
-- Move all default input processors from LynkCMS\Core to Form\Input\Processor\Types
-- Rename Form\Input\DefaultInput to Form\Input\Types
-- Remove OptionTrait completely from use and replace where needed with Container\StandardContainer.
-    - Move Form\OptionTrait to Container\OptionTrait -- will need LynkCMS\Core updated first before removing.
