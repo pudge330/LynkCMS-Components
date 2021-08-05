@@ -18,7 +18,6 @@
 namespace LynkCMS\Component\Form\Input;
 
 use LynkCMS\Component\Container\StandardContainer;
-use LynkCMS\Component\Form\OptionTrait;
 use LynkCMS\Component\Form\Input\InputHelper;
 use LynkCMS\Component\Form\Validator\BasicDataValidator;
 
