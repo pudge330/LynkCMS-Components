@@ -20,7 +20,7 @@ use Exception;
 /**
  * Class the provides ability to create a new Connection class.
  */
-class NewConnection {
+class ConnectionFactory {
 
 	/**
 	 * @var Closure Callback that handles logging errors.

@@ -125,7 +125,7 @@ class ConnectionPool {
 			else if (is_array($connection)) {
 				$t = $this;
 				$this->connections[$name] = function() use ($name, $t) {
-					$t->connections[$name] = NewConnection::get($t->connectionConfig[$name], $t->root);
+					$t->connections[$name] = ConnectionFactory::get($t->connectionConfig[$name], $t->root);
 					return $t->connections[$name];
 				};
 				$this->connectionConfig[$name] = $connection;

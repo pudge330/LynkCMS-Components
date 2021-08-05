@@ -7,7 +7,7 @@ A simple library that helps manage PDO connections, assists in creating new conn
 * Connection
 * ConnectionPool
 * ConnectionWrapped
-* NewConnection
+* ConnectionFactory
 
 <hr />
 
