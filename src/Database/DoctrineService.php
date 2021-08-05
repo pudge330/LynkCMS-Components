@@ -8,11 +8,11 @@
  * file that was distributed with this source code.
  *
  * @package LynkCMS Components
- * @subpackage DoctrineService
+ * @subpackage Database
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\DoctrineService;
+namespace LynkCMS\Component\Database;
 
 use Doctrine\ORM\EntityManager;
 
