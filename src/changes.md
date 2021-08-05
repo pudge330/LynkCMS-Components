@@ -10,8 +10,6 @@
 
 * Add a `DatabaseListener` as a logger listener option. LynkCMS\Component\Logger\Listener\DatabaseListener
 
-* Move DoctrineService\DoctrineService to Database\DoctrineService
-
 * Rename Connection\NewConnection to Connection\ConnectionFactory
 
 * Rename Connection\ConnectionFactory::get to Connection\ConnectionFactory::create
