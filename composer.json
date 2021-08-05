@@ -13,12 +13,11 @@
 	],
 	"autoload": {
 		"psr-4": {
-			"LynkCMS\\Component\\": "src.new/",
-			"lynk\\": "src.new/Functions/",
-			"BGStudios\\Component\\": "src/"
+			"LynkCMS\\Component\\": "src/",
+			"lynk\\": "src/Functions/",
 		},
 		"files": [
-			"src.new/Functions/Autoload.php"
+			"src/Functions/Autoload.php"
 		]
 	},
 	"require": {
