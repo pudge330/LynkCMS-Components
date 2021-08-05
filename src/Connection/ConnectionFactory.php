@@ -112,7 +112,7 @@ class ConnectionFactory {
 					$s[$k] = str_repeat('*', strlen($v));
 			}
 			if (static::$logger && static::$logger instanceof Closure)
-            	static::$logger('NewConnection Error - ' . static::$errMsg, ['settings' => $s, 'errno' => static::$errNo, 'errmsg' => static::$errMsg]);
+            	static::$logger('ConnectionFactory Error - ' . static::$errMsg, ['settings' => $s, 'errno' => static::$errNo, 'errmsg' => static::$errMsg]);
 		}
 		return null;
 	}
