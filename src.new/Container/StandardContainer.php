@@ -244,6 +244,15 @@ class StandardContainer {
 	}
 
 	/**
+	 * Export/return an array of data keys.
+	 * 
+	 * @return Array The array of keys.
+	 */
+	public function exportKeys() {
+		return array_keys($this->data);
+	}
+
+	/**
 	 * Export the data, without closures to JSON format.
 	 * 
 	 * @return string The array in JSON form.
