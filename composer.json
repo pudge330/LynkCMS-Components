@@ -14,7 +14,7 @@
 	"autoload": {
 		"psr-4": {
 			"LynkCMS\\Component\\": "src/",
-			"lynk\\": "src/Functions/",
+			"lynk\\": "src/Functions/"
 		},
 		"files": [
 			"src/Functions/Autoload.php"
