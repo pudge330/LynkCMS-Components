@@ -62,7 +62,7 @@ class ConnectionFactory {
      * 
      * @return Connection The new Connection object.
      */
-	public static function get($s, $root = null) {
+	public static function create($s, $root = null) {
 		if ($root) {
 			$root = rtrim($root, '/') . '/';
 		}
