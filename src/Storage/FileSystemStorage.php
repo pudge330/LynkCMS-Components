@@ -38,8 +38,6 @@ class FileSystemStorage implements StorageInterface {
 			if (!$directory || !file_exists($directory)) {
 				throw new \Exception('LynkCMS\\Component\\Storage\\FileSystemStorage expects either a valid directory or for $_SERVER[\'DOCUMENT_ROOT\'] to be set');
 			}
-			$namespace = $namespace ? DIRECTORY_SEPARATOR . $namespace : '';
-			$this->directory = rtrim($directory, DIRECTORY_SEPARATOR) . $namespace;
 	}
 
 	/**
