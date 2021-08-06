@@ -57,9 +57,7 @@ class DatabaseStorage implements StorageInterface {
 			$this->columns = ['identifier', 'value'];
 		}
 		else if (
-			isset($schema['table']) && isset($schema['columns']) &&
-			isset($schema['columns']['table']) && isset($schema['columns']['columns']) && 
-			sizeof($schema['columns']['columns']) == 2) {
+			isset($schema['table']) && isset($schema['columns']) && sizeof($schema['columns']) == 2) {
 			$this->table = $schema['table'];
 			$this->columns = $schema['columns'];
 		}
