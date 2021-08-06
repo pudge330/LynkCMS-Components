@@ -26,7 +26,7 @@ class Container extends BaseContainer {
 	/**
 	 * @var Array Parameters list.
 	 */
-	private $parameters = Array();
+	private $parameters;
 
 	/**
 	 * @var AbstractCompiledContainer Precompiled container.
@@ -49,6 +49,7 @@ class Container extends BaseContainer {
 	 */
 	public function __construct(Array $values = [], AbstractCompiledContainer $compiledContainer = null) {
 		parent::__construct($values);
+		$this->parameters = new StandardContainer;
 		if ($compiledContainer)
 			$this->setCompiledContainer($compiledContainer);
 		if (!$this->compiledContainerMapKeys)
@@ -199,7 +200,7 @@ class Container extends BaseContainer {
 	 * @param mixed $parameter Parameter value.
 	 */
 	public function setParameter($key, $parameter) {
-		$this->parameters[$key] = $parameter;
+		$this->parameters->set($key, $parameter);
 	}
 
 	/**
@@ -211,7 +212,7 @@ class Container extends BaseContainer {
 	 */
 	public function getParameter($key) {
 		if ($this->hasParameter($key))
-			return $this->parameters[$key];
+			return $this->parameters->get($key);
 	}
 
 	/**
@@ -222,10 +223,7 @@ class Container extends BaseContainer {
 	 * @return bool True if parameter exists, false otherwise.
 	 */
 	public function hasParameter($key) {
-		if (array_key_exists($key, $this->parameters))
-			return true;
-		else
-			return false;
+		return $this->parameters->has($key);
 	}
 
 	/**
@@ -234,7 +232,7 @@ class Container extends BaseContainer {
 	 * @param string $key Parameter key.
 	 */
 	public function removeParameter($key) {
-		unset($this->parameters[$key]);
+		$this->parameters->remove($key);
 	}
 
 	/**
@@ -243,7 +241,7 @@ class Container extends BaseContainer {
 	 * @return Array Parameter list.
 	 */
 	public function getAllParameters() {
-		return $this->parameters;
+		return $this->parameters->export();
 	}
 
 	/**
@@ -252,7 +250,7 @@ class Container extends BaseContainer {
 	 * @return Array Parameter key list.
 	 */
 	public function getParameterKeys() {
-		return array_keys($this->parameters);
+		return $this->parameters->exportKeys();
 	}
 
 	/**
@@ -261,8 +259,9 @@ class Container extends BaseContainer {
 	 * @param Closure $closure Callback closure.
 	 */
 	public function eachParameter(Closure $callback) {
+		$parameters = $this->getAllParameters();
 		$index = -1;
-		foreach ($this->parameters as $key => $value) {
+		foreach ($parameters as $key => $value) {
 			$index++;
 			$callback($index, $key, $value);
 		}
