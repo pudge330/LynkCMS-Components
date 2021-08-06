@@ -59,32 +59,6 @@ class SessionCache {
 	}
 
 	/**
-	 * Renew a session variable. Can also renew an expired value before its removed.
-	 * 
-	 * @param string $key The variable key.
-	 * @param int $renew Optional. The time in seconds to renew the value for.
-	 * @param bool $expired Optional. Set to true if the variable should be renewed even if its already expired.
-	 *                                Otherwise it would only renew the variable if it is still valid.
-	 * 
-	 * @return bool True if variable expiration has been renewed, otherwise false.
-	 */
-	public function renew($key, $renew = 60, $expired = false) {
-		if ($this->has($key)) {
-			if ($this->isValid($key) || $expired) {
-				if (is_int((int)$renew)) {
-					$dt = new Datetime();
-					$dt->add(new DateInterval('PT' . $renew . 'S'));
-					$data = $this->export(false, true);
-					$data["{$key}.expiration"] = (int)$dt->format('YmdHis');
-					$this->session->set($this->sessionDataKey, $data);
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-
-	/**
 	 * Get a value.
 	 * 
 	 * @param string $key The variable key.
@@ -145,34 +119,6 @@ class SessionCache {
 	}
 
 	/**
-	 * Check if the varaible has expired or not.
-	 * 
-	 * @param string $key The variable key.
-	 * 
-	 * @return mixed True if the varaible is expired, false if still valid and null if the variable doesn't exists.
-	 */
-	public function isExpired($key) {
-		if ($this->has($key)) {
-			if ((int)date('YmdHis') >= (int)$this->export()["{$key}.expiration"]) {
-				return true;
-			}
-			return false;
-		}
-		return null;
-	}
-
-	/**
-	 * Check if the variable is valid.
-	 * 
-	 * @param string $key The variable key.
-	 * 
-	 * @return bool True if the variable is valid, false otherwise.
-	 */
-	public function isValid($key) {
-		return $this->isExpired($key) ? false : true;
-	}
-
-	/**
 	 * Check if the variable is null.
 	 * 
 	 * @param string $key The variable key.
@@ -204,6 +150,60 @@ class SessionCache {
 		}
 		else
 			return false;
+	}
+
+	/**
+	 * Check if the varaible has expired or not.
+	 * 
+	 * @param string $key The variable key.
+	 * 
+	 * @return mixed True if the varaible is expired, false if still valid and null if the variable doesn't exists.
+	 */
+	public function isExpired($key) {
+		if ($this->has($key)) {
+			if ((int)date('YmdHis') >= (int)$this->export()["{$key}.expiration"]) {
+				return true;
+			}
+			return false;
+		}
+		return null;
+	}
+
+	/**
+	 * Check if the variable is valid.
+	 * 
+	 * @param string $key The variable key.
+	 * 
+	 * @return bool True if the variable is valid, false otherwise.
+	 */
+	public function isValid($key) {
+		return $this->isExpired($key) ? false : true;
+	}
+
+	/**
+	 * Renew a session variable. Can also renew an expired value before its removed.
+	 * 
+	 * @param string $key The variable key.
+	 * @param int $renew Optional. The time in seconds to renew the value for.
+	 * @param bool $expired Optional. Set to true if the variable should be renewed even if its already expired.
+	 *                                Otherwise it would only renew the variable if it is still valid.
+	 * 
+	 * @return bool True if variable expiration has been renewed, otherwise false.
+	 */
+	public function renew($key, $renew = 60, $expired = false) {
+		if ($this->has($key)) {
+			if ($this->isValid($key) || $expired) {
+				if (is_int((int)$renew)) {
+					$dt = new Datetime();
+					$dt->add(new DateInterval('PT' . $renew . 'S'));
+					$data = $this->export(false, true);
+					$data["{$key}.expiration"] = (int)$dt->format('YmdHis');
+					$this->session->set($this->sessionDataKey, $data);
+					return true;
+				}
+			}
+		}
+		return false;
 	}
 
 	/**
