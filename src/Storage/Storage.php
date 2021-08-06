@@ -50,14 +50,12 @@ class Storage implements StorageInterface {
 	 * 
 	 * @throws \Exception
 	 */
-	public function __construct($dirOrPdo, $opts = Array()) {
+	public function __construct(StorageInterface $storage, $opts = Array()) {
 		if (static::$isSymfonyYamlSupported === null) {
 			static::$isSymfonyYamlSupported = class_exists('\Symfony\Component\Yaml\Yaml');
 		}
 		$opts = array_merge(Array(
-			'table' => 'database_storage'
-			,'columns' => Array('identifier', 'value')
-			,'namespace' => null
+			'namespace' => null
 			,'hashName' => false
 			,'hashAlgo' => 'sha1'
 			,'encodeData' => false
@@ -66,31 +64,15 @@ class Storage implements StorageInterface {
 			,'storageType' => 'serialize' //--serialize|json|yaml
 			,'returnJsonArray' => true
 		), $opts);
-		if (is_string($dirOrPdo)) {
-			$dirOrPdo = rtrim($dirOrPdo, DIRECTORY_SEPARATOR);
-			if (!file_exists("{$dirOrPdo}/{$opts['namespace']}")) {
-				if (!mkdir("{$dirOrPdo}/{$opts['namespace']}", 0755, true)) {
-					throw new Exception("Cannot create directory {$dirOrPdo}");
-				}
-			}
-			if (!is_writable("{$dirOrPdo}/{$opts['namespace']}")) {
-				throw new Exception("Directory {$dirOrPdo} is not writable");
-			}
-			$this->storage = new FileSystemStorage("{$dirOrPdo}/{$opts['namespace']}");
-			$this->storageType = 'filesystem';
+
+		$this->storage = $storage;
+
+		if ($opts['namespace'] && !preg_match('/^[a-zA-Z0-9-_+\ ]+$/', $opts['namespace'])) {
+			throw new Exception("Storage: 'namespace' must match 'a-zA-Z0-9-_+ '");
 		}
-		else if ($dirOrPdo instanceof PDO || $dirOrPdo instanceof Connection\Connection || $dirOrPdo instanceof Connection\ConnectionWrapped) {
-			$this->storage = new DatabaseStorage($dirOrPdo, Array(
-				'table' => $opts['table'],
-				'columns' => $opts['columns']
-			));
-			$this->storageType = 'database';
-		}
-		else {
-			throw new Exception('LynkCMS\\Component\\Storage\\Storage requires the first parameter to be either a directory, PDO object or ConnectionWrapped object');
-		}
+
 		if ($opts['encryptData'] && !$opts['encryptKey']) {
-			throw new Exception('Must provide an encryption key if using the \'encryptData\' option');
+			throw new Exception("Storage: Must provide an encryption key if using the 'encryptData' option");
 		}
 		$this->options = $opts;
 	}
@@ -172,7 +154,7 @@ class Storage implements StorageInterface {
 	 * @param string $key Key name.
 	 */
 	public function createKey($key) {
-		$key = $this->storageType == 'database' && $this->options['namespace']
+		$key = $this->options['namespace']
 			? "{$this->options['namespace']}.{$key}" : $key;
 		$key = $this->options['hashName'] ? hash($this->options['hashAlgo'], $key) : $key;
 		return $key;

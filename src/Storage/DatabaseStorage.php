@@ -56,12 +56,15 @@ class DatabaseStorage implements StorageInterface {
 			$this->table = 'database_storage';
 			$this->columns = ['identifier', 'value'];
 		}
-		else if (isset($schema['table']) && isset($schema['columns']) && sizeof($schema) > 1) {
+		else if (
+			isset($schema['table']) && isset($schema['columns']) &&
+			isset($schema['columns']['table']) && isset($schema['columns']['columns']) && 
+			sizeof($schema['columns']['columns']) == 2) {
 			$this->table = $schema['table'];
 			$this->columns = $schema['columns'];
 		}
 		else {
-			throw new Exception('Not a valid schema');
+			throw new Exception('DatabaseStorage: Not a valid schema');
 		}
 	}
 
