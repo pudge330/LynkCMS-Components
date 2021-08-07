@@ -913,6 +913,74 @@ function decrypt($ivHashCiphertext, $password) {
 }
 
 /**
+ * ==================================================
+ * Colors
+ * ==================================================
+ */
+
+/**
+ * Convert rgb color values to hex.
+ * 
+ * @param Array $rgb Rgb colors.
+ * 
+ * @return string Hex color value.
+ */
+function rgbToHex($rgb) {
+	//--rgba regex
+	//--matches ###(1),###(2),###(3),#.#(4)?
+	//--/rgb(?:a)?\( ?([\d]{1,3}) ?, ?([\d]{1,3}) ?, ?([\d]{1,3}) ?,? ?([\d](?:\.[\d])?)? ?\)/
+	$rgb = array_values($rgb);
+	return '#' . sprintf('%02x', $rgb[0]) . sprintf('%02x', $rgb[1]) . sprintf('%02x', $rgb[2]);
+}
+
+/**
+ * Convert hex color to rgb values.
+ * 
+ * @param string $hex Hex color value.
+ * @param bool $assoc Return associative array.
+ * 
+ * @return Array Rgb values.
+ */
+function hexToRgb($hex, $assoc = false) {
+	$hex = str_replace("#", "", $hex);
+	$r = $g = $b = null;
+	if ($hex && preg_match('/^[0-9a-f]+$/i', $hex)) {
+		if(strlen($hex) == 3) {
+			$r = hexdec($hex[0].$hex[0]);
+			$g = hexdec($hex[1].$hex[1]);
+			$b = hexdec($hex[2].$hex[2]);
+		} else if (strlen($hex) == 6) {
+			$r = hexdec($hex[0].$hex[1]);
+			$g = hexdec($hex[2].$hex[3]);
+			$b = hexdec($hex[4].$hex[5]);
+		}
+	}
+	if ($assoc)
+		return ['r' => $r, 'g' => $g, 'b' => $b];
+	else
+		return [$r, $g, $b];
+}
+
+/**
+ * Generate a random color, returns both RGB and HEX version.
+ * 
+ * @param int $lower Optional. Lower color value, 0-255.
+ * @param int $upper Optional. Upper color value, 0-255.
+ */
+function randomColor($lower = 0, $upper = 255) {
+	$c1 = str_pad(dechex(mt_rand($lower, $upper)), 2, '0', STR_PAD_LEFT);
+	$c2 = str_pad(dechex(mt_rand($lower, $upper)), 2, '0', STR_PAD_LEFT);
+	$c3 = str_pad(dechex(mt_rand($lower, $upper)), 2, '0', STR_PAD_LEFT);
+	return Array("#{$c1}{$c2}{$c3}", \lynk\hexToRgb("#{$c1}{$c2}{$c3}", true));
+}
+
+/**
+ * ==================================================
+ * Other
+ * ==================================================
+ */
+
+/**
  * Returns used memory (either in percent (without percent sign) or free and overall in bytes).
  * 
  * @source https://www.php.net/manual/en/function.memory-get-peak-usage.php
@@ -1118,55 +1186,6 @@ function _getServerLoadLinuxData() {
  */
 function isCli() {
 	return (php_sapi_name() == "cli");
-}
-
-/**
- * ==================================================
- * Other
- * ==================================================
- */
-
-/**
- * Convert rgb color values to hex.
- * 
- * @param Array $rgb Rgb colors.
- * 
- * @return string Hex color value.
- */
-function rgbToHex($rgb) {
-	//--rgba regex
-	//--matches ###(1),###(2),###(3),#.#(4)?
-	//--/rgb(?:a)?\( ?([\d]{1,3}) ?, ?([\d]{1,3}) ?, ?([\d]{1,3}) ?,? ?([\d](?:\.[\d])?)? ?\)/
-	$rgb = array_values($rgb);
-	return '#' . sprintf('%02x', $rgb[0]) . sprintf('%02x', $rgb[1]) . sprintf('%02x', $rgb[2]);
-}
-
-/**
- * Convert hex color to rgb values.
- * 
- * @param string $hex Hex color value.
- * @param bool $assoc Return associative array.
- * 
- * @return Array Rgb values.
- */
-function hexToRgb($hex, $assoc = false) {
-	$hex = str_replace("#", "", $hex);
-	$r = $g = $b = null;
-	if ($hex && preg_match('/^[0-9a-f]+$/i', $hex)) {
-		if(strlen($hex) == 3) {
-			$r = hexdec($hex[0].$hex[0]);
-			$g = hexdec($hex[1].$hex[1]);
-			$b = hexdec($hex[2].$hex[2]);
-		} else if (strlen($hex) == 6) {
-			$r = hexdec($hex[0].$hex[1]);
-			$g = hexdec($hex[2].$hex[3]);
-			$b = hexdec($hex[4].$hex[5]);
-		}
-	}
-	if ($assoc)
-		return ['r' => $r, 'g' => $g, 'b' => $b];
-	else
-		return [$r, $g, $b];
 }
 
 /**
