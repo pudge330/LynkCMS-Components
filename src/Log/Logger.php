@@ -15,6 +15,7 @@
 namespace LynkCMS\Component\Log;
 
 use LynkCMS\Component\Log\Event\LogEvent;
+use LynkCMS\Component\Log\Listener\AbstractListener;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\EventDispatcher\EventDispatcher;
@@ -113,7 +114,12 @@ class Logger implements LoggerInterface {
 	 */
 	public function registerListener($listener, $level = null) {
 		$level = $level ? ".{$level}" : '';
-		$this->eventDispatcher->addListener("log{$level}", $listener);
+		if ($listener instanceof AbstractListener) {
+			$this->eventDispatcher->addListener("log{$level}", [$listener, 'handle']);
+		}
+		else {
+			$this->eventDispatcher->addListener("log{$level}", $listener);
+		}
 	}
 
 	/**

@@ -15,6 +15,7 @@
 namespace LynkCMS\Component\Log\Listener;
 
 use LynkCMS\Component\Container\ContainerAwareClass;
+use LynkCMS\Component\Log\Event\LogEvent;
 
 /**
  * Abstract logger event listener.
@@ -29,30 +30,24 @@ class AbstractListener extends ContainerAwareClass {
 	public function __construct() {}
 
 	/**
-	 * Interpolate log, level and context into log entry.
+	 * Map event data to placeholders from event object. Return an associative array of placeholder data pairs.
 	 * 
-	 * @param string $level Log level.
-	 * @param string $message Log message.
-	 * @param Array $context Message context.
+	 * @param LogEvent The log event.
 	 * 
-	 * @return string Log record.
+	 * @return mixed Return value of the callback.
 	 */
-	public function interpolateLog($level, $message, array $context = array()) {
-		$userId = isset($_SESSION['user']) ? $_SESSION['user']['id'] : 0;
-		$record = "[%datetime%][%ip%][%uid%][%level%] %message%";
-		$recordContext = array(
-			'datetime' => date($this->datetimeFormat)
-			,'level' => $level
-			,'message' => $message
-			,'ip' => \lynk\getIp()
-			,'uid' => $userId
-		);
-		if (sizeof($context) > 0) {
-			$record .= "{$this->sectionDelimeter}%context%\n";
-			$recordContext['context'] = json_encode($context);
+	protected function mapEventData(LogEvent $event) {
+		$data = [];
+		$data['timestamp'] = date('F j, Y h:i:s A');
+		$ip = \lynk\getIp();
+		if ($ip) {
+			$data['ip_address'] = $ip;
 		}
-		else
-			$record .= "\n";
-		return \lynk\interpolate($record, $recordContext, array('%'));
+		$data['level'] = $event->getLevelName();
+		$data['message'] = $event->getMessage();
+		if (sizeof($event->getContext())) {
+			$data['context'] = json_encode($event->getContext());
+		}
+		return $data;
 	}
 }

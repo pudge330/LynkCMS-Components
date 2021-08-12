@@ -14,6 +14,7 @@
 
 namespace LynkCMS\Component\Log\Listener;
 
+use Closure;
 use LynkCMS\Component\Log\Event\LogEvent;
 
 /**
@@ -22,16 +23,27 @@ use LynkCMS\Component\Log\Event\LogEvent;
 class StreamListener extends AbstractListener {
 
 	/**
+	 * @var string Log record section delimeter/separator.
+	 */
+	protected $sectionDelimeter = '::';
+
+	/**
 	 * @var string Log file path.
 	 */
 	protected $filePath;
 
 	/**
+	 * @var Closure Data mapping closure.
+	 */
+	protected $dataMapping;
+
+	/**
 	 * @param string $filePath Log file path.
 	 */
-	public function __construct($filePath) {
+	public function __construct($filePath, Closure $dataMapping = null) {
 		parent::__construct();
 		$this->filePath = $filePath;
+		$this->dataMapping = $dataMapping;
 	}
 
 	/**
@@ -44,10 +56,31 @@ class StreamListener extends AbstractListener {
 	public function handle(LogEvent $event) {
 		if (!file_exists($this->filePath))
 			file_put_contents($this->filePath, '');
-		$level = $event->getLevelName();
+
+		$data = $this->mapEventData($event);
+		if ($this->dataMapping) {
+			$data = ($this->dataMapping)($event, $data);
+		}
+
+		$template = '';
+		foreach ($data as $key => $value) {
+			if (!in_array($key, ['message', 'level', 'context'])) {
+				$template .= "[%{$key}%]";
+			}
+		}
+		$template .= '[%level%] %message%';
+		if (
+			isset($data['context']) &&
+			((is_array($data['context']) && sizeof($data['context'])) ||
+			($data['context'] && $data['context'] != ''))
+		) {
+			$template .= " {$this->sectionDelimeter} %context% {$this->sectionDelimeter}";
+			$data['context'] = is_array($data['context']) ? json_encode($data['context']) : $data['context'];
+		}
+
 		file_put_contents(
 			$this->filePath
-			,$this->interpolateLog($level, $event->getMessage(), $event->getContext())
+			,\lynk\interpolate($template, $data, ['%']) . "\n"
 			,FILE_APPEND
 		);
 	}
