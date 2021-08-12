@@ -12,9 +12,9 @@
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Log\Handler;
+namespace LynkCMS\Component\Log\Listener;
 
-use LynkCMS\Component\Logger\Event\LogEvent;
+use LynkCMS\Component\Log\Event\LogEvent;
 
 /**
  * Stream listener class. Appends logs to a file.
@@ -24,7 +24,7 @@ class StreamListener extends AbstractListener {
 	/**
 	 * @var string Log file path.
 	 */
-	private $filePath;
+	protected $filePath;
 
 	/**
 	 * @param string $filePath Log file path.

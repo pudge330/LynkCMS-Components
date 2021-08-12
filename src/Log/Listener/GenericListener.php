@@ -14,17 +14,17 @@
 
 namespace LynkCMS\Component\Log\Listener;
 
-use LynkCMS\Component\Logger\Event\LogEvent;
+use LynkCMS\Component\Log\Event\LogEvent;
 
 /**
  * Generic listener class. Calls a closure.
  */
-class GenericCallableListener extends AbstractListener {
+class GenericListener extends AbstractListener {
 
 	/**
 	 * @var mixed Callable function or closure.
 	 */
-	private $callable;
+	protected $callable;
 
 	/**
 	 * @param mixed $callable Callable function or closure.
