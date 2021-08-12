@@ -26,6 +26,8 @@ class AbstractListener extends ContainerAwareClass {
 	 */
 	protected $sectionDelimeter = ':';
 
+	public function __construct() {}
+
 	/**
 	 * Interpolate log, level and context into log entry.
 	 * 
