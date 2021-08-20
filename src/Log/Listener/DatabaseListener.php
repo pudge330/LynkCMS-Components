@@ -28,7 +28,7 @@ class DatabaseListener extends AbstractListener {
 	/**
 	 * @var Connection|ConnectionWrapped Database connection.
 	 */
-	protected $database;
+	protected $connection;
 
 	/**
 	 * @var string Table name.
