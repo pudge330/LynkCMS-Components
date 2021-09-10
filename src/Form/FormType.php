@@ -176,8 +176,8 @@ class FormType {
 		else if (!$options) {
 			$options = [];
 		}
-		if ($options && !is_array($options)) {
-			$type = is_object($options) ? get_class($options) : gettype($options);
+		if ($defaults && !is_array($defaults)) {
+			$type = is_object($defaults) ? get_class($defaults) : gettype($defaults);
 			throw new Exception(
 				'FormType - invalid arguments passed to constructor. Argument $defaults is expected to be an array, ' . $type . ' given.'
 			);
@@ -305,7 +305,7 @@ class FormType {
 	}
 
 	/**
-	 * Bind submission data to instance. Checks is the HTTP request method is one of the desired methods.
+	 * Bind submission data to instance. Checks if the HTTP request method is one of the desired methods.
 	 * If name format is 'array' the $_FILES structure groups the file submission values together is a nested array,
 	 * otherwise each array in $_FILES represents one file submission. The method will internally call processSubmittedFiles()
 	 * to normalie the data if the name format is 'array'.
@@ -328,7 +328,7 @@ class FormType {
 				else {
 					$submittedData = [];
 					foreach ($requestData as $key => $value) {
-						if (preg_match('/^' . preg_quote($formName) . '_(.*)/', $key, $match)) {
+						if (preg_match('/^' . preg_quote($formName, '/') . '_(.*)/', $key, $match)) {
 							$submittedData[$match[1]] = $value;
 						}
 					}
