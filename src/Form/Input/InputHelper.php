@@ -353,11 +353,12 @@ class InputHelper {
 					,'/^\d{14}$/' => 'YmdHis'
 					,'/^\d{12}$/' => 'YmdHi'
 					,'/^\d{8}$/' => 'Ymd'
+					,'/^\d{12}$/' => 'Hi'
 				];
 				foreach ($formats as $regex => $format) {
 					if (preg_match($regex, $value)) {
 						try {
-							$dt = DateTime::createFromFormat($format, $value);
+							$dt = DateTime::createFromFormat($format, strtolower($value));
 							break;
 						}
 						catch(Exception $e) {
