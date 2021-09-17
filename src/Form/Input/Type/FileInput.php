@@ -67,7 +67,7 @@ class FileInput extends InputType {
 		if ($this->settings->options->required && (!isset($data[$this->name]) || !$data[$this->name] || (!isset($data[$this->name]['error']) || $data[$this->name]['error'] == 4)))
 			return [false, "{$displayName} is required"];
 		else if ($data[$this->name] && $data[$this->name]['error'] == 0) {
-			$fileResult = $this->val->file(
+			$fileResult = $this->validator->file(
 				$data[$this->name]['tmp_name'], 
 				$this->settings->options->accept,
 				$this->settings->options->maxsize,
@@ -124,8 +124,8 @@ class FileInput extends InputType {
 		if ($this->settings->options->disabled)
 			$attr['input']['attr']['disabled'] = 'disabled';
 
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 
 		return "<input{$inputAttr}{$inputDataAttr}>";
 	}

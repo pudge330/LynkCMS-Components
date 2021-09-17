@@ -14,23 +14,12 @@
 
 namespace LynkCMS\Component\Form;
 
-use LynkCMS\Component\Form\Security\FormTokenizer;
+use LynkCMS\Component\Container\StandardContainer;
 
 /**
  * Form view class used to render fields and errors.
  */
 class FormView {
-	use OptionTrait;
-
-	/**
-	 * @var FormType Form instance.
-	 */
-	protected $form;
-
-	/**
-	 * @var Array List of input elements.
-	 */
-	protected $inputs;
 
 	/**
 	 * @var Array Submitted data.
@@ -43,9 +32,24 @@ class FormView {
 	protected $errors;
 
 	/**
+	 * @var FormType Form instance.
+	 */
+	protected $form;
+
+	/**
+	 * @var Array List of input elements.
+	 */
+	protected $inputs;
+
+	/**
 	 * @var Array List of already outputted fields.
 	 */
 	protected $outputtedFields;
+
+	/**
+	 * @var StandardContainer View options.
+	 */
+	protected $viewOptions;
 
 	/**
 	 * @param FormType Form instance.
@@ -54,8 +58,8 @@ class FormView {
 		$this->form = $form;
 		$this->inputs = $form->getInputs();
 		$this->data = $form->getSubmittedData();
-		$this->errors = $form->formErrors();
-		$this->setOption($form->getViewOptions(), true);
+		$this->errors = $form->getFormErrors();
+		$this->viewOptions = new StandardContainer($form->getViewOptions());
 		$this->resetRemainingFields();
 	}
 
@@ -74,6 +78,15 @@ class FormView {
 	}
 
 	/**
+	 * Get list of input fields.
+	 * 
+	 * @return Array Input list.
+	 */
+	public function getAllFields() {
+		return $this->inputs;
+	}
+
+	/**
 	 * Check if form has particular field.
 	 * 
 	 * @param string $name Field name.
@@ -82,18 +95,6 @@ class FormView {
 	 */
 	public function hasField($name) {
 		return array_key_exists($name, $this->inputs);
-	}
-
-	/**
-	 * Register new CSRF token.
-	 * 
-	 * @param string $formName Optional. Form name, uses current instance by default.
-	 * 
-	 * @return string New token.
-	 */
-	public function registerToken($formName = null) {
-		$formName = $formName ?: $this->form->getName();
-		return $this->form->getTokenizer()->registerToken($formName);
 	}
 
 	/**
@@ -106,94 +107,15 @@ class FormView {
 	}
 
 	/**
-	 * Get list of inputs.
+	 * Register new CSRF token.
 	 * 
-	 * @return Array Input list.
+	 * @param string $formName Optional. Form name, uses current instance by default.
+	 * 
+	 * @return string New token.
 	 */
-	public function getInputs() {
-		return $this->inputs;
-	}
-
-	/**
-	 * Get input by name.
-	 * change: same as getField, only need one.
-	 * 
-	 * @param string $name Input name.
-	 * 
-	 * @return InputType Field input.
-	 */
-	public function getInput($name) {
-		if ($this->hasField($name)) {
-			return $this->inputs[$name];
-		}
-	}
-
-	/**
-	 * Render field.
-	 * 
-	 * @param string $name Input name.
-	 * 
-	 * @return string Rendered input.
-	 */
-	public function renderField($name) {
-		$output = '';
-		if ($this->hasField($name)) {
-			$isToken = ($name == '_token');
-			if ($isToken && $this->getOption('usingToken')) {
-				$this->inputs[$name]->setOption('default', $this->registerToken());
-			}
-			$errors = $this->getOption('inlineErrors') && !$isToken ? $this->errors : Array();
-			$output = $this->inputs[$name]->outputHtml(!$isToken ? $this->data : array(), $errors);
-			$this->outputtedFields[] = $name;
-		}
-		else {
-			$output = "Form field '{$name}' is unregistered";
-		}
-		return $output;
-	}
-
-	/**
-	 * Render all fields.
-	 * change: add option to return array of render fields with input name as key.
-	 * 
-	 * @param bool $echo Output fields.
-	 * 
-	 * @return mixed Rendered fields or null if outputted.
-	 */
-	public function renderAllFields($echo = true) {
-		$output = '';
-		foreach (array_keys($this->inputs) as $name) {
-			if ($echo)
-				echo $this->renderField($name);
-			else
-				$output .= $this->renderField($name);
-			$this->outputtedFields[] = $name;
-		}
-		if (!$echo)
-			return $output;
-	}
-
-	/**
-	 * Render all remaining unrendered fields.
-	 * change: add option to return array of render fields with input name as key.
-	 * 
-	 * @param bool $echo Output fields.
-	 * 
-	 * @return mixed Rendered fields or null if outputted.
-	 */
-	public function renderRemainingFields($echo = true) {
-		$output = '';
-		foreach (array_keys($this->inputs) as $name) {
-			if (!in_array($name, $this->outputtedFields)) {
-				if ($echo)
-					echo $this->renderField($name);
-				else
-					$output .= $this->renderField($name);
-				$this->outputtedFields[] = $name;
-			}
-		}
-		if (!$echo)
-			return $output;
+	public function registerToken($formName = null) {
+		$formName = $formName ?: $this->form->getName();
+		return $this->form->getTokenizer()->registerToken($formName);
 	}
 
 	/**
@@ -282,5 +204,73 @@ class FormView {
 			break;
 		}
 		return $output;
+	}
+
+	/**
+	 * Render field.
+	 * 
+	 * @param string $name Input name.
+	 * 
+	 * @return string Rendered input.
+	 */
+	public function renderField($name) {
+		$output = '';
+		if ($this->hasField($name)) {
+			$isToken = ($name == '_token');
+			if ($isToken && $this->viewOptions->get('usingToken')) {
+				$this->inputs[$name]->setOption('default', $this->registerToken());
+			}
+			$errors = $this->viewOptions->get('inlineErrors') && !$isToken ? $this->errors : Array();
+			$output = $this->inputs[$name]->outputHtml(!$isToken ? $this->data : array(), $errors);
+			$this->outputtedFields[] = $name;
+		}
+		else {
+			$output = "Form field '{$name}' is unregistered";
+		}
+		return $output;
+	}
+
+	/**
+	 * Render all fields.
+	 * change: add option to return array of render fields with input name as key.
+	 * 
+	 * @param bool $echo Output fields.
+	 * 
+	 * @return mixed Rendered fields or null if outputted.
+	 */
+	public function renderAllFields($echo = true) {
+		$output = '';
+		foreach (array_keys($this->inputs) as $name) {
+			if ($echo)
+				echo $this->renderField($name);
+			else
+				$output .= $this->renderField($name);
+			$this->outputtedFields[] = $name;
+		}
+		if (!$echo)
+			return $output;
+	}
+
+	/**
+	 * Render all remaining unrendered fields.
+	 * change: add option to return array of render fields with input name as key.
+	 * 
+	 * @param bool $echo Output fields.
+	 * 
+	 * @return mixed Rendered fields or null if outputted.
+	 */
+	public function renderRemainingFields($echo = true) {
+		$output = '';
+		foreach (array_keys($this->inputs) as $name) {
+			if (!in_array($name, $this->outputtedFields)) {
+				if ($echo)
+					echo $this->renderField($name);
+				else
+					$output .= $this->renderField($name);
+				$this->outputtedFields[] = $name;
+			}
+		}
+		if (!$echo)
+			return $output;
 	}
 }

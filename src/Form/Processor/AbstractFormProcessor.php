@@ -15,6 +15,7 @@
 namespace LynkCMS\Component\Form\Processor;
 
 use Exception;
+use LynkCMS\Component\Container\StandardContainer;
 use LynkCMS\Component\Form\FormType;
 use LynkCMS\Component\Form\OptionTrait;
 
@@ -22,7 +23,11 @@ use LynkCMS\Component\Form\OptionTrait;
  * Abstract form processor class.
  */
 class AbstractFormProcessor {
-	use OptionTrait;
+
+	/**
+	 * @var StandardContainer Form processor options.
+	 */
+	protected $formOptions;
 
 	/**
 	 * @var Array Input processors.
@@ -33,7 +38,7 @@ class AbstractFormProcessor {
 	 * @param Array $options Optional. Form processor options.
 	 */
 	public function __construct($options = []) {
-		$this->setOption($options, true);
+		$this->options = new StandardContainer($options);
 		$this->processors = $this->inputProcessors();
 	}
 
@@ -45,7 +50,7 @@ class AbstractFormProcessor {
 	 * 
 	 * @return Array Processed form submission data.
 	 */
-	public function processFormData(&$data, FormType $form) {
+	public function processSubmissionData(&$data, FormType $form) {
 		$settings = $form->getFieldSettings();
 		if (!is_array($data)) {
 			$data = [];
@@ -53,7 +58,7 @@ class AbstractFormProcessor {
 		foreach ($settings as $fieldKey => $fieldSettings) {
 			if (array_key_exists($fieldSettings->type, $this->processors)) {
 				$processorKey = is_string($this->processors[$fieldSettings->type]) ? $this->processors[$fieldSettings->type] : $fieldSettings->type;
-				$data = $this->processors[$processorKey]->processFormData(
+				$data = $this->processors[$processorKey]->processSubmissionData(
 					$data
 					,$fieldKey
 					,$fieldSettings
@@ -64,14 +69,14 @@ class AbstractFormProcessor {
 	}
 
 	/**
-	 * Process form data.
+	 * Process data for form.
 	 * 
 	 * @param Array $data Form submission data.
 	 * @param FormType $form Form instance.
 	 * 
 	 * @return Array Processed form data.
 	 */
-	public function processData(&$data, FormType $form) {
+	public function processFormData(&$data, FormType $form) {
 		$settings = $form->getFieldSettings();
 		if (!is_array($data)) {
 			$data = [];
@@ -79,7 +84,7 @@ class AbstractFormProcessor {
 		foreach ($settings as $fieldKey => $fieldSettings) {
 			if (array_key_exists($fieldSettings->type, $this->processors)) {
 				$processorKey = is_string($this->processors[$fieldSettings->type]) ? $this->processors[$fieldSettings->type] : $fieldSettings->type;
-				$data = $this->processors[$processorKey]->processData(
+				$data = $this->processors[$processorKey]->processFormData(
 					$data
 					,$fieldKey
 					,$fieldSettings

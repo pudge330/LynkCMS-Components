@@ -33,9 +33,9 @@ class TextInput extends InputType {
 		$displayName = $this->settings->label ? $this->settings->label : $this->settings->errorName;
 		if ($this->settings->options->required && (!isset($data[$this->name]) || ($data[$this->name] === null || $data[$this->name] == '')))
 			return [false, "{$displayName} is required"];
-		else if (isset($data[$this->name]) && $data[$this->name] && $this->settings->options->min && $this->settings->options->max && !$this->val->text($data[$this->name], $this->settings->options->max, $this->settings->options->min))
+		else if (isset($data[$this->name]) && $data[$this->name] && $this->settings->options->min && $this->settings->options->max && !$this->validator->text($data[$this->name], $this->settings->options->max, $this->settings->options->min))
 			return [false, "{$displayName} must be between {$this->settings->options->min} and {$this->settings->options->max} characters"];
-		else if (isset($data[$this->name]) && $data[$this->name] && $this->settings->options->max && !$this->val->text($data[$this->name], $this->settings->options->max))
+		else if (isset($data[$this->name]) && $data[$this->name] && $this->settings->options->max && !$this->validator->text($data[$this->name], $this->settings->options->max))
 			return [false, "{$displayName} must be {$this->settings->options->max} characters or less"];
 		else if (isset($data[$this->name]) && $data[$this->name] && $this->settings->options->min && strlen($data[$this->name]) < $this->settings->options->min)
 			return [false, "{$displayName} must be {$this->settings->options->min} characters or more"];
@@ -79,8 +79,8 @@ class TextInput extends InputType {
 		if ($this->settings->options->placeholder)
 			$attr['input']['attr']['placeholder'] = $this->settings->options->placeholder;
 
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		return "<input{$inputAttr}{$inputDataAttr}>";
 	}
 }

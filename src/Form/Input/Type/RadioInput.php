@@ -123,8 +123,8 @@ class RadioInput extends InputType {
 			$selected = $dataKey == $submittedValues ? ' checked="checked"' : '';
 			$attr['input']['attr']['value'] = htmlentities($dataKey);
 			$attr['input']['attr']['id'] = $fieldId . "_{$count}";
-			$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-			$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr']);
+			$inputAttr = \lynk\attributes($attr['input']['attr']);
+			$inputDataAttr = \lynk\attributes($attr['input']['dataAttr']);
 			$output .= "<label for=\"{$attr['input']['attr']['id']}\" class=\"{$classes['sublabel']}\"><input{$inputAttr}{$inputDataAttr}{$selected}><span>{$dataValue}</span></label>";
 		}
 

@@ -158,8 +158,8 @@ class SelectableDateInput extends InputType {
 		$attr['input']['attr']['name'] = $this->helper->getFieldSuffixId($this->inputName, '_month');
 		$attr['input']['attr']['id'] = "{$fieldId}_month";
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['subinput']}-month";
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		$dateOutput .= "<select{$inputAttr}{$inputDataAttr}>";
 		$dateOutput .= "<option value=\"\" id=\"{$fieldId}_none\">--</option>";
 		foreach (array(
@@ -174,8 +174,8 @@ class SelectableDateInput extends InputType {
 		$attr['input']['attr']['name'] = $this->helper->getFieldSuffixId($this->inputName, '_day');
 		$attr['input']['attr']['id'] = "{$fieldId}_day";
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['subinput']}-day";
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		$dateOutput .= "<select{$inputAttr}{$inputDataAttr}>";
 		$dateOutput .= "<option value=\"\" id=\"{$fieldId}_none\">--</option>";
 		for ($i = 1; $i <= 31; $i++) {
@@ -187,8 +187,8 @@ class SelectableDateInput extends InputType {
 		$attr['input']['attr']['name'] = $this->helper->getFieldSuffixId($this->inputName, '_year');
 		$attr['input']['attr']['id'] = "{$fieldId}_year";
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['subinput']}-year";
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		$dateOutput .= "<select{$inputAttr}{$inputDataAttr}>";
 		$dateOutput .= "<option value=\"\" id=\"{$fieldId}_none\">--</option>";
 		for ($i = $this->settings->options->startYear; $i <= $this->settings->options->endYear; $i++) {

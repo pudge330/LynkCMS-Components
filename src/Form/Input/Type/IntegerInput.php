@@ -38,7 +38,7 @@ class IntegerInput extends InputType {
 		$displayName = $this->settings->label ? $this->settings->label : $this->settings->errorName;
 		if ($this->settings->options->required && (!isset($data[$this->name]) || !$data[$this->name] || $data[$this->name] == ''))
 			return [false, "{$displayName} is required"];
-		else if (isset($data[$this->name]) && $data[$this->name] && !$this->val->int($data[$this->name], ['min' => $this->settings->options->min, 'max' => $this->settings->options->max])) {
+		else if (isset($data[$this->name]) && $data[$this->name] && !$this->validator->int($data[$this->name], ['min' => $this->settings->options->min, 'max' => $this->settings->options->max])) {
 			if ($this->settings->options->min && $this->settings->options->max)
 				return [false, "{$displayName} must be a integer between {$this->settings->options->min} and {$this->settings->options->max}"];
 			else if ($this->settings->options->min)
@@ -91,8 +91,8 @@ class IntegerInput extends InputType {
 		if ($this->settings->options->disabled)
 			$attr['input']['attr']['disabled'] = 'disabled';
 
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 
 		return "<input{$inputAttr}{$inputDataAttr}>";
 	}

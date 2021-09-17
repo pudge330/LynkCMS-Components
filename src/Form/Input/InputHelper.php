@@ -28,7 +28,7 @@ class InputHelper {
 	/**
 	 * @var BasicDataValidator Basic data validator class.
 	 */
-	public $val;
+	public $validator;
 
 	/**
 	 * @var NamedBuffers Named output buffer class.
@@ -39,203 +39,41 @@ class InputHelper {
 	 * @param BasicDataValidator Basic data validator instance.
 	 */
 	public function __construct(BasicDataValidator $validator = null) {
-		$validator = $validator ?: new BasicDataValidator();
-		$this->val = $validator;
+		$this->validator = new BasicDataValidator();
 		$this->buffer = new NamedBuffers();
 	}
 
 	/**
-	 * Attempt to convert a date or time string into a valid DateTime object.
+	 * Generic data validation based on simple types.
 	 * 
-	 * @param string $value Date, time or datetime string.
+	 * @param string $allow Data type.
+	 * @param mixed $data Data value.
 	 * 
-	 * @return DateTime A DateTime object or false on failure.
+	 * @return bool True if valid, false otherwise.
 	 */
-	public function toDateTime($value) {
-		if (!$value)
-			return null;
-		if (is_numeric($value)) {
-			if (preg_match('/^\d{8}$/', $value)) {
-				return DateTime::createFromFormat('Ymd', $value);
-			}
-			else if (preg_match('/^\d{14}$/', $value)) {
-				return DateTime::createFromFormat('YmdHis', $value);
-			}
-			else {
-				return DateTime::createFromFormat('YmdHi', $value);
-			}
+	public function validateType($allow, $data) {
+		if ($allow && in_array($allow, ['email', 'phone', 'text', 'int', 'double', 'rgb', 'hexcolor'])) {
+			return $this->validator->{$allow}($data);
 		}
-		else {
-			if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $value)) {
-				return Datetime::createFromFormat('Y-m-d H:i', $submittedValue . ' ' . date('H:i'));
-			}
-			else {
-				return new Datetime($value);
-			}
-		}
+		return true;
 	}
 
 	/**
-	 * Adds a class to a specified element class set.
+	 * Validate data exists in source.
 	 * 
-	 * @param Array $attr Attribute array sets.
-	 * @param string $key Input part/section.
-	 * @param string $class Class name.
-	 * @param string $type Optional. Attribute type. 'attr' or 'dataAttr'
+	 * @param Array $data Data values.
+	 * @param Array $source Source array.
+	 * 
+	 * @return bool True if exists, false otherwise.
 	 */
-	public function addAttrClass(&$attr, $key, $class, $type = 'attr') {
-		if (isset($attr[$key][$type])) {
-			if (!isset($attr[$key][$type]['class']))
-				$attr[$key][$type]['class'] = '';
-			$class = $attr[$key][$type]['class'] == '' ? $class : " {$class}";
-			$attr[$key][$type]['class'] .= $class;
+	public function validateExists($data, $source) {
+		$source = array_keys($source);
+		$data = is_array($data) ? $data : [$data];
+		foreach ($data as $d) {
+			if (!in_array($d, $source))
+				return false;
 		}
-	}
-
-	/**
-	 * Build field id based of of field name for array type naming convention.
-	 * 
-	 * @param string $fieldname The field name attribute.
-	 * 
-	 * @return string Field id.
-	 */
-	public function getFieldId($fieldname) {
-		if (preg_match('/^([^\[\]]+)\[([^\[\]]+)\]$/', $fieldname, $match)) {
-			return "{$match[1]}_{$match[2]}";
-		}
-		else
-			return $fieldname;
-	}
-
-	/**
-	 * Get field name with a suffix added to the sub name.
-	 * 
-	 * @param string $fieldname Field name attribute.
-	 * @param string $suffix Sufffix to add.
-	 * 
-	 * @return string Suffixed name.
-	 */
-	public function getFieldSuffixId($fieldname, $suffix) {
-		if (preg_match('/^([^\[\]]+)\[([^\[\]]+)\]$/', $fieldname, $match)) {
-			return "{$match[1]}[{$match[2]}{$suffix}]";
-		}
-		else
-			return $fieldname . $suffix;
-	}
-
-	/**
-	 * Get field name with a suffix added to a numerical subname. eg. `form[file_1]`
-	 * 
-	 * @param string $fieldname Field name attribute.
-	 * @param string $suffix Sufffix to add.
-	 * @param string $glue Optional. Glue to append suffix with.
-	 * 
-	 * @return string Suffixed name.
-	 */
-	public function getFieldSuffixNumericId($fieldname, $suffix, $glue = '_') {
-		if (preg_match('/^([^\[\]]+)\[([^\[\]]+)\]$/', $fieldname, $match)) {
-			$formName = $match[1];
-			if (preg_match('/^([a-zA-Z_-]+)([0-9]+)?$/', $match[2], $match)) {
-				$newFieldId = "{$match[1]}" . (preg_match('/' . $glue . '$/', $match[1]) ? '' : $glue) . "new_window" . (isset($match[2]) && $match[2] && $match[2] != '' ? "{$glue}{$match[2]}" : '');
-				return "{$formName}[{$newFieldId}]";
-			}
-			else {
-				return "{$match[1]}[{$match[2]}{$suffix}]";
-			}
-		}
-		else {
-			return $fieldname . $suffix;
-		}
-	}
-
-	/**
-	 * Process field attributes from field settings array.
-	 * 
-	 * @param Array $settings Field settings array.
-	 * 
-	 * @return Array Field attributes array.
-	 */
-	public function processFieldAttributes($settings) {
-		$attr = array(
-			'wrap' => array(
-				'attr' => $settings->options->attr ?: array(),'dataAttr' => $settings->options->dataAttr ?: array()
-			)
-			,'label' => array(
-				'attr' => $settings->options->labelAttr ?: array(),'dataAttr' => $settings->options->labelDataAttr ?: array()
-			)
-			,'labelWrap' => array(
-				'attr' => $settings->options->labelWrapAttr ?: array(),'dataAttr' => $settings->options->labelWrapDataAttr ?: array()
-			)
-			,'input' => array(
-				'attr' => $settings->options->inputAttr ?: array(),'dataAttr' => $settings->options->inputDataAttr ?: array()
-			)
-			,'inputWrap' => array(
-				'attr' => $settings->options->inputWrapAttr ?: array(),'dataAttr' => $settings->options->inputWrapDataAttr ?: array()
-			)
-			,'subInput' => array(
-				'attr' => $settings->options->subInputAttr ?: array(),'dataAttr' => $settings->options->subInputDataAttr ?: array()
-			)
-			,'subInputWrap' => array(
-				'attr' => $settings->options->subInputWrapAttr ?: array(),'dataAttr' => $settings->options->subInputWrapDataAttr ?: array()
-			)
-			,'help' => array(
-				'attr' => $settings->options->helpAttr ?: array(),'dataAttr' => $settings->options->helpDataAttr ?: array()
-			)
-			,'helpWrap' => array(
-				'attr' => $settings->options->helpWrapAttr ?: array(),'dataAttr' => $settings->options->helpWrapDataAttr ?: array()
-			)
-			,'error' => array(
-				'attr' => $settings->options->errorAttr ?: array(),'dataAttr' => $settings->options->errorDataAttr ?: array()
-			)
-			,'errorWrap' => array(
-				'attr' => $settings->options->errorWrapAttr ?: array(),'dataAttr' => $settings->options->errorWrapDataAttr ?: array()
-			)
-			,'data' => array(
-				'attr' => $settings->options->dataAttr ?: array(),'dataAttr' => $settings->options->dataDataAttr ?: array()
-			)
-			,'dataWrap' => array(
-				'attr' => $settings->options->dataWrapAttr ?: array(),'dataAttr' => $settings->options->dataWrapDataAttr ?: array()
-			)
-		);
-		return $attr;
-	}
-
-	/**
-	 * Get default value(s) for input. Convert to array if multiple.
-	 * 
-	 * @param StandardContainer $settings Field settings.
-	 * @param Array $values Form data.
-	 * @param string $key Field name.
-	 * 
-	 * @return mixed Default value or values as array.
-	 */
-	public function getDefaultValues($settings, $values, $key) {
-		$defaultValues = $settings->options->default;
-		if ($defaultValues !== null && !is_array($defaultValues) && $settings->options->multiple)
-			$defaultValues = explode(',', $defaultValues);
-		else if ($defaultValues === null && $settings->options->multiple)
-			$defaultValues = array();
-		if (isset($values[$key])) {
-			$defaultValues = $values[$key];
-			if ($defaultValues !== null && !is_array($defaultValues) && $settings->options->multiple)
-				$defaultValues = explode(',', $defaultValues);
-			else if ($defaultValues === null && $settings->options->multiple)
-				$defaultValues = array();
-		}
-		return $defaultValues;
-	}
-
-	/**
-	 * Format file sizes in more readable format with labels.
-	 * change: to be removed, should be replaced by \lynk\formatFileSize()
-	 * 
-	 * @param int $filesize File size in bytes.
-	 * @param Array $labels Optional. Array of size labels. Using abbreviations as keys.
-	 * 
-	 * @return string Formatted file size.
-	 */
-	public function formatFileSize($filesize, array $labels = array()) {
-		return \lynk\formatFileSize($filesize, $labels);
+		return true;
 	}
 
 	/**
@@ -358,58 +196,185 @@ class InputHelper {
 	}
 
 	/**
-	 * Build HTML tag attribute string.
+	 * Get default value(s) for input. Convert to array if multiple.
 	 * 
-	 * @param Array $data Tag attributes.
-	 * @param string $prefix Optional. Attribute prefix.
-	 * @param bool $padding Optional. Trim spaces or remove padding from attribute string.
+	 * @param StandardContainer $settings Field settings.
+	 * @param Array $values Form data.
+	 * @param string $key Field name.
 	 * 
-	 * @return string Attribute string.
+	 * @return mixed Default value or values as array.
 	 */
-	public function buildAttributeString($data, $prefix = null, $padding = true) {
-		$attrString = '';
-		foreach ($data as $k => $v)
-			$attrString .= $v !== null ? " {$prefix}{$k}=\"{$v}\"" : " {$prefix}{$k}";
-		if (!$padding && $attrString != '')
-			$attrString = trim($attrString);
-		return $attrString;
+	public function getDefaultValues($settings, $values, $key) {
+		$defaultValues = isset($values[$key]) ? $values[$key] : $settings->options->default;
+		if ($defaultValues !== null && !is_array($defaultValues) && $settings->options->multiple)
+			$defaultValues = explode(',', $defaultValues);
+		else if ($defaultValues === null && $settings->options->multiple)
+			$defaultValues = array();
+		return $defaultValues;
 	}
 
 	/**
-	 * Generic data validation based on simple types.
+	 * Process field attributes from field settings array.
 	 * 
-	 * @param string $allow Data type.
-	 * @param mixed $data Data value.
+	 * @param Array $settings Field settings array.
 	 * 
-	 * @return bool True if valid, false otherwise.
+	 * @return Array Field attributes array.
 	 */
-	public function validateType($allow, $data) {
-		if ($allow && in_array($allow, ['email', 'phone', 'text', 'int', 'double', 'rgb', 'hexcolor'])) {
-			return $this->val->{$allow}($data);
-		}
-		return true;
+	public function processFieldAttributes($settings) {
+		$attr = array(
+			'wrap' => array(
+				'attr' => $settings->options->attr ?: array(),'dataAttr' => $settings->options->dataAttr ?: array()
+			)
+			,'label' => array(
+				'attr' => $settings->options->labelAttr ?: array(),'dataAttr' => $settings->options->labelDataAttr ?: array()
+			)
+			,'labelWrap' => array(
+				'attr' => $settings->options->labelWrapAttr ?: array(),'dataAttr' => $settings->options->labelWrapDataAttr ?: array()
+			)
+			,'input' => array(
+				'attr' => $settings->options->inputAttr ?: array(),'dataAttr' => $settings->options->inputDataAttr ?: array()
+			)
+			,'inputWrap' => array(
+				'attr' => $settings->options->inputWrapAttr ?: array(),'dataAttr' => $settings->options->inputWrapDataAttr ?: array()
+			)
+			,'subInput' => array(
+				'attr' => $settings->options->subInputAttr ?: array(),'dataAttr' => $settings->options->subInputDataAttr ?: array()
+			)
+			,'subInputWrap' => array(
+				'attr' => $settings->options->subInputWrapAttr ?: array(),'dataAttr' => $settings->options->subInputWrapDataAttr ?: array()
+			)
+			,'help' => array(
+				'attr' => $settings->options->helpAttr ?: array(),'dataAttr' => $settings->options->helpDataAttr ?: array()
+			)
+			,'helpWrap' => array(
+				'attr' => $settings->options->helpWrapAttr ?: array(),'dataAttr' => $settings->options->helpWrapDataAttr ?: array()
+			)
+			,'error' => array(
+				'attr' => $settings->options->errorAttr ?: array(),'dataAttr' => $settings->options->errorDataAttr ?: array()
+			)
+			,'errorWrap' => array(
+				'attr' => $settings->options->errorWrapAttr ?: array(),'dataAttr' => $settings->options->errorWrapDataAttr ?: array()
+			)
+			,'data' => array(
+				'attr' => $settings->options->dataAttr ?: array(),'dataAttr' => $settings->options->dataDataAttr ?: array()
+			)
+			,'dataWrap' => array(
+				'attr' => $settings->options->dataWrapAttr ?: array(),'dataAttr' => $settings->options->dataWrapDataAttr ?: array()
+			)
+		);
+		return $attr;
 	}
 
 	/**
-	 * Validate data exists in source.
+	 * Get field name with a suffix added to a numerical subname. eg. `form[file_1]`
 	 * 
-	 * @param Array $data Data values.
-	 * @param Array $source Source array.
+	 * @param string $fieldname Field name attribute.
+	 * @param string $suffix Sufffix to add.
+	 * @param string $glue Optional. Glue to append suffix with.
 	 * 
-	 * @return bool True if exists, false otherwise.
+	 * @return string Suffixed name.
 	 */
-	public function validateExists($data, $source) {
-		$source = array_keys($source);
-		if (is_array($data)) {
-			foreach ($data as $d) {
-				if (!in_array($d, $source))
-					return false;
+	public function getFieldSuffixNumericId($fieldname, $suffix, $glue = '_') {
+		if (preg_match('/^([^\[\]]+)\[([^\[\]]+)\]$/', $fieldname, $match)) {
+			$formName = $match[1];
+			if (preg_match('/^([a-zA-Z_-]+)([0-9]+)?$/', $match[2], $match)) {
+				$newFieldId = "{$match[1]}" . (preg_match('/' . $glue . '$/', $match[1]) ? '' : $glue) . "new_window" . (isset($match[2]) && $match[2] && $match[2] != '' ? "{$glue}{$match[2]}" : '');
+				return "{$formName}[{$newFieldId}]";
+			}
+			else {
+				return "{$match[1]}[{$match[2]}{$suffix}]";
 			}
 		}
 		else {
-			if (!in_array($data, $source))
-				return false;
+			return $fieldname . $suffix;
 		}
-		return true;
+	}
+
+	/**
+	 * Build field id based of of field name for array type naming convention.
+	 * 
+	 * @param string $fieldname The field name attribute.
+	 * 
+	 * @return string Field id.
+	 */
+	public function getFieldId($fieldname) {
+		if (preg_match('/^([^\[\]]+)\[([^\[\]]+)\]$/', $fieldname, $match)) {
+			return "{$match[1]}_{$match[2]}";
+		}
+		else
+			return $fieldname;
+	}
+
+	/**
+	 * Get field name with a suffix added to the sub name.
+	 * 
+	 * @param string $fieldname Field name attribute.
+	 * @param string $suffix Sufffix to add.
+	 * 
+	 * @return string Suffixed name.
+	 */
+	public function getFieldSuffixId($fieldname, $suffix) {
+		if (preg_match('/^([^\[\]]+)\[([^\[\]]+)\]$/', $fieldname, $match)) {
+			return "{$match[1]}[{$match[2]}{$suffix}]";
+		}
+		else
+			return $fieldname . $suffix;
+	}
+
+	/**
+	 * Adds a class to a specified element class set.
+	 * 
+	 * @param Array $attr Attribute array sets.
+	 * @param string $key Input part/section.
+	 * @param string $class Class name.
+	 * @param string $type Optional. Attribute type. 'attr' or 'dataAttr'
+	 */
+	public function addAttrClass(&$attr, $key, $class, $type = 'attr') {
+		if (isset($attr[$key][$type])) {
+			if (!isset($attr[$key][$type]['class']))
+				$attr[$key][$type]['class'] = '';
+			$class = $attr[$key][$type]['class'] == '' ? $class : " {$class}";
+			$attr[$key][$type]['class'] .= $class;
+		}
+	}
+
+	public function convertToDateTime($value, $format = null) {
+		$dt = null;
+		if ($value) {
+			if ($format) {
+				$dt = DateTime::createFromFormat($format, $value);
+			}
+			else {
+				$formats = [
+					'/^\d\d\d\d-(?:[0-1][0-9])-(?:[0-3][0-9])$/' => 'Y-m-d'
+					,'/^(?:[0-2][0-9]):(?:[0-5][0-9])$/' => 'H:i'
+					,'/^\d\d\d\d-(?:[0-1][0-9])-(?:[0-3][0-9]) (?:[0-2][0-9]):(?:[0-5][0-9])$/' => 'Y-m-d H:i'
+					,'/^\d\d\d\d-(?:[0-1][0-9])-(?:[0-3][0-9]) (?:[0-1]?[0-9]):(?:[0-5][0-9]) (am|pm|AM|PM)$/' => 'Y-m-d g:i a'
+					,'/^\d{14}$/' => 'YmdHis'
+					,'/^\d{12}$/' => 'YmdHi'
+					,'/^\d{8}$/' => 'Ymd'
+				];
+				foreach ($formats as $regex => $format) {
+					if (preg_match($regex, $value)) {
+						try {
+							$dt = DateTime::createFromFormat($format, $value);
+							break;
+						}
+						catch(Exception $e) {
+							$dt = null;
+						}
+					}
+				}
+				if (!$dt) {
+					try {
+						$dt = new DateTime($value);
+					}
+					catch (Exception $e) {
+						$dt = null;
+					}
+				}
+			}
+		}
+		return $dt;
 	}
 }

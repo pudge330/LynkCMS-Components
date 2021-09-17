@@ -38,7 +38,7 @@ class ColorInput extends InputType {
 		$displayName = $this->settings->label ? $this->settings->label : $this->settings->errorName;
 		if ($this->settings->options->required && (!isset($data[$this->name]) || !$data[$this->name] || $data[$this->name] == ''))
 			return [false, "{$displayName} is required"];
-		else if (isset($data[$this->name]) && $data[$this->name] && !$this->val->hexColor($data[$this->name]))
+		else if (isset($data[$this->name]) && $data[$this->name] && !$this->validator->hexColor($data[$this->name]))
 			return [false, "{$displayName} must be a valid hex color value"];
 		else
 			return [true];
@@ -77,8 +77,8 @@ class ColorInput extends InputType {
 		if ($this->settings->options->disabled)
 			$attr['input']['attr']['disabled'] = 'disabled';
 
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 
 		return "<input{$inputAttr}{$inputDataAttr}>";
 	}

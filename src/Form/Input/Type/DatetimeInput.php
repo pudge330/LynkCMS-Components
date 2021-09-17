@@ -20,7 +20,7 @@ use LynkCMS\Component\Form\Input\InputType;
 /**
  * Date and Time input type.
  */
-class DateAndTimeInput extends InputType {
+class DatetimeInput extends InputType {
 
 	/**
 	 * @var string Input field name.
@@ -131,8 +131,8 @@ class DateAndTimeInput extends InputType {
 		if ($submittedDate)
 			$attr['input']['attr']['value'] = $submittedDate;
 		$attr['input']['dataAttr']['dataid'] = "{$fieldId}_time";
-		$dateInputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$dateInputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$dateInputAttr = \lynk\attributes($attr['input']['attr']);
+		$dateInputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		unset($attr['input']['attr']['value']);
 		$attr['input']['attr']['name'] = $this->helper->getFieldSuffixId($this->inputName, '_time');
 		$attr['input']['attr']['type'] = 'time';
@@ -140,8 +140,8 @@ class DateAndTimeInput extends InputType {
 		$attr['input']['attr']['class'] = "{$classes} {$fieldId} {$fieldId}_time";
 		if ($submittedTime)
 			$attr['input']['attr']['value'] = $submittedTime;
-		$timeInputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$timeInputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$timeInputAttr = \lynk\attributes($attr['input']['attr']);
+		$timeInputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		return "<div><input{$dateInputAttr}{$dateInputDataAttr}></div><div><input{$timeInputAttr}{$timeInputDataAttr}></div>";
 	}
 }

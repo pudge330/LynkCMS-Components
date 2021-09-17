@@ -69,8 +69,8 @@ class HiddenInput extends InputType {
 		$this->helper->addAttrClass($attr, 'input', $classes['input']);
 		$attr['input']['attr']['class'] = trim($attr['input']['attr']['class']);
 
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 
 		return "<input{$inputAttr}{$inputDataAttr}>";
 	}

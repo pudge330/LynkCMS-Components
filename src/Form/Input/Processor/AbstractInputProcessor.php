@@ -15,20 +15,21 @@
 namespace LynkCMS\Component\Form\Input\Processor;
 
 use Exception;
-use LynkCMS\Component\Form\OptionTrait;
+use LynkCMS\Component\Container\StandardContainer;
 use LynkCMS\Component\Form\FormType;
 
 /**
  * Abstract inout processor class.
  */
 class AbstractInputProcessor {
-	use OptionTrait;
+
+	/***/
 
 	/**
 	 * @param Array $options Processor options.
 	 */
 	public function __construct(Array $options = []) {
-		$this->setOption($options, true);
+		$this->options = new StandardContainer($options);
 	}
 
 	/**
@@ -39,7 +40,7 @@ class AbstractInputProcessor {
 	 * 
 	 * @return Array Processed form submission data.
 	 */
-	public function processFormData(&$data, $key, $settings) {
+	public function processSubmissionData(&$data, $key, $settings) {
 		throw new Exception('AbstractProcessor::processFormData() must be overwritten');
 	}
 
@@ -51,7 +52,7 @@ class AbstractInputProcessor {
 	 * 
 	 * @return Array Processed form data.
 	 */
-	public function processData(&$data, $key, $settings) {
+	public function processFormData(&$data, $key, $settings) {
 		throw new Exception('AbstractProcessor::processData() must be overwritten');
 	}
 

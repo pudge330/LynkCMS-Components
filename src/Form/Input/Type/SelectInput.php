@@ -68,8 +68,8 @@ class SelectInput extends CheckboxInput {
 		if ($this->settings->options->resiable)
 			$attr['input']['dataAttr']['resiable'] = 'true';
 
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 
 		$output = '';
 		$count = -1;

@@ -138,8 +138,8 @@ class SelectableTimeInput extends InputType {
 		$attr['input']['attr']['name'] = $this->helper->getFieldSuffixId($this->inputName, '_hour');
 		$attr['input']['attr']['id'] = "{$fieldId}_hour";
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['subinput']}-hour";
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		$dateOutput .= "<select{$inputAttr}{$inputDataAttr}>";
 		$dateOutput .= "<option value=\"\" id=\"{$fieldId}_none\">--</option>";
 		for ($i = 1; $i <= 12; $i++) {
@@ -151,8 +151,8 @@ class SelectableTimeInput extends InputType {
 		$attr['input']['attr']['name'] = $this->helper->getFieldSuffixId($this->inputName, '_minute');
 		$attr['input']['attr']['id'] = "{$fieldId}_minute";
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['subinput']}-minute";
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		$dateOutput .= "<select{$inputAttr}{$inputDataAttr}>";
 		$dateOutput .= "<option value=\"\" id=\"{$fieldId}_none\">--</option>";
 		for ($i = 0; $i <= 59; $i++) {
@@ -164,8 +164,8 @@ class SelectableTimeInput extends InputType {
 		$attr['input']['attr']['name'] = $this->helper->getFieldSuffixId($this->inputName, '_period');
 		$attr['input']['attr']['id'] = "{$fieldId}_period";
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['subinput']}-period";
-		$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-		$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr'], 'data-');
+		$inputAttr = \lynk\attributes($attr['input']['attr']);
+		$inputDataAttr = \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		$amSelected = 'AM' == $submittedValues['period'] ? ' selected="selected"' : '';
 		$pmSelected = 'PM' == $submittedValues['period'] ? ' selected="selected"' : '';
 		$dateOutput .= "<select{$inputAttr}{$inputDataAttr}>";

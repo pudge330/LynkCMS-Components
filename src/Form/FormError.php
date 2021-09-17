@@ -60,12 +60,30 @@ class FormError {
 	}
 
 	/**
+	 * Set the error message.
+	 * 
+	 * @param string $error Error message.
+	 */
+	public function setError($error) {
+		$this->error = $error;
+	}
+
+	/**
 	 * Get error message key.
 	 * 
 	 * @return string Error key.
 	 */
 	public function getKey() {
 		return $this->key;
+	}
+
+	/**
+	 * Set error message key.
+	 * 
+	 * @param string $key Error key.
+	 */
+	public function setKey($key) {
+		$this->key = $key;
 	}
 
 	/**

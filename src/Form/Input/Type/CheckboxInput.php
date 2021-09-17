@@ -35,7 +35,7 @@ class CheckboxInput extends InputType {
 	 */
 	public function processSettings($settings) {
 		if ($settings->options->data && !is_array($settings->options->data))
-			$settings->options->data = $this->helper->processCsv($settings->options->data, $settings->options->dataDormat);
+			$settings->options->data = $this->helper->processCsv($settings->options->data, $settings->options->dataformat);
 		else if (!$settings->options->data)
 			$settings->options->data = [];
 		if ($settings->options->dataFile) {
@@ -54,7 +54,7 @@ class CheckboxInput extends InputType {
 	 * @return Array Data values.
 	 */
 	public function processData($data) {
-		if (!isset($data[$this->name]) || !$data[$this->name])
+		if (!$this->helper->validateExists($this->name, $data))
 			$data[$this->name] = null;
 		return $data;
 	}
@@ -77,18 +77,12 @@ class CheckboxInput extends InputType {
 				for ($i = 0; $i < sizeof($data[$this->name]); $i++) {
 					if (!$this->helper->validateType($this->settings->options->allow, $data[$this->name][$i]))
 						return [false, "{$displayName} must be one or more {$this->settings->options->allow} values"];
-					// if (sizeof($this->settings->options->data) > 0 && !$this->helper->validateExists($data[$this->name][$i], $this->settings->options->data))
-					// 	return [false, "{$displayName} contains invalid data"];
 				}
 			}
 			else {
 				if (!$this->helper->validateType($this->settings->options->allow, $data[$this->name]))
 					return [false, "{$displayName} must be a {$this->settings->options->allow} value"];
-				// if (sizeof($this->settings->options->data) > 0 && !$this->helper->validateExists($data[$this->name], $this->settings->options->data))
-				// 	return [false, "{$displayName} contains invalid data"];
 			}
-			// if (sizeof($this->settings->options->data) > 0 && !$this->helper->validateExists($data[$this->name], $this->settings->options->data))
-			// 	return [false, "{$displayName} contains invalid data"];
 		}
 		return [true];
 	}
@@ -155,8 +149,8 @@ class CheckboxInput extends InputType {
 			$selected = in_array($dataKey, $submittedValues) ? ' checked="checked"' : '';
 			$attr['input']['attr']['value'] = htmlentities($dataKey);
 			$attr['input']['attr']['id'] = $fieldId . "_{$count}";
-			$inputAttr = $this->helper->buildAttributeString($attr['input']['attr']);
-			$inputDataAttr = $this->helper->buildAttributeString($attr['input']['dataAttr']);
+			$inputAttr = \lynk\attributes($attr['input']['attr']);
+			$inputDataAttr = \lynk\attributes($attr['input']['dataAttr']);
 			$output .= "<label for=\"{$attr['input']['attr']['id']}\" class=\"{$classes['sublabel']}\"><input{$inputAttr}{$inputDataAttr}{$selected}><span>{$dataValue}</span></label>";
 		}
 
