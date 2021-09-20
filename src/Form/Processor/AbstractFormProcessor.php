@@ -27,7 +27,7 @@ class AbstractFormProcessor {
 	/**
 	 * @var StandardContainer Form processor options.
 	 */
-	protected $formOptions;
+	protected $options;
 
 	/**
 	 * @var Array Input processors.
@@ -117,5 +117,46 @@ class AbstractFormProcessor {
 			$settings[$key] = $input->getSettings();
 		}
 		return $settings;
+	}
+
+	/**
+	 * Get options object.
+	 * 
+	 * @return StandardContainer Options.
+	 */
+	public function getOptions() {
+		return $this->options;
+	}
+
+	/**
+	 * Get option value.
+	 * 
+	 * @param string $key The values key.
+	 * 
+	 * @return mixed The stored value or null if non-existent..
+	 */
+	public function getOption($key) {
+		return $this->options->get($key);
+	}
+
+	/**
+	 * Set option value.
+	 * 
+	 * @param string $key The values key.
+	 * @param mixed $value The value to store.
+	 */
+	public function setOption($key, $value) {
+		return $this->options->set($key, $value);
+	}
+
+	/**
+	 * Check whether or not a option exists.
+	 * 
+	 * @param string $key The key to check for.
+	 * 
+	 * @return bool True if key exists, false if not.
+	 */
+	public function hasOption($key) {
+		return $this->options->has($key);
 	}
 }
