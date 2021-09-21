@@ -618,18 +618,18 @@ function getDirContents($dir, &$results = array(), $filesOnly = false, $foldersO
  * @return string Mime type.
  */
 function mimeType($filename) {
-	$fileExists = file_exists($file);
-	if(function_exists('mime_content_type') && $mimeType = mime_content_type($file))
+	$fileExists = file_exists($filename);
+	if(function_exists('mime_content_type') && $mimeType = mime_content_type($filename))
 		return $mimeType;
 	else if ($fileExists && function_exists('finfo_open')) {
 		$finfo = finfo_open(FILEINFO_MIME);
-		$mimetype = finfo_file($finfo, $file);
+		$mimetype = finfo_file($finfo, $filename);
 		finfo_close($finfo);
 		return $mimetype;
 	}
 	else {
-		$file = escapeshellcmd($file);
-		$command = "file -b --mime-type -m /usr/share/misc/magic {$file}";
+		$filename = escapeshellcmd($filename);
+		$command = "file -b --mime-type -m /usr/share/misc/magic {$filename}";
 		$mimeType = shell_exec($command);
 		return trim($mimeType);
 	}
