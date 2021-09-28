@@ -129,7 +129,7 @@ class SelectableDateInput extends InputType {
 		$submittedValues = array('year' => null, 'month' => null, 'day' => null);
 		$submittedValue = $this->helper->getDefaultValues($this->settings, $values, $this->name);
 		if ($submittedValue) {
-			$submittedDatetime = $this->helper->toDateTime($submittedValue);
+			$submittedDatetime = $this->helper->convertToDateTime($submittedValue);
 			$submittedValues['year'] = $submittedDatetime->format('Y');
 			$submittedValues['month'] = $submittedDatetime->format('m');
 			$submittedValues['day'] = $submittedDatetime->format('d');
