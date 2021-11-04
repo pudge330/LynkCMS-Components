@@ -288,14 +288,15 @@ class Config {
 	 */
 	public function interpolate($config, $context = []) {
 		$contextCallbacks = $this->contextCallbacks;
+		$tmpContextCallbacks = [];
 		if (sizeof($context)) {
 			$t = $this;
-			$contextCallbacks['__TMP__CONTEXT__CALLBACK__' . rand()] = function($config) use ($t, $context) {
+			$tmpContextCallbacks['__TMP__CONTEXT__CALLBACK__' . rand()] = function($config) use ($t, $context) {
 				$regex = '';
 				array_walk($context, function($value, $key) use (&$regex) {
-					$regex .= ($regex != '' ? '|' : '') . preg_quote($key);
+					$regex .= ($regex != '' ? '|' : '') . preg_quote($key, '/');
 				});
-				$regex = "/" . preg_quote($t->contextWrap[0]) . "(" . $regex . ")" . preg_quote($t->contextWrap[1]) . "/";
+				$regex = "/" . preg_quote($t->contextWrap[0], '/') . "(" . $regex . ")" . preg_quote($t->contextWrap[1], '/') . "/";
 				if (preg_match_all($regex, $config, $matches)) {
 					foreach ($matches[1] as $match) {
 						$config = str_replace("{$this->contextWrap[0]}{$match}{$this->contextWrap[1]}", $context[$match], $config);
@@ -304,6 +305,7 @@ class Config {
 				return $config;
 			};
 		}
+		$contextCallbacks = array_merge($tmpContextCallbacks, $contextCallbacks);
 		$interpolateFuncs = function($value) use ($contextCallbacks) {
 			foreach ($contextCallbacks as $f) {
 				$value = $f($value);
