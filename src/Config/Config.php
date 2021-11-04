@@ -125,29 +125,29 @@ class Config {
 			break;
 			case self::FORMAT_PHP:
 				$data = include $path;
-				return $this->parse(self::FORMAT_PHP, $data, $options, $context);
+				return $this->parse(self::FORMAT_PHP, $data, $context, $options);
 			break;
 			case self::FORMAT_YAML:
 				$data = file_get_contents($path);
 				if (!$data || $data == '')
 					$data = '{}';
-				return $this->parse(self::FORMAT_YAML, $data, $options, $context);
+				return $this->parse(self::FORMAT_YAML, $data, $context, $options);
 			break;
 			case self::FORMAT_INI:
 				$data = file_get_contents($path);
-				return $this->parse(self::FORMAT_INI, $data, $options, $context);
+				return $this->parse(self::FORMAT_INI, $data, $context, $options);
 			break;
 			case self::FORMAT_SERIALIZED:
 				$data = file_get_contents($path);
 				if (!$this->isSerialized($data)) {
 					throw new Exception(sprintf("Config::get() file %s in %s is is corrupted.", $pathParts['basename'], $pathParts['dirname']));
 				}
-				return $this->parse(self::FORMAT_SERIALIZED, $data, $options, $context);
+				return $this->parse(self::FORMAT_SERIALIZED, $data, $context, $options);
 			break;
 			case self::FORMAT_RAW:
 			default:
 				$data = file_get_contents($path);
-				return $this->parse(self::FORMAT_RAW, $data, $options, $context);
+				return $this->parse(self::FORMAT_RAW, $data, $context, $options);
 			break;
 		}
 	}
