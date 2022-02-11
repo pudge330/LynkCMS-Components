@@ -96,7 +96,7 @@ class DatetimeInput extends InputType {
 		$submittedDate = $submittedTime = null;
 		$submittedValue = $this->helper->getDefaultValues($this->settings, $values, $this->name);
 		if ($submittedValue) {
-			$submittedDatetime = Datetime::createFromFormat('Y-m-d H:i', $submittedValue);
+			$submittedDatetime = $this->helper->convertToDateTime($submittedValue);
 			$submittedDate = $submittedDatetime->format('Y-m-d');
 			$submittedTime = $submittedDatetime->format('H:i');
 		}
