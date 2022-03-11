@@ -198,7 +198,7 @@ class FormType {
 			'_name' => null
 			,'_method' => 'GET'
 			,'_csrf' => false
-			,'_nameFormat' => 'array' // array|snake
+			,'_nameFormat' => InputCollection::NAME_FORMAT_ARRAY
 			,'_inlineErrors' => false
 			,'_validate' => true
 			,'_fields' => []
