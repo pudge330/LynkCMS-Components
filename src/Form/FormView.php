@@ -56,7 +56,7 @@ class FormView {
 	 */
 	public function __construct(FormType $form) {
 		$this->form = $form;
-		$this->inputs = $form->getInputs();
+		$this->inputs = $form->inputs()->all();
 		$this->data = $form->getSubmittedData();
 		$this->errors = $form->getFormErrors();
 		$this->viewOptions = new StandardContainer($form->getViewOptions());

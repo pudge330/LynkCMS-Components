@@ -17,6 +17,7 @@ namespace LynkCMS\Component\Form;
 use LynkCMS\Component\Container\StandardContainer;
 use LynkCMS\Component\Container\Container;
 use LynkCMS\Component\Form\Input\Type as InputType;
+use LynkCMS\Component\Form\Input\inputCollection;
 use LynkCMS\Component\Form\Security\FormTokenizer;
 use LynkCMS\Component\Form\Validator\BasicDataValidator;
 
@@ -76,9 +77,9 @@ class FormType {
 	protected $inlineErrors;
 
 	/**
-	 * @var Array Form input list.
+	 * @var Array Form input collection.
 	 */
-	protected $inputs;
+	protected $inputCollection;
 
 	/**
 	 * @var bool Is submission data bound.
@@ -236,10 +237,26 @@ class FormType {
 		$initFieldSettings = $this->init();
 		$initFieldSettings = $initFieldSettings && is_array($initFieldSettings) ? $initFieldSettings : [];
 		$this->fieldSettings = \lynk\deepMerge($this->fieldSettings, $initFieldSettings, $fieldSettings);
-		$this->setInputs($this->fieldSettings);
+
+		$processedSettings = $this->processFieldSettings($this->fieldSettings);
+		if ($processedSettings && is_array($processedSettings)) {
+			$this->fieldSettings = $processedSettings;
+		}
+		$this->inputCollection = new inputCollection($this->fieldSettings, [
+			'token' => $this->usingToken,
+			'types' => $this->getRegisteredInputTypes(),
+			'name' => $this->getName(),
+			'format' => $this->nameFormat
+		]);
+
 		if ($this->isBound() && $this->autoValidate)
 			$this->validate();
 	}
+
+	/**
+	 * Overridable method used to pre-process field settings before adding to collection.
+	 */
+	protected function processFieldSettings(Array $settings) { return $settings; }
 
 	/**
 	 * Overridable method used to initialize form or manipulate values.
@@ -370,7 +387,7 @@ class FormType {
 					$this->addError('_token', 'CSRF Token is invalid');
 				}
 			}
-			foreach ($this->inputs as $name => $input) {
+			foreach ($this->inputCollection->all() as $name => $input) {
 				$valResult = $input->validateData($data, $name);
 				if (!$valResult[0]) {
 					$this->addError($name, $valResult[1]);
@@ -397,124 +414,12 @@ class FormType {
 	}
 
 	/**
-	 * Set form input fields, process settings and add _token field if CSRF token is required and missing.
+	 * Get input collection.
 	 * 
-	 * @param Array $settings List of input field settings.
-	 * 
-	 * @return FormType This instance.
+	 * @return InputCollection The input collection
 	 */
-	public function setInputs(Array $settings) {
-		if (!array_key_exists('_token', $settings) && $this->usingToken) {
-			$settings['_token'] = [
-				'type' => 'hidden'
-			];
-		}
-		$this->inputs = $this->convertSettingsToInputs($settings);
-		return $this;
-	}
-
-	/**
-	 * Add form input and process settings.
-	 * 
-	 * @param string $name Input field name.
-	 * @param Array $settings Input field settings.
-	 * 
-	 * @return FormType This instance.
-	 */
-	public function addInput($name, $settings) {
-		$this->inputs[$name] = $this->convertSettingsToInputs([$name => $settings])[$name];
-		return $this;
-	}
-
-	/**
-	 * Get field input.
-	 * 
-	 * @param string $name Input name.
-	 * 
-	 * @return InputType field input type or null.
-	 */
-	public function getInput($name) {
-		return ($this->hasInput($name) ? $this->inputs[$name] : null);
-	}
-
-	/**
-	 * Get all field inputs.
-	 * 
-	 * @return Array Field input list.
-	 */
-	public function getInputs() {
-		return $this->inputs;
-	}
-
-	/**
-	 * Check if input exists.
-	 * 
-	 * @param string $name Input name.
-	 * 
-	 * @return bool True if input exists, false otherwise.
-	 */
-	public function hasInput($name) {
-		return array_key_exists($name, $this->inputs);
-	}
-
-	/**
-	 * Check if form has any inputs set.
-	 * 
-	 * @return bool True if inputs exists, false otherwise.
-	 */
-	public function hasInputs() {
-		return (sizeof($this->inputs) > 0);
-	}
-
-	/**
-	 * Remove field input.
-	 * 
-	 * @param string $name Input name.
-	 */
-	public function removeInput($name) {
-		unset($this->inputs[$name]);
-	}
-
-	/**
-	 * Convert field settings into field input instances.
-	 * 
-	 * @param Array $settings Field settings.
-	 * 
-	 * @return Array Input class instances.
-	 */
-	public function convertSettingsToInputs(Array $settings) {
-		$formName = $this->getName();
-		$types = $this->registeredInputTypes;
-		$settings = self::processFieldSettings($settings);
-		$inputs = [];
-		foreach ($settings as $key => $values) {
-			$fieldName = $this->getFieldName($key);
-			if (!($values instanceof InputType)) {
-				if (isset($types[$values->type])) {
-					$values = new $types[$values->type]($key, $fieldName, $values);	
-				}
-				else {
-					$values = new $values->type($key, $fieldName, $values);
-				}
-			}
-			$settings[$key] = $values;
-		}
-		return $settings;
-	}
-
-	/**
-	 * Get field name attribute for element.
-	 * 
-	 * @param string $name Field name/key.
-	 * 
-	 * @return string Element name attribute.
-	 */
-	public function getFieldName($name) {
-		$formName = $this->getName();
-		$fieldName = $name;
-		if ($formName)
-			$fieldName = $this->nameFormat == 'snake' ? "{$formName}_{$name}" : "{$formName}[{$name}]";
-		return $fieldName;
+	public function inputs() {
+		return $this->inputCollection;
 	}
 
 	/**
@@ -524,20 +429,6 @@ class FormType {
 	 */
 	public function getRegisteredInputTypes() {
 		return $this->registeredInputTypes;
-	}
-
-	/**
-	 * Get field settings.
-	 * 
-	 * @return Array List of field settings.
-	 */
-	public function getFieldSettings() {
-		$inputs = $this->getInputs();
-		$settings = [];
-		foreach ($inputs as $key => $input) {
-			$settings[$key] = $input->getSettings();
-		}
-		return $settings;
 	}
 
 	/**
@@ -762,24 +653,6 @@ class FormType {
 	 */
 	public function getContainer() {
 		return $this->serviceContainer;
-	}
-
-	/**
-	 * Process field settings array. Make sure sub-array settings are using StandardContainer class.
-	 * 
-	 * @param Array $settings Field settings.
-	 * 
-	 * @return Array Processed field settings.
-	 */
-	public static function processFieldSettings(Array $settings) {
-		foreach ($settings as $key => $values) {
-			if (!is_object($values)) {
-				$values = new StandardContainer($values);
-				$values->options = new StandardContainer($values->options ? $values->options : []);
-				$settings[$key] = $values;
-			}
-		}
-		return $settings;
 	}
 
 	/**

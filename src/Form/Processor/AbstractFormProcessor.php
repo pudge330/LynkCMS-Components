@@ -111,7 +111,7 @@ class AbstractFormProcessor {
 	 * @return Array Field settings.
 	 */
 	protected function getFieldSettings(FormType $form) {
-		$inputs = $form->getInputs();
+		$inputs = $form->inputs()->all();
 		$settings = [];
 		foreach ($inputs as $key => $input) {
 			$settings[$key] = $input->getSettings();
