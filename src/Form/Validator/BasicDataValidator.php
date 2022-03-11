@@ -41,7 +41,7 @@ class BasicDataValidator {
 	 * 
 	 * @param string $phone Phone number.
 	 * @param string $type Optional. Validate US or a more basic type.
-	 *                               Basiuc type checks for characters and minimum length of 10.
+	 *                               Basic type checks for characters and minimum length of 10.
 	 * 
 	 * @return bool True if valid, false otherwise.
 	 */
