@@ -353,7 +353,7 @@ class InputHelper {
 					,'/^\d{14}$/' => 'YmdHis'
 					,'/^\d{12}$/' => 'YmdHi'
 					,'/^\d{8}$/' => 'Ymd'
-					,'/^\d{12}$/' => 'Hi'
+					,'/^\d{4}$/' => 'Hi'
 				];
 				foreach ($formats as $regex => $format) {
 					if (preg_match($regex, $value)) {
