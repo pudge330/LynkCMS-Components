@@ -14,6 +14,9 @@
 
 namespace lynk;
 
+use DateTime;
+use Exception;
+
 /**
  * Empty functions class, used to autoload this file.
  */
@@ -814,6 +817,41 @@ function getTimezones() {
         $timezoneList[$tz['identifier']] = $sign . $offset;
     }
     return $timezoneList;
+}
+
+function toDateTime($value, $format = null) {
+	$object = null;
+	if ($value) {
+		try {
+			if ($format) {
+				$object = DateTime::createFromFormat($format, $value);
+			}
+			else {
+				$formats = [
+					'/^\d\d\d\d-(?:[0-1][0-9])-(?:[0-3][0-9])$/' => 'Y-m-d'
+					,'/^(?:[0-2][0-9]):(?:[0-5][0-9])$/' => 'H:i'
+					,'/^\d\d\d\d-(?:[0-1][0-9])-(?:[0-3][0-9]) (?:[0-2][0-9]):(?:[0-5][0-9])$/' => 'Y-m-d H:i'
+					,'/^\d\d\d\d-(?:[0-1][0-9])-(?:[0-3][0-9]) (?:[0-1]?[0-9]):(?:[0-5][0-9]) (am|pm|AM|PM)$/' => 'Y-m-d g:i a'
+					,'/^\d{14}$/' => 'YmdHis'
+					,'/^\d{12}$/' => 'YmdHi'
+					,'/^\d{8}$/' => 'Ymd'
+					,'/^\d{4}$/' => 'Hi'
+				];
+				foreach ($formats as $regex => $format) {
+					if (preg_match($regex, $value)) {
+						$object = DateTime::createFromFormat($format, strtolower($value));
+					}
+				}
+				if (!$object) {
+					$object = new DateTime($value);
+				}
+			}
+		}
+		catch (Exception $e) {
+			$object = null;
+		}
+	}
+	return $object ?: null;
 }
 
 /**
