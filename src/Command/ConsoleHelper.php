@@ -196,7 +196,7 @@ class ConsoleHelper {
 	public function askRequired($message, &$answer = null) {
 		do {
 			$this->getAnswer($message, $answer);
-		} while (!$answer);
+		} while ($answer !== '');
 		return $answer;
 	}
 
