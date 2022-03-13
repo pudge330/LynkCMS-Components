@@ -204,6 +204,15 @@ class Container extends BaseContainer {
 	}
 
 	/**
+	 * Get parameter object.
+	 * 
+	 * @return StandardContainer Parameters object.
+	 */
+	public function getParameters() {
+		return $this->parameters;
+	}
+
+	/**
 	 * Get parameter.
 	 * 
 	 * @param string $key Parameter key.
