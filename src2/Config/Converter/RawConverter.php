@@ -46,7 +46,7 @@ class RawConverter implements ConverterInterface {
 	 * 
 	 * @return string The converted JSON data
 	 */
-	public function convert(array $data) {
+	public function dump(array $data) {
 		if (gettype($data) != 'string') {
 			$data = "[serialized]" . serialize($data);
 		}
