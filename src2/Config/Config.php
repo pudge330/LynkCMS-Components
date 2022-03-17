@@ -63,7 +63,7 @@ class Config {
 			self::FORMAT_JSON => new Converter\JsonConverter(),
 			self::FORMAT_PHP => new Converter\PhpConverter(),
 			self::FORMAT_RAW => new Converter\RawConverter(),
-			self::FORMAT_SERIALIZED => new Converter\SerializeConverter(),
+			self::FORMAT_SERIALIZED => new Converter\SerializedConverter(),
 			self::FORMAT_YAML => new Converter\YamlConverter()
 		];
 		$this->contextWrap = sizeof($contextWrap) == 2 ? $contextWrap : Array('%', '%');
