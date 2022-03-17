@@ -50,7 +50,7 @@ class RawConverter implements ConverterInterface {
 		if (gettype($data) != 'string') {
 			$data = "[serialized]" . serialize($data);
 		}
-		break;
+		return $data;
 	}
 
 	/**
