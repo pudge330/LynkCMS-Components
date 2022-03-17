@@ -59,12 +59,12 @@ class Config {
 	public function __construct($contextTokens = Array(), $contextWrap = Array()) {
 		$this->contextTokens = [];
 		$this->converters = [
-			self::FORMAT_INI => Converter\IniConverter(),
-			self::FORMAT_JSON => Converter\JsonConverter(),
-			self::FORMAT_PHP => Converter\PhpConverter(),
-			self::FORMAT_RAW => Converter\RawConverter(),
-			self::FORMAT_SERIALIZED => Converter\SerializeConverter(),
-			self::FORMAT_YAML => Converter\YamlConverter()
+			self::FORMAT_INI => new Converter\IniConverter(),
+			self::FORMAT_JSON => new Converter\JsonConverter(),
+			self::FORMAT_PHP => new Converter\PhpConverter(),
+			self::FORMAT_RAW => new Converter\RawConverter(),
+			self::FORMAT_SERIALIZED => new Converter\SerializeConverter(),
+			self::FORMAT_YAML => new Converter\YamlConverter()
 		];
 		$this->contextWrap = sizeof($contextWrap) == 2 ? $contextWrap : Array('%', '%');
 		$self = $this;
