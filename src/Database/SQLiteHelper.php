@@ -16,7 +16,7 @@ namespace LynkCMS\Component\Database;
 
 use Exception;
 use PDO;
-use LynkCMS\Component\Connection;
+use Lynk\Component\Connection;
 
 /**
  * SQLite helper class.
@@ -36,7 +36,7 @@ class SQLiteHelper {
 		$isConnection = ($connection instanceof Connection\Connection);
 		$isConnectionWrapped = ($connection instanceof Connection\ConnectionWrapped);
 		if (!($isPDO || $isConnection || $isConnectionWrapped)) {
-			throw new Exception('SQLiteHelper: $connection must be a instance of PDO, LynkCMS\Component\Connection\Connection, or LynkCMS\Component\Connection\ConnectionWrapped.');
+			throw new Exception('SQLiteHelper: $connection must be a instance of PDO, Lynk\Component\Connection\Connection, or Lynk\Component\Connection\ConnectionWrapped.');
 		}
 		if ($isPDO) {
 			$connection = new Connection\ConnectionWrapped($connection);

@@ -14,7 +14,7 @@
 
 namespace LynkCMS\Component\Migration;
 
-use LynkCMS\Component\Connection\ConnectionWrapped;
+use Lynk\Component\Connection\ConnectionWrapped;
 
 /**
  * Migration query.

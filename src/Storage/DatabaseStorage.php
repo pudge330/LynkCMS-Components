@@ -16,7 +16,7 @@ namespace LynkCMS\Component\Storage;
 
 use Exception;
 use PDO;
-use LynkCMS\Component\Connection;
+use Lynk\Component\Connection;
 
 /**
  * Database key value based storage.

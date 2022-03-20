@@ -15,7 +15,7 @@
 namespace LynkCMS\Component\Migration;
 
 use Closure;
-use LynkCMS\Component\Connection\ConnectionWrapped;
+use Lynk\Component\Connection\ConnectionWrapped;
 
 /**
  * Migration action.

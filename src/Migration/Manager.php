@@ -16,7 +16,7 @@ namespace LynkCMS\Component\Migration;
 
 use Exception;
 use PDO;
-use LynkCMS\Component\Connection\ConnectionWrapped;
+use Lynk\Component\Connection\ConnectionWrapped;
 
 /**
  * Migrations manager class. Responsible for performing migrations.

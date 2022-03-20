@@ -1,4 +1,4 @@
-# LynkCMS Connection Component
+# Lynk Connection Component
 
 A simple library that helps manage PDO connections, assists in creating new connections and adds a few helper methods to the standard PDO interface.
 
@@ -11,7 +11,7 @@ A simple library that helps manage PDO connections, assists in creating new conn
 
 <hr />
 
-## LynkCMS\Component\Connection\Connection
+## Lynk\Component\Connection\Connection
 
 Connection class that extends the standard PDO class and adds a couple of helper methods to assist with querying the database. The constructor is the same as the inherited PDO object.
 
@@ -41,7 +41,7 @@ Connection class that extends the standard PDO class and adds a couple of helper
 
 - `$delayfetch` - Delays fetching the data and allows looping through the results directly from the statment provided in the result set.
 
-## LynkCMS\Component\Connection\ConnectionPool
+## Lynk\Component\Connection\ConnectionPool
 
 Class to manage named PDO connections. ConnectionPool will lazy-load the connections if they are provided as an array of configuration settings instead of an instantiated PDO object. A default connection can also be set by name so that the `get()` method's `$name` paramter is optional.
 
@@ -77,7 +77,7 @@ Class to manage named PDO connections. ConnectionPool will lazy-load the connect
 
 **remove($name)** - Removes a connection from the connection pool.
 
-## LynkCMS\Component\Connection\ConnectionWrapped
+## Lynk\Component\Connection\ConnectionWrapped
 
 Connection class that wraps a standard PDO class and adds a couple of helper methods to assist with querying the database. The constructor takes a PDO instance as the only argument. This class has the same interface as the `Connection` class with the an addional use of the magic `__call` method so that this class can be used interchangeably with the PDO class.
 

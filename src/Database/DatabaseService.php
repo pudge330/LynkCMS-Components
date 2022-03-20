@@ -16,8 +16,8 @@ namespace LynkCMS\Component\Database;
 
 use Exception;
 use PDO;
-use LynkCMS\Component\Connection\Connection;
-use LynkCMS\Component\Connection\ConnectionWrap;
+use Lynk\Component\Connection\Connection;
+use Lynk\Component\Connection\ConnectionWrap;
 
 /**
  * Database service intended to simplify and provide an abstract way to interact with a database.

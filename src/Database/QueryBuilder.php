@@ -16,8 +16,8 @@ namespace LynkCMS\Component\Database;
 
 use Exception;
 use PDO;
-use LynkCMS\Component\Connection\Connection;
-use LynkCMS\Component\Connection\ConnectionWrap;
+use Lynk\Component\Connection\Connection;
+use Lynk\Component\Connection\ConnectionWrap;
 
 /**
  * Query builder class. Used to generate SELECT, UPDATE, INSERT and DELETE queries.
