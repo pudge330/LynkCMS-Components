@@ -537,4 +537,17 @@ class Config {
 		$c = new static();
 		return $c->getConverter($name);
 	}
+
+	/**
+	 * Static method to interpolate context into config.
+	 *
+	 * @param string $config The config.
+	 * @param Array $context Optional. Context tokens.
+	 * 
+	 * @return string The interpolated string.
+	 */
+	public static function configInterpolate($config, $context = Array()) {
+		$c = new static();
+		return $c->interpolate($config, $context);
+	}
 }
