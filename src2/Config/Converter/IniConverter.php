@@ -82,7 +82,7 @@ class IniConverter implements ConverterInterface {
 	 * 
 	 * @return array The parsed data
 	 */
-	public function parse(array $data) {
+	public function parse(string $data) {
 		return parse_ini_string($data, true, INI_SCANNER_TYPED);
 	}
 }

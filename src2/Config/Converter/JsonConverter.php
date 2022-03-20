@@ -61,7 +61,7 @@ class JsonConverter implements ConverterInterface {
 	 * 
 	 * @return array The parsed data
 	 */
-	public function parse(array $data) {
+	public function parse(string $data) {
 		return json_decode($data, true);
 	}
 }

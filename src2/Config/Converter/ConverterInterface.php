@@ -51,5 +51,5 @@ interface ConverterInterface {
 	 * 
 	 * @return array The parsed data
 	 */
-	public function parse(array $data);
+	public function parse(string $data);
 }

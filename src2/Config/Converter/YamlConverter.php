@@ -63,7 +63,7 @@ class YamlConverter implements ConverterInterface {
 	 * 
 	 * @return array The parsed data
 	 */
-	public function parse(array $data) {
+	public function parse(string $data) {
 		return Yaml::parse($data);
 	}
 }

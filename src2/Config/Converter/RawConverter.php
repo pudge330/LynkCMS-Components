@@ -60,7 +60,7 @@ class RawConverter implements ConverterInterface {
 	 * 
 	 * @return array The parsed data
 	 */
-	public function parse(array $data) {
+	public function parse(string $data) {
 		if (\lynk\startsWith($data, '[serialized]')) {
 			$data = unserialize(substr($data, 12));
 		}
