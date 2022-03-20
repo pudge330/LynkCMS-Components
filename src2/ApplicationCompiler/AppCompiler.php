@@ -1,24 +1,24 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage ApplicationCompiler
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\ApplicationCompiler;
+namespace Lynk\Component\ApplicationCompiler;
 
 use Exception;
-use LynkCMS\Component\ApplicationCompiler\Event as CompilerEvent;
-use LynkCMS\Component\ApplicationCompiler\SubCompiler;
-use LynkCMS\Component\Config\Config;
-use LynkCMS\Component\Config\ConfigLoader;
+use Lynk\Component\ApplicationCompiler\Event as CompilerEvent;
+use Lynk\Component\ApplicationCompiler\SubCompiler;
+use Lynk\Component\Config\Config;
+use Lynk\Component\Config\ConfigLoader;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 
 /**
@@ -49,7 +49,7 @@ class AppCompiler {
 
 	/**
 	 * Application compilers, an array of
-	 * LynkCMS\Component\ApplicationCompiler\SubCompiler\AbstractCompiler
+	 * Lynk\Component\ApplicationCompiler\SubCompiler\AbstractCompiler
 	 * instances.
 	 *
 	 * @var array $compilers
@@ -67,7 +67,7 @@ class AppCompiler {
 	 * @param string $root The projects root directory.
 	 * @param string $tmpDirectory Temporary working directory.
 	 * @param string $env Optional. Application environment.
-	 * @param object $config Optional. Imstance of LynkCMS\Component\Config\Config class.
+	 * @param object $config Optional. Instance of Lynk\Component\Config\Config class.
 	 */
 	public function __construct($root, $tmpDirectory, $env = null, $config = null) {
 		$this->root = rtrim($root, '/');

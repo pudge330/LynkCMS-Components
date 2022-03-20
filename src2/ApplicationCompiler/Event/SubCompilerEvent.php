@@ -1,21 +1,21 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage ApplicationCompiler
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\ApplicationCompiler\Event;
+namespace Lynk\Component\ApplicationCompiler\Event;
 
 use Symfony\Component\EventDispatcher\Event;
-use LynkCMS\Component\ApplicationCompiler\SubCompiler\AbstractCompiler;
+use Lynk\Component\ApplicationCompiler\SubCompiler\AbstractCompiler;
 
 /**
  * Application compiler sub-compiler event.
