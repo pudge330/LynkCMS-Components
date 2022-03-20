@@ -36,7 +36,7 @@ class PhpConverter implements ConverterInterface {
 	 * @return string The file data
 	 */
 	public function read(string $path) {
-		return include $path;
+		return $path;
 	}
 
 	/**
@@ -47,9 +47,7 @@ class PhpConverter implements ConverterInterface {
 	 * @return string The converted PHP data
 	 */
 	public function dump(array $data) {
-		$output = $indent."[\n";
-		$output .= $this->formatArrayNested($data, $indent."\t");
-		$output .= $indent."]";
+		$output = $this->formatArray($data);
 		return "<?php\nreturn " . $output . ";";
 	}
 
@@ -60,8 +58,24 @@ class PhpConverter implements ConverterInterface {
 	 * 
 	 * @return array The parsed data
 	 */
-	public function parse(array $data) {
+	public function parse(string $data) {
+		$data = include $data;
 		return $data;
+	}
+
+	/**
+	 * Format a array into a writeable string.
+	 *
+	 * @param Array $data Array of config values.
+	 * @param string $indent Current indentation.
+	 * 
+	 * @return string The PHP array data as a writable string.
+	 */
+	public function formatArray(array $data, $indent = "") {
+		$output = $indent."[\n";
+		$output .= $this->formatArrayNested($data, $indent."\t");
+		$output .= $indent."]";
+		return $output;
 	}
 
 	/**
