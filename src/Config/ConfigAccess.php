@@ -1,13 +1,13 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Config
  * @author Brandon Garcia <me@bgarcia.dev>
  */
@@ -28,13 +28,13 @@ class ConfigAccess {
     protected $config;
 
     /**
-     * @var Config Instance of the LynkCMS config class.
+     * @var Config Instance of the Lynk config class.
      */
     protected $configService;
 
     /**
      * @param Array $config Optional. The configuration.
-     * @param Config $c Optional. Instance of the LynkCMS config class.
+     * @param Config $c Optional. Instance of the Lynk config class.
      */
     public function __construct($config = [], $c = null) {
         $this->config = [];

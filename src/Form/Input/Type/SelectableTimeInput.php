@@ -1,21 +1,21 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Form
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Form\Input\Type;
+namespace Lynk\Component\Form\Input\Type;
 
 use Datetime;
-use LynkCMS\Component\Form\Input\InputType;
+use Lynk\Component\Form\Input\InputType;
 
 /**
  * Selectable Time input type.

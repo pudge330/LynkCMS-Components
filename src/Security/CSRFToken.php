@@ -1,20 +1,20 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Security
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Security;
+namespace Lynk\Component\Security;
 
-use LynkCMS\Component\Util\UUID;
+use Lynk\Component\Util\UUID;
 
 /**
  * CSRF Token class, uses secret key which should be unique to app.

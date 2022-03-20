@@ -1,18 +1,18 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Database
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Database;
+namespace Lynk\Component\Database;
 
 use Exception;
 use PDO;
@@ -120,7 +120,7 @@ class DatabaseService {
 			,'offset' => null
 			,'distinct' => false
 			,'scalar' => false
-			,'EntityClass' => '\\LynkCMS\\Component\\Database\\AbstractEntity'
+			,'EntityClass' => '\\Lynk\\Component\\Database\\AbstractEntity'
 		), $mod);
 		$isScalar = isset($mod['scalar']) && $mod['scalar'] ? true : false;
 		$isSqlFnSelect = is_string($select)

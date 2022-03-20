@@ -1,25 +1,25 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Form
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Form;
+namespace Lynk\Component\Form;
 
-use LynkCMS\Component\Container\StandardContainer;
-use LynkCMS\Component\Container\Container;
-use LynkCMS\Component\Form\Input\Type as InputType;
-use LynkCMS\Component\Form\Input\inputCollection;
-use LynkCMS\Component\Form\Security\FormTokenizer;
-use LynkCMS\Component\Form\Validator\BasicDataValidator;
+use Lynk\Component\Container\StandardContainer;
+use Lynk\Component\Container\Container;
+use Lynk\Component\Form\Input\Type as InputType;
+use Lynk\Component\Form\Input\inputCollection;
+use Lynk\Component\Form\Security\FormTokenizer;
+use Lynk\Component\Form\Validator\BasicDataValidator;
 
 /**
  * Form type, represents a HTML form.
@@ -163,7 +163,7 @@ class FormType {
 		//--Validate constructor arguments
 		if ($container && !($container instanceof Container)) {
 			throw new Exception(
-				'FormType - invalid arguments passed to constructor. Argument $container is expected to be of type LynkCMS\\Component\\Container\\Container, ' . get_class($container) . ' given.'
+				'FormType - invalid arguments passed to constructor. Argument $container is expected to be of type Lynk\\Component\\Container\\Container, ' . get_class($container) . ' given.'
 			);
 		}
 		else if (!$container) {

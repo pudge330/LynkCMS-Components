@@ -1,21 +1,21 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Form
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Form\Input;
+namespace Lynk\Component\Form\Input;
 
-use LynkCMS\Component\Container\StandardContainer;
-use LynkCMS\Component\FormNew\Input\Type as InputType;
+use Lynk\Component\Container\StandardContainer;
+use Lynk\Component\FormNew\Input\Type as InputType;
 
 /**
  * Form input collection class.

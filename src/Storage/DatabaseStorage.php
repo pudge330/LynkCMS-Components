@@ -1,18 +1,18 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Storage
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Storage;
+namespace Lynk\Component\Storage;
 
 use Exception;
 use PDO;
@@ -46,7 +46,7 @@ class DatabaseStorage implements StorageInterface {
 	 */
 	public function __construct($connection = null, $schema = null) {
 		if (!$connection || (!($connection instanceof PDO) && !($connection instanceof Connection\ConnectionWrapped))) {
-			throw new Exception('LynkCMS\\Component\\Storage\\DatabaseStorage requires a PDO or Connection\ConnectionWrapped object');
+			throw new Exception('Lynk\\Component\\Storage\\DatabaseStorage requires a PDO or Connection\ConnectionWrapped object');
 		}
 		if (!($connection instanceof Connection\Connection) && !($connection instanceof Connection\ConnectionWrapped)) {
 			$connection = new Connection\ConnectionWrapped($connection);

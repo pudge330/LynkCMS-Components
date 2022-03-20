@@ -14,7 +14,7 @@
 
 namespace Lynk\Component\Command;
 
-use LynkCMS\Component\Container\ContainerAwareTrait;
+use Lynk\Component\Container\ContainerAwareTrait;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 

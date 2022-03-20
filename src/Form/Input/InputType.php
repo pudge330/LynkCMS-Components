@@ -1,22 +1,22 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Form
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Form\Input;
+namespace Lynk\Component\Form\Input;
 
-use LynkCMS\Component\Container\StandardContainer;
-use LynkCMS\Component\Form\Input\InputHelper;
-use LynkCMS\Component\Form\Validator\BasicDataValidator;
+use Lynk\Component\Container\StandardContainer;
+use Lynk\Component\Form\Input\InputHelper;
+use Lynk\Component\Form\Validator\BasicDataValidator;
 
 /**
  * Form input type class.
@@ -24,7 +24,7 @@ use LynkCMS\Component\Form\Validator\BasicDataValidator;
 class InputType {
 
 	/**
-	 * @var LynkCMS\Component\Container\Container Service container.
+	 * @var Lynk\Component\Container\Container Service container.
 	 */
 	protected static $serviceContainer = null;
 
@@ -519,7 +519,7 @@ class InputType {
 	/**
 	 * Get service container.
 	 * 
-	 * @return LynkCMS\Component\Container\Container Service container.
+	 * @return Lynk\Component\Container\Container Service container.
 	 */
 	public function getContainer() {
 		return static::getServiceContainer();
@@ -528,7 +528,7 @@ class InputType {
 	/**
 	 * Set service container.
 	 * 
-	 * @param LynkCMS\Component\Container\Container Service container.
+	 * @param Lynk\Component\Container\Container Service container.
 	 */
 	public static function setServiceContainer($container) {
 		static::$serviceContainer = $container;
@@ -537,7 +537,7 @@ class InputType {
 	/**
 	 * Get service container.
 	 * 
-	 * @return LynkCMS\Component\Container\Container Service container.
+	 * @return Lynk\Component\Container\Container Service container.
 	 */
 	public static function getServiceContainer() {
 		return static::$serviceContainer;

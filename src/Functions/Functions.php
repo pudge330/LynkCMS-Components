@@ -1,13 +1,13 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Functions
  * @author Brandon Garcia <me@bgarcia.dev>
  */
@@ -1362,7 +1362,7 @@ function getPagination($current, $last, $delta = 2, $start = 1, $end = 1) {
  * @return string Unique id.
  */
 function getUniqueId($opt=false) {
-	return \LynkCMS\Component\Util\UUID::uniqid($opt);
+	return \Lynk\Component\Util\UUID::uniqid($opt);
 }
 
 /**
@@ -1373,7 +1373,7 @@ function getUniqueId($opt=false) {
  * @return string Series of random bytes as string.
  */
 function getRandomBytes($length = 64) {
-	return \LynkCMS\Component\Util\UUID::randomBytes($length);
+	return \Lynk\Component\Util\UUID::randomBytes($length);
 }
 
 /**
@@ -1385,5 +1385,5 @@ function getRandomBytes($length = 64) {
  * @return string Randomly generated reference id.
  */
 function getReferenceId($format = null, $randomizedFormat = true) {
-	return \LynkCMS\Component\Util\UUID::referenceId($format, $randomizedFormat);
+	return \Lynk\Component\Util\UUID::referenceId($format, $randomizedFormat);
 }

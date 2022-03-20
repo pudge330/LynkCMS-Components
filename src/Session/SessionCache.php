@@ -1,22 +1,22 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Session
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Session;
+namespace Lynk\Component\Session;
 
 use Datetime;
 use DateInterval;
-use LynkCMS\Component\Container\GlobalArrayContainer;
+use Lynk\Component\Container\GlobalArrayContainer;
 use Symfony\Component\Yaml\Yaml;
 
 /**

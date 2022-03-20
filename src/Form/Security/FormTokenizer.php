@@ -1,21 +1,21 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Form
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Form\Security;
+namespace Lynk\Component\Form\Security;
 
-use LynkCMS\Component\Security\CSRFToken;
-use LynkCMS\Component\Util\UUID;
+use Lynk\Component\Security\CSRFToken;
+use Lynk\Component\Util\UUID;
 
 /**
  * Form tokenizer class. Generates and registers token in session.

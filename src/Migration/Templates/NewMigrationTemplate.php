@@ -1,6 +1,6 @@
 <?php
 /**
- * This Migration file was generated with the LynkCMS Migration component.
+ * This Migration file was generated with the Lynk Migration component.
  * 
  * Generated on: {{datetime}}
  */

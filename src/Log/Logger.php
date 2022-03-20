@@ -1,21 +1,21 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Logger
  * @author Brandon Garcia <me@bgarcia.dev>
  */
 
-namespace LynkCMS\Component\Log;
+namespace Lynk\Component\Log;
 
-use LynkCMS\Component\Log\Event\LogEvent;
-use LynkCMS\Component\Log\Listener\AbstractListener;
+use Lynk\Component\Log\Event\LogEvent;
+use Lynk\Component\Log\Listener\AbstractListener;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 use Symfony\Component\EventDispatcher\EventDispatcher;

@@ -13,8 +13,7 @@
 	],
 	"autoload": {
 		"psr-4": {
-			"LynkCMS\\Component\\": "src/",
-			"Lynk\\Component\\": "src2/",
+			"Lynk\\Component\\": "src/",
 			"lynk\\": "src/Functions/"
 		},
 		"files": [

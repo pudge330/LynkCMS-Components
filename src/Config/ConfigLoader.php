@@ -1,13 +1,13 @@
 <?php
 /**
- * This file is part of the LynkCMS Components Package.
+ * This file is part of the Lynk Components Package.
  *
  * (c) Brandon Garcia <me@bgarcia.dev>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package LynkCMS Components
+ * @package Lynk Components
  * @subpackage Config
  * @author Brandon Garcia <me@bgarcia.dev>
  */
@@ -33,13 +33,13 @@ class ConfigLoader {
     protected $importCallback;
 
     /**
-     * @var Config Instance of the LynkCMS config class.
+     * @var Config Instance of the Lynk config class.
      */
     protected $config;
 
     /**
      * @param string $root Root directory for file loading.
-     * @param Config $config Optional. Config Instance of the LynkCMS config class.
+     * @param Config $config Optional. Config Instance of the Lynk config class.
      * @param Closure $importCallback Optional. Import callback function.
      */
     public function __construct($root, $config = null, $importCallback = Array()) {
