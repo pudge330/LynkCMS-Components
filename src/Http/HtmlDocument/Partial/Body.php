@@ -53,6 +53,7 @@ class Body extends AbstractPartial {
 	 */
 	public function reset($preserveDetails = false) {
 		parent::reset($preserveDetails);
+		$this->data = $this->defaults();
 	}
 
 	/**
