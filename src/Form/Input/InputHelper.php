@@ -61,16 +61,16 @@ class InputHelper {
 	/**
 	 * Validate data exists in source.
 	 * 
-	 * @param Array $data Data values.
-	 * @param Array $source Source array.
+	 * @param array|string $names Data value names/keys.
+	 * @param array $source Source array.
 	 * 
 	 * @return bool True if exists, false otherwise.
 	 */
-	public function validateExists($data, $source) {
+	public function validateExists($names, array $source) {
 		$source = array_keys($source);
-		$data = is_array($data) ? $data : [$data];
-		foreach ($data as $d) {
-			if (!in_array($d, $source))
+		$names = is_array($names) ? $names : [$names];
+		foreach ($names as $name) {
+			if (!in_array($name, $source))
 				return false;
 		}
 		return true;
