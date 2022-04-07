@@ -77,6 +77,29 @@ class InputHelper {
 	}
 
 	/**
+	 * Validate data is populated in source.
+	 * 
+	 * @param array|string $names Data value names/keys.
+	 * @param array $source Source array.
+	 * 
+	 * @return bool True if exists, false otherwise.
+	 */
+	public function validatePopulated($names, array $source) {
+		if (!$this->validateExists($names, $source)) {
+			return false;
+		}
+		foreach ($names as $name) {
+			if (
+				($source[$name] === null || $source[$name] === '') ||
+				(is_array($source[$name]) && sizeof($source[$name]) === 0)
+			) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Convert CSV data line to input options.
 	 * 
 	 * @param string $data CSV data line.
