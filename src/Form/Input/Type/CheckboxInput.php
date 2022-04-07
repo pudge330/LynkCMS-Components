@@ -34,15 +34,18 @@ class CheckboxInput extends InputType {
 	 * @return StandardContainer Processed input settings.
 	 */
 	public function processSettings($settings) {
-		if ($settings->options->data && !is_array($settings->options->data))
+		if ($settings->options->data && !is_array($settings->options->data)) {
 			$settings->options->data = $this->helper->processCsv($settings->options->data, $settings->options->dataformat);
-		else if (!$settings->options->data)
+		}
+		else if (!$settings->options->data){
 			$settings->options->data = [];
+		}
 		if ($settings->options->dataFile) {
 			$settings->options->data = $this->helper->processDataFile($settings->options->dataFile, $settings->options->dataFileFormat) + $settings->options->data;
 		}
-		if (!$settings->options->layout)
+		if (!$settings->options->layout) {
 			$settings->options->layout = 'inline';
+		}
 		return $settings;
 	}
 
@@ -54,8 +57,9 @@ class CheckboxInput extends InputType {
 	 * @return Array Data values.
 	 */
 	public function processData($data) {
-		if (!$this->helper->validateExists($this->name, $data))
+		if (!$this->helper->validateExists($this->name, $data)) {
 			$data[$this->name] = null;
+		}
 		return $data;
 	}
 
@@ -75,13 +79,15 @@ class CheckboxInput extends InputType {
 		else if (isset($data[$this->name]) && $data[$this->name]) {
 			if (is_array($data[$this->name])) {
 				for ($i = 0; $i < sizeof($data[$this->name]); $i++) {
-					if (!$this->helper->validateType($this->settings->options->allow, $data[$this->name][$i]))
+					if (!$this->helper->validateType($this->settings->options->allow, $data[$this->name][$i])) {
 						return [false, "{$displayName} must be one or more {$this->settings->options->allow} values"];
+					}
 				}
 			}
 			else {
-				if (!$this->helper->validateType($this->settings->options->allow, $data[$this->name]))
+				if (!$this->helper->validateType($this->settings->options->allow, $data[$this->name])) {
 					return [false, "{$displayName} must be a {$this->settings->options->allow} value"];
+				}
 			}
 		}
 		return [true];
