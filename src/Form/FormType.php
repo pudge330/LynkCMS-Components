@@ -294,7 +294,7 @@ class FormType {
 
 	/**
 	 * Bind submission data to instance. Checks if the HTTP request method is one of the desired methods.
-	 * If name format is 'array' the $_FILES structure groups the file submission values together is a nested array,
+	 * If name format is 'array' the $_FILES structure groups the file submission values together in a nested array,
 	 * otherwise each array in $_FILES represents one file submission. The method will internally call processSubmittedFiles()
 	 * to normalie the data if the name format is 'array'.
 	 */
