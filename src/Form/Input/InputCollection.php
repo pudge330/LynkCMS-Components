@@ -15,7 +15,7 @@
 namespace Lynk\Component\Form\Input;
 
 use Lynk\Component\Container\StandardContainer;
-use Lynk\Component\FormNew\Input\Type as InputType;
+use Lynk\Component\Form\Input\Type as InputType;
 
 /**
  * Form input collection class.
