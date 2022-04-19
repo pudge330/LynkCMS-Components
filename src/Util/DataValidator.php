@@ -89,7 +89,7 @@ class DataValidator {
 	 * 
 	 * @return bool True if valid, false otherwise.
 	 */
-	public function int($int, $min => null, $max => null) {
+	public function int($int, $min = null, $max = null) {
 		$passedNumericalTest = is_numeric($int);
 		$passedIntegerTest = is_int((int)$int);
 		$passedMinTest = $min === null || ($passedNumericalTest && (int)$int >= $min);
