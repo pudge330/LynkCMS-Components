@@ -57,6 +57,7 @@ class LoaderSource {
 		if (file_exists($this->searchPath) && is_dir($this->searchPath)) {
 			return \lynk\getDirContents($this->searchPath);
 		}
+		return [];
 	}
 
 	/**
