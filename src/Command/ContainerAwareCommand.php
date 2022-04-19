@@ -128,6 +128,6 @@ class ContainerAwareCommand extends AbstractCommand {
 	 * @param Container Service container.
 	 */
 	public function setContainer(Container $container) {
-		return $this->__container;
+		$this->__container = $container;
 	}
 }
