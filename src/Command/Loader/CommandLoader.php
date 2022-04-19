@@ -15,6 +15,8 @@
 namespace Lynk\Component\Command\Loader;
 
 use Closure;
+use Lynk\Component\Command\ContainerAwareCommand;
+use Lynk\Component\Container\Container;
 use Symfony\Component\Console\Application;
 
 /**
@@ -33,12 +35,19 @@ class CommandLoader {
 	protected $application;
 
 	/**
-	 * @param string $root Root directory for relative paths.
-	 * @param Symfony\Compnent\Console\Application Instance of Symfony Application class.
+	 * @var Lynk\Component\Container\Container Instance of Lynk Container class.
 	 */
-	public function __construct($root, Application $application) {
+	protected $container;
+
+	/**
+	 * @param string $root Root directory for relative paths.
+	 * @param Symfony\Compnent\Console\Application $application Instance of Symfony Application class.
+	 * @param Lynk\Component\Container\Container $container Optional. Instance of Lynk Container class.
+	 */
+	public function __construct($root, Application $application, Container $container = null) {
 		$this->root = rtrim($root, '/');
 		$this->application = $application;
+		$this->container = $container;
 	}
 
 	/**
@@ -67,6 +76,9 @@ class CommandLoader {
 		$commands = array_unique($commands);
 		foreach ($commands as $command) {
 			$cmd = new $command();
+			if ($this->container && $cmd instanceof ContainerAwareCommand) {
+				$cmd->setContainer($this->container);
+			}
 			if ($callback) {
 				call_user_func($callback, $cmd);
 			}
