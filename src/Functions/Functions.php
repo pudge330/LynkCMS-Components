@@ -951,6 +951,26 @@ function decrypt($ivHashCiphertext, $password) {
 }
 
 /**
+ * Check if data can be decrypted by provided password.
+ * 
+ * @param string $ivHashCiphertext Encrypted data.
+ * @param string $password Password string.
+ * 
+ * @return bool True if able to be successfully decrypted, false otherwise
+ */
+function canDecrypt($ivHashCiphertext, $password) {
+    $method = "AES-256-CBC";
+    $iv = substr($ivHashCiphertext, 0, 16);
+    $hash = substr($ivHashCiphertext, 16, 32);
+    $ciphertext = substr($ivHashCiphertext, 48);
+    $key = hash('sha256', $password, true);
+    if (!hash_equals(hash_hmac('sha256', $ciphertext . $iv, $key, true), $hash))
+         return false;
+    else
+        return true;
+}
+
+/**
  * ==================================================
  * Colors
  * ==================================================
