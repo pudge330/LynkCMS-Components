@@ -1349,6 +1349,25 @@ function getPagination($current, $last, $delta = 2, $start = 1, $end = 1) {
 }
 
 /**
+ * Get all traits including those used by parent classes and other traits.
+ * 
+ * @param string|object $class An object (class instance) or a string (class name).
+ * @param bool $autoload Optional. Whether to call __autoload by default.
+ * 
+ * @return array An array of traits.
+ */
+function classUsesDeep($class, $autoload = true) {
+	$traits = [];
+	do {
+		$traits = array_merge(class_uses($class, $autoload), $traits);
+	} while($class = get_parent_class($class));
+	foreach ($traits as $trait => $same) {
+		$traits = array_merge(class_uses($trait, $autoload), $traits);
+	}
+	return array_unique($traits);
+} 
+
+/**
  * ==================================================
  * Backwards Compatibility - To be removed
  * ==================================================
