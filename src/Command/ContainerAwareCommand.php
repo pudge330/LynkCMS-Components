@@ -40,7 +40,7 @@ class ContainerAwareCommand extends AbstractCommand {
 	 */
 	public function getService($key) {
 		if ($this->hasService($key))
-			return $this->$__container[$key];
+			return $this->__container[$key];
 	}
 
 	/**
@@ -53,7 +53,7 @@ class ContainerAwareCommand extends AbstractCommand {
 	 * @param mixed $service Service to set.
 	 */
 	public function setService($key, $service) {
-		$this->$__container[$key] = $service;
+		$this->__container[$key] = $service;
 	}
 
 	/**
@@ -67,7 +67,7 @@ class ContainerAwareCommand extends AbstractCommand {
 	 * @return bool True if service exists, false otherwise.
 	 */
 	public function hasService($key) {
-		return $this->$__container->has($key);
+		return $this->__container->has($key);
 	}
 
 	/**
@@ -81,8 +81,8 @@ class ContainerAwareCommand extends AbstractCommand {
 	 * @return mixed Parameter value.
 	 */
 	public function getParameter($key) {
-		if ($this->$__container && $this->$__container->hasParameter($key))
-			return $this->$__container->getParameter($key);
+		if ($this->__container && $this->__container->hasParameter($key))
+			return $this->__container->getParameter($key);
 	}
 
 	/**
@@ -95,8 +95,8 @@ class ContainerAwareCommand extends AbstractCommand {
 	 * @param mixed $parameter Parameter value.
 	 */
 	public function setParameter($key, $parameter) {
-		if ($this->$__container)
-			$this->$__container->setParameter($key, $parameter);
+		if ($this->__container)
+			$this->__container->setParameter($key, $parameter);
 	}
 
 	/**
@@ -110,7 +110,7 @@ class ContainerAwareCommand extends AbstractCommand {
 	 * @return bool True if parameter exists, false otherwise.
 	 */
 	public function hasParameter($key) {
-		return ($this->$__container && $this->$__container->hasParameter($key));
+		return ($this->__container && $this->__container->hasParameter($key));
 	}
 
 	/**
