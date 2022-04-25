@@ -363,7 +363,7 @@ class InputView {
 
 	public function getFieldClasses() {
 		return [
-			'wrap' => 'formField'
+			'wrap' => 'formField formNewField'
 			,'labelWrap' => 'fieldLabelWrap'
 			,'label' => 'fieldLabel'
 			,'inputWrap' => 'fieldWrap'
