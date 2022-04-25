@@ -120,7 +120,7 @@ class DatetimeView extends InputView {
 		$wrapAttr = \lynk\attributes($wrapAttributes);
 		$wrapAttr .= \lynk\attributes($attr['subInputWrap']['dataAttr'], 'data-');
 
-		$output = "\n\t\t<div{$wrapAttr}><input{$dateInputAttr}></div>\n\t\t<div{$wrapAttr}><input{$timeInputAttr}></div>";
-		return $output . "\n\t";
+		$output = "<div{$wrapAttr}><input{$dateInputAttr}></div><div{$wrapAttr}><input{$timeInputAttr}></div>";
+		return $output;
 	}
 }

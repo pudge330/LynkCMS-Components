@@ -131,9 +131,9 @@ class CheckboxView extends InputView {
 			$wrapAttr = \lynk\attributes($wrapAttributes);
 			$wrapAttr .= \lynk\attributes($attr['subInputWrap']['dataAttr'], 'data-');
 
-			$output .= "\n\t\t<div{$wrapAttr}><input{$inputAttr}> <label{$labelAttr}>{$dataValue}</label></div>";
+			$output .= "<div{$wrapAttr}><input{$inputAttr}> <label{$labelAttr}>{$dataValue}</label></div>";
 		}
 
-		return $output . "\n\t";
+		return $output;
 	}
 }

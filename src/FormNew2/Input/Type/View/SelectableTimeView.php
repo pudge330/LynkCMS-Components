@@ -103,13 +103,13 @@ class SelectableTimeView extends InputView {
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['input']}-hour";
 		$inputAttr = \lynk\attributes($attr['input']['attr']);
 		$inputAttr .= \lynk\attributes($attr['input']['dataAttr'], 'data-');
-		$output .= "\n\t\t<select{$inputAttr}>";
-		$output .= "\n\t\t\t<option value=\"\" id=\"{$fieldId}_hour_none\">--</option>";
+		$output .= "<select{$inputAttr}>";
+		$output .= "<option value=\"\" id=\"{$fieldId}_hour_none\">--</option>";
 		for ($i = 1; $i <= 12; $i++) {
 			$selected = sprintf("%02d", $i) == $submittedValues['hour'] ? ' selected="selected"' : '';
-			$output .= "\n\t\t\t<option value=\"".sprintf("%02d", $i)."\" id=\"{$fieldId}_hour_".sprintf("%02d", $i)."\"{$selected}>".sprintf("%02d", $i)."</option>";
+			$output .= "<option value=\"".sprintf("%02d", $i)."\" id=\"{$fieldId}_hour_".sprintf("%02d", $i)."\"{$selected}>".sprintf("%02d", $i)."</option>";
 		}
-		$output .= "\n\t\t</select>";
+		$output .= "</select>";
 
 		// minute
 		$attr['input']['attr']['name'] = $helper->getFieldSuffixId($inputName, '_minute');
@@ -118,12 +118,12 @@ class SelectableTimeView extends InputView {
 		$inputAttr = \lynk\attributes($attr['input']['attr']);
 		$inputAttr .= \lynk\attributes($attr['input']['dataAttr'], 'data-');
 		$output .= "<select{$inputAttr}>";
-		$output .= "\n\t\t\t<option value=\"\" id=\"{$fieldId}_minute_none\">--</option>";
+		$output .= "<option value=\"\" id=\"{$fieldId}_minute_none\">--</option>";
 		for ($i = 0; $i <= 59; $i++) {
 			$selected = sprintf("%02d", $i) == $submittedValues['minute'] ? ' selected="selected"' : '';
-			$output .= "\n\t\t\t<option value=\"".sprintf("%02d", $i)."\" id=\"{$fieldId}_minute_".sprintf("%02d", $i)."\"{$selected}>".sprintf("%02d", $i)."</option>";
+			$output .= "<option value=\"".sprintf("%02d", $i)."\" id=\"{$fieldId}_minute_".sprintf("%02d", $i)."\"{$selected}>".sprintf("%02d", $i)."</option>";
 		}
-		$output .= "\n\t\t</select>";
+		$output .= "</select>";
 
 		// period
 		$attr['input']['attr']['name'] = $helper->getFieldSuffixId($inputName, '_period');
@@ -134,10 +134,10 @@ class SelectableTimeView extends InputView {
 		$amSelected = 'AM' == $submittedValues['period'] ? ' selected="selected"' : '';
 		$pmSelected = 'PM' == $submittedValues['period'] ? ' selected="selected"' : '';
 		$output .= "<select{$inputAttr}>";
-		$output .= "\n\t\t\t<option value=\"AM\" id=\"{$fieldId}_period_am\"{$amSelected}>AM</option>";
-		$output .= "\n\t\t\t<option value=\"PM\" id=\"{$fieldId}_period_pm\"{$pmSelected}>PM</option>";
-		$output .= "\n\t\t</select>";
+		$output .= "<option value=\"AM\" id=\"{$fieldId}_period_am\"{$amSelected}>AM</option>";
+		$output .= "<option value=\"PM\" id=\"{$fieldId}_period_pm\"{$pmSelected}>PM</option>";
+		$output .= "</select>";
 
-		return "<div class=\"subInputWrap\">{$output}</div>\n\t";
+		return "<div class=\"subInputWrap\">{$output}</div>";
 	}
 }

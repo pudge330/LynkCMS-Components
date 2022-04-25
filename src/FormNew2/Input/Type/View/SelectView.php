@@ -79,8 +79,8 @@ class SelectView extends InputView {
 		foreach ($settings->options->data as $dataKey => $dataValue) {
 			$count++;
 			$selected = in_array($dataKey, $submittedValues) ? ' selected="selected"' : '';
-			$output .= "\n\t\t<option value=\"{$dataKey}\" id=\"{$fieldId}_{$count}\"{$selected}>{$dataValue}</option>";
+			$output .= "<option value=\"{$dataKey}\" id=\"{$fieldId}_{$count}\"{$selected}>{$dataValue}</option>";
 		}
-		return "<select{$inputAttr}>{$output}\n\t</select>";
+		return "<select{$inputAttr}>{$output}</select>";
 	}
 }
