@@ -16,7 +16,7 @@ namespace Lynk\Component\FormNew2\Input\Processor;
 
 use Exception;
 use Lynk\Component\Container\StandardContainer;
-use Lynk\Component\FormNew\FormType;
+use Lynk\Component\FormNew2\FormType;
 
 /**
  * Abstract inout processor class.

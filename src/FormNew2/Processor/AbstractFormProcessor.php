@@ -16,8 +16,8 @@ namespace Lynk\Component\FormNew2\Processor;
 
 use Exception;
 use Lynk\Component\Container\StandardContainer;
-use Lynk\Component\FormNew\FormType;
-use Lynk\Component\FormNew\OptionTrait;
+use Lynk\Component\FormNew2\FormType;
+use Lynk\Component\FormNew2\OptionTrait;
 
 /**
  * Abstract form processor class.

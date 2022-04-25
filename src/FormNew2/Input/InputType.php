@@ -15,7 +15,7 @@
 namespace Lynk\Component\FormNew2\Input;
 
 use Lynk\Component\Container\StandardContainer;
-use Lynk\Component\FormNew\Input\InputHelper;
+use Lynk\Component\FormNew2\Input\InputHelper;
 use Lynk\Component\Util\DataValidator;
 
 /**
