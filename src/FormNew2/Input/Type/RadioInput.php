@@ -54,6 +54,9 @@ class RadioInput extends InputType {
 				,$this->helper->processDataFile($settings->options->dataFile, $settings->options->format)
 			);
 		}
+		if (!$settings->options->layout) {
+			$settings->options->layout = 'inline';
+		}
 		return $settings;
 	}
 

@@ -106,7 +106,7 @@ class SelectableDateView extends InputView {
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['input']}-month";
 		$inputAttr = \lynk\attributes($attr['input']['attr']);
 		$inputAttr .= \lynk\attributes($attr['input']['dataAttr'], 'data-');
-		$output .= "<select{$inputAttr}>";
+		$output .= "<div class=\"{$classes['inputWrap']}\"><select{$inputAttr}>";
 		$output .= "<option value=\"\" id=\"{$fieldId}_month_none\">--</option>";
 		foreach (array(
 			'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'
@@ -115,7 +115,7 @@ class SelectableDateView extends InputView {
 			$selected = sprintf("%02d", $dateKey) == $submittedValues['month'] ? ' selected="selected"' : '';
 			$output .= "<option value=\"".sprintf("%02d", $dateKey)."\" id=\"{$fieldId}_month_".sprintf("%02d", $dateKey)."\"{$selected}>{$dateValue}</option>";
 		}
-		$output .= "</select>";
+		$output .= "</select></div>";
 
 		// day input
 		$attr['input']['attr']['name'] = $helper->getFieldSuffixId($inputName, '_day');
@@ -123,13 +123,13 @@ class SelectableDateView extends InputView {
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['input']}-day";
 		$inputAttr = \lynk\attributes($attr['input']['attr']);
 		$inputAttr .= \lynk\attributes($attr['input']['dataAttr'], 'data-');
-		$output .= "<select{$inputAttr}>";
+		$output .= "<div class=\"{$classes['inputWrap']}\"><select{$inputAttr}>";
 		$output .= "<option value=\"\" id=\"{$fieldId}_day_none\">--</option>";
 		for ($i = 1; $i <= 31; $i++) {
 			$selected = sprintf("%02d", $i) == $submittedValues['day'] ? ' selected="selected"' : '';
 			$output .= "<option value=\"".sprintf("%02d", $i)."\" id=\"{$fieldId}_day_".sprintf("%02d", $i)."\"{$selected}>".sprintf("%02d", $i)."</option>";
 		}
-		$output .= "</select>";
+		$output .= "</select></div>";
 
 		// year input
 		$attr['input']['attr']['name'] = $helper->getFieldSuffixId($inputName, '_year');
@@ -137,14 +137,14 @@ class SelectableDateView extends InputView {
 		$attr['input']['attr']['class'] = "{$inputClasses} {$classes['input']}-year";
 		$inputAttr = \lynk\attributes($attr['input']['attr']);
 		$inputAttr .= \lynk\attributes($attr['input']['dataAttr'], 'data-');
-		$output .= "<select{$inputAttr}>";
+		$output .= "<div class=\"{$classes['inputWrap']}\"><select{$inputAttr}>";
 		$output .= "<option value=\"\" id=\"{$fieldId}_year_none\">--</option>";
 		for ($i = $settings->options->startYear; $i <= $settings->options->endYear; $i++) {
 			$selected = sprintf("%04d", $i) == $submittedValues['year'] ? ' selected="selected"' : '';
 			$output .= "<option value=\"".sprintf("%04d", $i)."\" id=\"{$fieldId}_year_".sprintf("%04d", $i)."\"{$selected}>".sprintf("%04d", $i)."</option>";
 		}
-		$output .= "</select>";
+		$output .= "</select></div>";
 
-		return "<div class=\"subInputWrap\">{$output}</div>";
+		return $output;
 	}
 }

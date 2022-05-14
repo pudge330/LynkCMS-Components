@@ -73,6 +73,7 @@ class InputType {
 		$this->inputName = $inputName;
 		$this->validator = new DataValidator();
 		$this->helper = new InputHelper($this->validator);
+		$this->settings = $settings;
 		$this->settings = $this->processSettings($settings);
 		$this->inputView = $this->createView();
 	}
