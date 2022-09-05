@@ -186,9 +186,7 @@ class StandardContainer {
 	 */
 	public function isClosure(string $key) {
 		if ($this->has($key)) {
-			$value = $this->get($key);
-			if ($value instanceof Closure)
-				return true;
+			return ($this->get($key) instanceof Closure);
 		}
 		return false;
 	}
