@@ -263,6 +263,17 @@ function validateHttpBasicAuth($credentials, $realm = null, $output = null) {
  */
 
 /**
+ * Normalize, trim trailing slash from path.
+ * 
+ * @param string $path Directory path
+ * 
+ * @return string
+ */
+function normalizePath(string $path) {
+	return realRelPath(path(preg_replace('/\/|\\\/', '', $path)));
+}
+
+/**
  * Interpolate variables into a string.
  * 
  * @param string $string The string template.
