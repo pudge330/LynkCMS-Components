@@ -147,7 +147,7 @@ class StandardContainer {
 	 * @deprecated #1819a39 Use clear()
 	 */
 	public function removeAll() {
-		$this->clear()
+		$this->clear();
 	}
 
 	/**
