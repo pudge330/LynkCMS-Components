@@ -200,6 +200,9 @@ class Storage implements StorageInterface {
 	 * @return mixed decoded data.
 	 */
 	public function decodeData($data) {
+		if ($data === null) {
+			return null;
+		}
 		$flags = '';
 		if (preg_match('/^([bejsy]+)\\\/', $data, $match)) {
 			$flags = $match[1];

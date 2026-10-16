@@ -126,7 +126,7 @@ class AppCompiler {
 		}
 
 		$event = new CompilerEvent\ConfigEvent($this->root, $this->env, $config);
-		$this->eventDispatcher->dispatch(CompilerEvent\ConfigEvent::NAME, $event);
+		$this->eventDispatcher->dispatch($event, CompilerEvent\ConfigEvent::NAME);
 		$config = $event->getConfig();
 		$vars = Array(
 			'%root_var%' => $this->root
@@ -139,7 +139,7 @@ class AppCompiler {
 		}
 
 		$event = new CompilerEvent\CompileEvent($this->root, $this->env, $config, $vars);
-		$this->eventDispatcher->dispatch(CompilerEvent\CompileEvent::NAME, $event);
+		$this->eventDispatcher->dispatch($event, CompilerEvent\CompileEvent::NAME);
 		$vars = $event->getVars();
 
 		$event = new CompilerEvent\InjectionEvent($this->root, $this->env, $config);
@@ -149,7 +149,7 @@ class AppCompiler {
 		foreach ($this->compilers as $compiler) {
 			$compiler->injection($event, $config);
 		}
-		$this->eventDispatcher->dispatch(CompilerEvent\InjectionEvent::NAME, $event);
+		$this->eventDispatcher->dispatch($event, CompilerEvent\InjectionEvent::NAME);
 		$injections = $event->getInjections();
 		foreach ($injections as $ikey => $ival) {
 			$vars[$ival['placeholder']] = $ival['content'];
@@ -203,7 +203,7 @@ class AppCompiler {
 		if (is_array($compilers))
 			$this->compilers = array_merge($this->compilers, $compilers);
 		$event = new CompilerEvent\SubCompilerEvent($this->root, $this->env);
-		$this->eventDispatcher->dispatch(CompilerEvent\SubCompilerEvent::NAME, $event);
+		$this->eventDispatcher->dispatch($event, CompilerEvent\SubCompilerEvent::NAME);
 		if ($event->hasSubCompilers()) {
 			$this->compilers = array_merge($this->compilers, $event->getSubCompilers());
 		}

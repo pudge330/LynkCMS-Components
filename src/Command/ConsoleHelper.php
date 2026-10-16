@@ -566,7 +566,7 @@ class ConsoleHelper {
 	 * 
 	 * @return string|null The answer to the question.
 	 */
-	protected function getAnswer($message, &$answer = null, Closure $trim = null) {
+	protected function getAnswer($message, &$answer = null, ?Closure $trim = null) {
 		if ($this->autoOutputWrap && strlen($message) > $this->autoOutputWrap)
 			$message = $this->wordwrap($message, $this->autoOutputWrap, $this->autoOutputWrapBreak);
 		echo $message;

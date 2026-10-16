@@ -27,7 +27,7 @@ class HiddenView extends InputView {
 	 * @param array &$attr Attributes array by reference.
 	 * @param array $classes Classes to apply.
 	 */
-	public function applyFormFieldClasses(array &$attr, array $classes = null) {}
+	public function applyFormFieldClasses(array &$attr, ?array $classes = null) {}
 
 	/**
 	 * Render input label.

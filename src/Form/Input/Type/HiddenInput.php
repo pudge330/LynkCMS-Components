@@ -59,7 +59,7 @@ class HiddenInput extends InputType {
 		//--name, type and value
 		$attr['input']['attr']['name'] = $this->inputName;
 		$attr['input']['attr']['type'] = 'hidden';
-		$attr['input']['attr']['value'] = htmlentities($this->helper->getDefaultValues($this->settings, $values, $this->name));
+		$attr['input']['attr']['value'] = htmlentities((string)$this->helper->getDefaultValues($this->settings, $values, $this->name));
 
 		//--id, class
 		$attr['input']['attr']['id'] = $this->helper->getFieldId($this->inputName);

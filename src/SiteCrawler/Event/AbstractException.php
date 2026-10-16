@@ -14,7 +14,7 @@
 
 namespace Lynk\Component\SiteCrawler\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Abstract SiteCrawlere exception class.

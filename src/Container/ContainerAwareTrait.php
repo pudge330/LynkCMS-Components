@@ -21,11 +21,6 @@ namespace Lynk\Component\Container;
 trait ContainerAwareTrait {
 
 	/**
-	 * @var Container Service container.
-	 */
-	protected static $__container;
-
-	/**
 	 * Get service from container.
 	 * 
 	 * @param string $id Service key.
@@ -34,7 +29,7 @@ trait ContainerAwareTrait {
 	 */
 	public function getService($key) {
 		if ($this->hasService($key))
-			return static::$__container[$key];
+			return static::__getContainer()[$key];
 	}
 
 	/**
@@ -44,7 +39,7 @@ trait ContainerAwareTrait {
 	 * @param mixed $service Service to set.
 	 */
 	public function setService($key, $service) {
-		static::$__container[$key] = $service;
+		static::__getContainer()[$key] = $service;
 	}
 
 	/**
@@ -55,7 +50,8 @@ trait ContainerAwareTrait {
 	 * @return bool True if service exists, false otherwise.
 	 */
 	public function hasService($key) {
-		return static::$__container->has($key);
+		$container = static::__getContainer();
+		return ($container && $container->has($key));
 	}
 
 	/**
@@ -66,8 +62,9 @@ trait ContainerAwareTrait {
 	 * @return mixed Parameter value.
 	 */
 	public function getParameter($key) {
-		if (static::$__container && static::$__container->hasParameter($key))
-			return static::$__container->getParameter($key);
+		$container = static::__getContainer();
+		if ($container && $container->hasParameter($key))
+			return $container->getParameter($key);
 	}
 
 	/**
@@ -77,8 +74,9 @@ trait ContainerAwareTrait {
 	 * @param mixed $parameter Parameter value.
 	 */
 	public function setParameter($key, $parameter) {
-		if (static::$__container)
-			static::$__container->setParameter($key, $parameter);
+		$container = static::__getContainer();
+		if ($container)
+			$container->setParameter($key, $parameter);
 	}
 
 	/**
@@ -89,7 +87,8 @@ trait ContainerAwareTrait {
 	 * @return bool True if parameter exists, false otherwise.
 	 */
 	public function hasParameter($key) {
-		return (static::$__container && static::$__container->hasParameter($key));
+		$container = static::__getContainer();
+		return ($container && $container->hasParameter($key));
 	}
 
 	/**
@@ -107,7 +106,7 @@ trait ContainerAwareTrait {
 	 * @param Container $container Service container.
 	 */
 	public static function __setContainer($container) {
-		static::$__container = $container;
+		ContainerRegistry::setContainer($container);
 	}
 
 	/**
@@ -116,6 +115,6 @@ trait ContainerAwareTrait {
 	 * @return Container Service container.
 	 */
 	public static function __getContainer() {
-		return static::$__container;
+		return ContainerRegistry::getContainer();
 	}
 }

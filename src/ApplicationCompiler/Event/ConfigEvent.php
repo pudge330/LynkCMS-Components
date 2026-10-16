@@ -14,7 +14,7 @@
 
 namespace Lynk\Component\ApplicationCompiler\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Application compiler config event.

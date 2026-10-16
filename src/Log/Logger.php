@@ -139,12 +139,12 @@ class Logger implements LoggerInterface {
 	 */
 	private function recordLog($level, $message, array $context = array(), $clevelName = null) {
 		$event = new LogEvent('log', $level, $message, $context, $clevelName);
-		$this->eventDispatcher->dispatch($event->getName(), $event);
+		$this->eventDispatcher->dispatch($event, $event->getName());
 		$event = new LogEvent("log.{$level}", $level, $message, $context, $clevelName);
-		$this->eventDispatcher->dispatch($event->getName(), $event);
+		$this->eventDispatcher->dispatch($event, $event->getName());
 		if ($level == self::CUSTOM && $clevelName) {
 			$event = new LogEvent("log.{$level}.{$clevelName}", $level, $message, $context, $clevelName);
-			$this->eventDispatcher->dispatch($event->getName(), $event);
+			$this->eventDispatcher->dispatch($event, $event->getName());
 		}
 	}
 

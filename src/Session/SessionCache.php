@@ -44,7 +44,7 @@ class SessionCache {
 	 * @param int $check The interval to check the cache items expiration, in seconds.
 	 * @param GlobalArrayContainer Optional. Global session object.
 	 */
-	public function __construct($key = 'sessionCache', $check = 60, GlobalArrayContainer $container = null) {
+	public function __construct($key = 'sessionCache', $check = 60, ?GlobalArrayContainer $container = null) {
 		$this->sessionDataKey = $key;
 		$this->secondsTillNextCheck = $check; //--once every 60 seconds
 		$this->session = $container ?: new GlobalArrayContainer('_SESSION');

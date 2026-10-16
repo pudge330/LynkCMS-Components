@@ -78,7 +78,7 @@ class Timer {
 		$difftime = $nowtime - $this->lastLogTime;
 		if ($this->eventDispatcher) {
 			$event = new LogEvent($message, $context, $dt, $difftime);
-			$this->eventDispatcher->dispatch(LogEvent::NAME, $event);
+			$this->eventDispatcher->dispatch($event, LogEvent::NAME);
 		}
 		$this->log[] = sprintf("%-30s | %-30s | %-3f", $message, $dt->format('F Y h:i:s.u A'), $difftime) . $context;
 		$this->lastLogTime = $nowtime;

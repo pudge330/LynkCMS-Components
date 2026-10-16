@@ -38,7 +38,7 @@ class InputHelper {
 	/**
 	 * @param DataValidator Basic data validator instance.
 	 */
-	public function __construct(DataValidator $validator = null) {
+	public function __construct(?DataValidator $validator = null) {
 		$this->validator = new DataValidator();
 		$this->buffer = new NamedBuffers();
 	}

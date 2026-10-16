@@ -40,7 +40,7 @@ class StreamListener extends AbstractListener {
 	/**
 	 * @param string $filePath Log file path.
 	 */
-	public function __construct($filePath, Closure $dataMapping = null) {
+	public function __construct($filePath, ?Closure $dataMapping = null) {
 		parent::__construct();
 		$this->filePath = $filePath;
 		$this->dataMapping = $dataMapping;

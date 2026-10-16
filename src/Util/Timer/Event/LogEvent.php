@@ -14,7 +14,7 @@
 
 namespace Lynk\Component\Util\Timer\Event;
 
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Timer log event.

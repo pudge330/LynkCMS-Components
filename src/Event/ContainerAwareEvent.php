@@ -15,7 +15,7 @@
 namespace Lynk\Component\Event;
 
 use Lynk\Component\Container\ContainerAwareTrait;
-use Symfony\Component\EventDispatcher\Event;
+use Symfony\Contracts\EventDispatcher\Event;
 
 /**
  * Base container aware event class.

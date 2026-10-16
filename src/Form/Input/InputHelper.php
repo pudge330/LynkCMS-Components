@@ -38,7 +38,7 @@ class InputHelper {
 	/**
 	 * @param BasicDataValidator Basic data validator instance.
 	 */
-	public function __construct(BasicDataValidator $validator = null) {
+	public function __construct(?BasicDataValidator $validator = null) {
 		$this->validator = new BasicDataValidator();
 		$this->buffer = new NamedBuffers();
 	}
@@ -118,7 +118,7 @@ class InputHelper {
 		for ($i = 0; $i < $max; $i++) {
 			
 			$tmpKey = $tmpValue = '';
-			if (preg_match('/kv$/', $format)) {
+			if (preg_match('/kv$/', $format ?? '')) {
 				$tmpKey = $i;
 				$tmpValue = $data[$i];
 			}

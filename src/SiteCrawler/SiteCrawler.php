@@ -215,7 +215,7 @@ class SiteCrawler {
 			$chosenUrl = null;
 			do {
 				$linkEvent = new Event\LinkEvent($url);
-				$this->dispatcher->dispatch(Event\LinkEvent::NAME, $linkEvent);
+				$this->dispatcher->dispatch($linkEvent, Event\LinkEvent::NAME);
 				if ($linkEvent->isSiteCrawlerStopped()) {
 					return $links;
 				}
@@ -263,7 +263,7 @@ class SiteCrawler {
 				}
 				$redirectCount = 0;
 				$pageEvent = new Event\PageEvent($url, $response);
-				$this->dispatcher->dispatch(Event\PageEvent::NAME, $pageEvent);
+				$this->dispatcher->dispatch($pageEvent, Event\PageEvent::NAME);
 
 				if ($pageEvent->isSiteCrawlerStopped()) {
 					return $links;
@@ -308,7 +308,7 @@ class SiteCrawler {
 							}
 							else {
 								$unparsableLinkEvent = new Event\UnparsableLinkEvent($href);
-								$this->dispatcher->dispatch(Event\UnparsableLinkEvent::NAME, $unparsableLinkEvent);
+								$this->dispatcher->dispatch($unparsableLinkEvent, Event\UnparsableLinkEvent::NAME);
 
 								if ($unparsableLinkEvent->isSiteCrawlerStopped()) {
 									return $links;
@@ -337,7 +337,7 @@ class SiteCrawler {
 					}
 					if (!$this->crawledLinks->has($redirectingTo) && !$this->uncrawledLinks->has($redirectingTo) && $redirectCount < $options['maxRedirectCount']) {
 						$redirectEvent = new Event\RedirectEvent($url, $redirectingTo, $response);
-						$this->dispatcher->dispatch(Event\RedirectEvent::NAME, $redirectEvent);
+						$this->dispatcher->dispatch($redirectEvent, Event\RedirectEvent::NAME);
 						if ($redirectEvent->isSiteCrawlerStopped()) {
 							return $links;
 						}
@@ -354,7 +354,7 @@ class SiteCrawler {
 		}
 		catch (Exception $e) {
 			$exceptionEvent = new Event\ExceptionEvent($url, $e);
-			$this->dispatcher->dispatch(Event\ExceptionEvent::NAME, $exceptionEvent);
+			$this->dispatcher->dispatch($exceptionEvent, Event\ExceptionEvent::NAME);
 			if ($exceptionEvent->isSiteCrawlerStopped()) {
 				return $links;
 			}

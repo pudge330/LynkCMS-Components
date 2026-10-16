@@ -47,7 +47,7 @@ class Container extends BaseContainer {
 	 * @param Array $values Optional. Container key value pairs.
 	 * @param AbstractCompiledContainer $compiledContainer Optional. Precompiled container.
 	 */
-	public function __construct(Array $values = [], AbstractCompiledContainer $compiledContainer = null) {
+	public function __construct(Array $values = [], ?AbstractCompiledContainer $compiledContainer = null) {
 		parent::__construct($values);
 		$this->parameters = new StandardContainer;
 		if ($compiledContainer)

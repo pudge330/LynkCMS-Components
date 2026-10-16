@@ -47,7 +47,7 @@ class DatabaseListener extends AbstractListener {
 	 * 
 	 * @throws Exception
 	 */
-	public function __construct($connection, $table, Closure $dataMapping = null) {
+	public function __construct($connection, $table, ?Closure $dataMapping = null) {
 		parent::__construct();
 		$isPDO = ($connection instanceof PDO);
 		$isConnection = ($connection instanceof Connection\Connection);

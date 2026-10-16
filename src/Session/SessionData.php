@@ -36,7 +36,7 @@ class SessionData {
 	 * @param string $name The name of the session cache key.
 	 * @param GlobalArrayContainer Optional. Global session object.
 	 */
-	public function __construct($key = 'sessionData', GlobalArrayContainer $container = null) {
+	public function __construct($key = 'sessionData', ?GlobalArrayContainer $container = null) {
 		$this->sessionDataKey = $key;
 		$this->session = $container ?: new GlobalArrayContainer('_SESSION');
 	}

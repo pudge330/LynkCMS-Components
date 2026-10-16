@@ -229,7 +229,7 @@ class FormType {
 
 		$this->ranValidationCheck = false;
 		$this->formTokenizer = FormTokenizer::create($csrfSecret);
-		$this->fieldSettings = $this->inputs = $this->formData = $this->formErrors = [];
+		$this->fieldSettings = $this->formData = $this->formErrors = [];
 		$this->validator = new BasicDataValidator();
 		$this->isDataBound = false;
 		$this->isDataProcessed = false;

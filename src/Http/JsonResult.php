@@ -20,6 +20,10 @@ use JsonSerializable;
  * JSON http result. Standardized result structure.
  */
 class JsonResult implements JsonSerializable {
+	/**
+	 * @var Array Response data.
+	 */
+	protected $data;
 
 	/**
 	 * @var string Response status.
@@ -162,7 +166,7 @@ class JsonResult implements JsonSerializable {
 	 * 
 	 * @return Array Data to serialize.
 	 */
-	public function jsonSerialize() {
+	public function jsonSerialize(): mixed {
 		return $this->export();
 	}
 }

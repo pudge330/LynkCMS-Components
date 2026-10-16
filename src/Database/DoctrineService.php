@@ -40,7 +40,7 @@ class DoctrineService {
 	 */
 	public function getEntityManager() {
 		if (!$this->entityManager->isOpen()) {
-			$this->entityManager = $this->entityManager->create(
+			$this->entityManager = new EntityManager(
 				$this->entityManager->getConnection(), $this->entityManager->getConfiguration()
 			);
 		}
@@ -65,7 +65,7 @@ class DoctrineService {
 	 * @return PDO Wrapped PDO connection.
 	 */
 	public function getPDO() {
-		return $this->getEntityManager()->getConnection()->getWrappedConnection();
+		return $this->getEntityManager()->getConnection()->getNativeConnection();
 	}
 
 	/**

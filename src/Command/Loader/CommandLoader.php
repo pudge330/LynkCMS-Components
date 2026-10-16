@@ -44,7 +44,7 @@ class CommandLoader {
 	 * @param Symfony\Compnent\Console\Application $application Instance of Symfony Application class.
 	 * @param Lynk\Component\Container\Container $container Optional. Instance of Lynk Container class.
 	 */
-	public function __construct($root, Application $application, Container $container = null) {
+	public function __construct($root, Application $application, ?Container $container = null) {
 		$this->root = rtrim($root, '/');
 		$this->application = $application;
 		$this->container = $container;

@@ -284,7 +284,7 @@ class StandardContainer {
 	 * 
 	 * @return array Data without closures
 	 */
-	public function getDataWithoutClosures(StandardContainer $obj = null) {
+	public function getDataWithoutClosures(?StandardContainer $obj = null) {
 		$obj = $obj ? $obj->export() : $this->export();
 		$arr = [];
 		foreach ($obj as $key => $val) {
