@@ -56,8 +56,16 @@ class Connection extends PDO {
 	 * 
 	 * @return string The quoted string or concatenated array of strings.
 	 */
-	public function quote($string, $parameterType = PDO::PARAM_STR) {
-		return self::quoteString($this, $string, $parameterType);
+	public function quote($string, $parameterType = PDO::PARAM_STR): string|false {
+		if (is_array($string)) {
+			$str = '';
+			foreach ($string as $s) {
+				$str .= ($str != '' ? ',' : '') . parent::quote($s, $parameterType);
+			}
+			return $str;
+		}
+
+		return parent::quote($string, $parameterType);
 	}
 
 	/**
@@ -71,16 +79,19 @@ class Connection extends PDO {
 	 * @return string The quoted string or concatenated array of strings.
 	 */
 	public static function quoteString(PDO $pdo, $string, $parameterType = PDO::PARAM_STR) {
+		if ($pdo instanceof self) {
+			return $pdo->quote($string, $parameterType);
+		}
+
 		if (is_array($string)) {
 			$str = '';
 			foreach ($string as $s) {
-				$str .= ($str != '' ? ',' : '') . parent::quote($s, $parameterType);
+				$str .= ($str != '' ? ',' : '') . $pdo->quote($s, $parameterType);
 			}
 			return $str;
 		}
-		else {
-			return parent::quote($string, $parameterType);
-		}
+
+		return $pdo->quote($string, $parameterType);
 	}
 
 	/**

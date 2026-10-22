@@ -96,7 +96,10 @@ class ConnectionFactory {
 			}
 			$options = [Connection::ATTR_EMULATE_PREPARES => false, Connection::ATTR_ERRMODE => Connection::ERRMODE_EXCEPTION];
 			if (in_array($s['driver'], ['mysql', 'pdo_mysql'])) {
-				$options[Connection::MYSQL_ATTR_FOUND_ROWS] = true;
+				$foundRowsAttribute = class_exists(\Pdo\Mysql::class)
+					? \Pdo\Mysql::ATTR_FOUND_ROWS
+					: Connection::MYSQL_ATTR_FOUND_ROWS;
+				$options[$foundRowsAttribute] = true;
 			}
 			return new Connection(
 				$args['dsn'], $args['username'], $args['password'],
