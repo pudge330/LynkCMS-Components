@@ -37,6 +37,11 @@ class InjectionEvent extends Event {
 	protected $env;
 
 	/**
+	 * @var Array Compiler configuration.
+	 */
+	protected $config;
+
+	/**
 	 * @var Array Injection list.
 	 */
 	protected $injections;

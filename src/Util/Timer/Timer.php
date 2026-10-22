@@ -51,7 +51,7 @@ class Timer {
 		$dt = $this->currentTime();
 		$this->log = Array();
 		$this->logFile = $logFile;
-		$this->lastLogTime = (double)$dt->format('s.u');
+		$this->lastLogTime = (float)$dt->format('s.u');
 		$this->eventDispatcher = $eventDispatcher;
 	}
 
@@ -74,7 +74,7 @@ class Timer {
 		$dt = $this->currentTime();
 		if ($context)
 			$context = is_object($context) || is_array($context) ? ' | ' . json_encode($context) : $context;
-		$nowtime = (double)$dt->format('s.u');
+		$nowtime = (float)$dt->format('s.u');
 		$difftime = $nowtime - $this->lastLogTime;
 		if ($this->eventDispatcher) {
 			$event = new LogEvent($message, $context, $dt, $difftime);

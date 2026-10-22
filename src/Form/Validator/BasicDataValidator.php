@@ -166,9 +166,9 @@ class BasicDataValidator {
 		$range['min'] = isset($range['min']) ? $range['min'] : null;
 		$range['max'] = isset($range['max']) ? $range['max'] : null;
 		$passedNumericalTest = is_numeric($double);
-		$passedDoubleTest = is_double((double)$double);
-		$passedMinTest = $range['min'] === null || ($passedNumericalTest && (double)$double >= $range['min']);
-		$passedMaxTest = $range['max'] === null || ($passedNumericalTest && (double)$double <= $range['max']);
+		$passedDoubleTest = is_double((float)$double);
+		$passedMinTest = $range['min'] === null || ($passedNumericalTest && (float)$double >= $range['min']);
+		$passedMaxTest = $range['max'] === null || ($passedNumericalTest && (float)$double <= $range['max']);
 		return ($passedNumericalTest && $passedDoubleTest && $passedMinTest && $passedMaxTest);
 	}
 

@@ -108,9 +108,9 @@ class DataValidator {
 	 */
 	public function double($double, $min = null, $max = null) {
 		$passedNumericalTest = is_numeric($double);
-		$passedDoubleTest = is_double((double)$double);
-		$passedMinTest = $min === null || ($passedNumericalTest && (double)$double >= $min);
-		$passedMaxTest = $max === null || ($passedNumericalTest && (double)$double <= $max);
+		$passedDoubleTest = is_double((float)$double);
+		$passedMinTest = $min === null || ($passedNumericalTest && (float)$double >= $min);
+		$passedMaxTest = $max === null || ($passedNumericalTest && (float)$double <= $max);
 		return ($passedNumericalTest && $passedDoubleTest && $passedMinTest && $passedMaxTest);
 	}
 

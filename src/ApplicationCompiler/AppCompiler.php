@@ -27,6 +27,20 @@ use Symfony\Component\EventDispatcher\EventDispatcher;
  */
 class AppCompiler {
 	/**
+	 * Application configuration.
+	 *
+	 * @var Config
+	 */
+	protected $config;
+
+	/**
+	 * Application configuration loader.
+	 *
+	 * @var ConfigLoader
+	 */
+	protected $configLoader;
+
+	/**
 	 * Root of the project/used for configuration loading as well.
 	 *
 	 * @var string $root
